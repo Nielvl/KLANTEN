@@ -1,109 +1,114 @@
 {
     "Rhino 03:30": {
-        "voorkeuren": "Inside hall E, we usually drop off the pallet next to the office",
+        "Info": "Inside hall E, we usually drop off the pallet next to the office",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/wy5evvpv3x4vcwzgcb5z4/Foto-20-09-2024-08-19-46.jpg?rlkey=t47ponuugflxprlnzofvilxc0&st=vqvhmljr&dl",
         "locatie": "50.87525018115413, 4.367670170036867"
     },
     "Cora 03:45": {
-        "voorkeuren": "At Van Lier, you must visit the small office on the right side when entering the warehouse to let them know that you delivered it.",
+        "Info": "At Van Lier, you must visit the small office on the right side when entering the warehouse to let them know that you delivered it.",
         "voertuigFoto": "https://lh3.googleusercontent.com/p/AF1QipNZEM-Oc_v4y5tvbq-w9sHLLY4eqgVmEWJ0a5YA=s680-w680-h510",
         "locatie": "50.87789077819844, 4.370138802680394"
     },
     "Tertholen 04:30": {
-        "voorkeuren": "LEFT WAREHOUSE ON THE PICTURE= C31",
+        "Info": "LEFT WAREHOUSE ON THE PICTURE= C31",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
         "locatie": "50.87422376311202, 4.366673280546562"
     },
     "De Smet Jean 04:30": {
-        "voorkeuren": "RIGHT WAREHOUSE IN THE PICTURE= C30",
+        "Info": "RIGHT WAREHOUSE IN THE PICTURE= C30",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
         "locatie": "50.87422376311202, 4.366673280546562"
     },
+    "De Winne Guy 05:30": {
+        "Info": "The truck looks like an ex 'ringoot' truck, white and blue. ",
+        "voertuigFoto": "",
+        "locatie": "50.877286606244205, 4.371222838032669"
+    },
+     "Thiry Gent": {
+        "Info": "Pallets are left outside on the parking next to the warehouse of Jonckheere, the very last warehous.",
+        "voertuigFoto": "",
+        "locatie": "50.87842984876467, 4.369662969458868"
+    },
     "Fast and Fresh 06:00": {
-        "voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Bouvry between 05:30 and 06:00.",
+        "Info": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Bouvry between 05:30 and 06:00.",
         "voertuigFoto": "",
         "locatie": "50.87744851368797, 4.368868283511946"
     },
     "Bouvry 06:00": {
-        "voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Fast & Fresh between 05:30 and 06:00.",
+        "Info": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Fast & Fresh between 05:30 and 06:00.",
         "voertuigFoto": "",
         "locatie": "50.87744851368797, 4.368868283511946"
     },
-    "Hoes 08:30": { 
-        "Instructions": "Could order extra stuff until 09:00", 
-        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
-        "locatie": "51.2240454, 4.4167634" 
-    },
-    "Delidis 08:30": { 
-        "voorkeuren": "Thursday: own truck, /n other days it needs to be delivered at Andiprim", 
-        "voertuigFoto": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
-        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl", 
-        "locatie Andiprim": "50.87746735752994, 4.373915702116713",
-        "locatie Own Truck": "50.877831976525336, 4.370717231621229" 
-    },
-    "Wyla 06:00": {
+     "Wyla 06:00": {
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87684386075354, 4.369225607132123"
     },
     "Horeca Totaal 06:00": {
-        "voorkeuren": "Jean Marie Trans (JM TRANS), other side of the building",
+        "Info": "Jean Marie Trans (JM TRANS), other side of the building",
         "voertuigFoto": "",
         "locatie": "50.87732455993015, 4.36878502799219"
     },
     "Verdigro": {
-        "voorkeuren": "Van Lier OR Could have his own truck. IF YOU NEED TO DROP IT OFF AT VAN LIER THEN ALWAYS ANNOUNCE IT IN THE SMALL OFFICE",
+        "Info": "Van Lier OR Could have his own truck. IF YOU NEED TO DROP IT OFF AT VAN LIER THEN ALWAYS ANNOUNCE IT IN THE SMALL OFFICE",
         "voertuigFoto": "",
         "locatie": "50.87788295752422, 4.370364990537037"
     },
-    "Dirilis24": { 
-        "Location": "HALL E", 
+    "Restofrais 05:30 - 06:00": {
+        "voorkeuren": "",
+        "voertuigFoto": "",
+        "locatie": "50.87841375413854, 4.370329582359883"
+    },
+    "Hoes 08:30": { 
+        "Info": "Could order extra stuff until 09:00", 
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
+        "locatie": "51.2240454, 4.4167634" 
+    },
+    "Delidis 08:30": { 
+        "Info": "Thursday: own truck, /n other days it needs to be delivered at Andiprim", 
+        "voertuigFoto": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl", 
+        "locatie Andiprim": "50.87746735752994, 4.373915702116713",
+        "locatie Own Truck": "50.877831976525336, 4.370717231621229" 
+    },
+    "Dirilis24 06:30": { 
+        "Info": "HALL E, try to combine it with Willy Wouters", 
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", 
         "locatie": "50.87462776809204, 4.368742282726083" 
     },
     "Naia 07:00 - 08:00": {
-        "voorkeuren": "",
+        "Info": "",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/rm0vjklq3zh3pwmwzz208/Foto-20-09-2024-09-27-13.jpg?rlkey=n2atucev9i2ds33uowi1an81v&st=mp2eadid&dl",
         "locatie": "50.87814991581628, 4.370361855333375"
-    },
-    "Restofrais": {
-        "voorkeuren": "",
-        "voertuigFoto": "",
-        "locatie": ""
     },
     "Jacques Remy 07:00 - 08:00": {
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87814991581628, 4.370361855333375"
     },
-    "Duva": {
-        "voorkeuren": "",
+    "Duva 07:00": {
+        "Info": "Generally will load himseld but there is a possibility he wants to load with JM trans.",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.87648084669674, 4.372139229885923"
     },
-    "De Winne Guy": {
-        "voorkeuren": "",
-        "voertuigFoto": "",
-        "locatie": ""
+    "Fresh Spegelaere 06:30-07:00": {
+        "Info": "JM trans, in front of Van Lier",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/v194i3usrh1efrt31p231/Foto-20-09-2024-07-26-21.jpg?rlkey=07qlqdm7qpqo297p34ztpsvbx&st=evvm03l9&dl",
+        "locatie": "50.87788295752422, 4.370364990537037"
     },
-    "Fresh Spegelaere": {
-        "voorkeuren": "",
+    "Jupitor 09:00": {
+        "Info": "Rents a small warehouse on the side of the MaBru",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.873728452988615, 4.36709559769328"
     },
-    "Jupitor": {
-        "voorkeuren": "",
+    "Yassalina 09:00": {
+        "Info": "Rents a small warehouse on the side of the MaBru",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.873728452988615, 4.36709559769328"
     },
-    "Yassalina": {
-        "voorkeuren": "",
+    "Fruitgarden & Isam Achour 09:00": {
+        "Info": "Son & dad are parked next to eachother. They refer to them as 'fruitgarden 1 and 2' ",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.877338431408056, 4.368681389862328"
     },
-    "Thiry Gent": {
-        "voorkeuren": "",
-        "voertuigFoto": "",
-        "locatie": ""
-    }
 }
