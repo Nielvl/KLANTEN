@@ -1,9 +1,4 @@
 {
-    "Dirilis24": { 
-        "Location": "HALL E", 
-        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", 
-        "locatie": "50.87462776809204, 4.368742282726083" 
-    },
     "Hoes": { 
         "Instructions": "Could order extra stuff until 09:00", 
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
@@ -16,12 +11,12 @@
         "locatie Own Truck": "50.877831976525336, 4.370717231621229" 
     },
     "Tertholen": {
-        "voorkeuren": "LEFT WAREHOUSE ON THE PICTURE",
+        "voorkeuren": "LEFT WAREHOUSE ON THE PICTURE= C31",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
         "locatie": "50.87422376311202, 4.366673280546562"
     },
     "De Smet Jean": {
-        "voorkeuren": "RIGHT WAREHOUSE IN THE PICTURE",
+        "voorkeuren": "RIGHT WAREHOUSE IN THE PICTURE= C30",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
         "locatie": "50.87422376311202, 4.366673280546562"
     },
@@ -44,6 +39,11 @@
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": ""
+    },
+    "Dirilis24": { 
+        "Location": "HALL E", 
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", 
+        "locatie": "50.87462776809204, 4.368742282726083" 
     },
     "Cora": {
         "voorkeuren": "",
