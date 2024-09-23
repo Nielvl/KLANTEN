@@ -27,8 +27,20 @@
         .details-button:hover {
             background-color: #0056b3;
         }
+        .back-button {
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .back-button:hover {
+            background-color: #218838;
+        }
         img {
-            max-width: 500px; /* Stel een maximale breedte in voor de afbeeldingen */
+            max-width: 300px; /* Stel een maximale breedte in voor de afbeeldingen */
             width: 100%; /* Past de breedte aan de container aan */
             height: auto; /* Houdt de aspect-ratio van de afbeelding */
         }
@@ -48,6 +60,7 @@
             <ul id="klant-lijst" class="mb-4 max-h-40 overflow-y-auto"></ul>
 
             <div id="klant-info" class="hidden">
+                <button id="back-button" class="back-button hidden">Terug naar klantenlijst</button>
                 <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
                 <p id="klant-voorkeuren" class="mb-2"></p>
                 <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4">
@@ -59,27 +72,15 @@
     <script>
         const klantData = {
             "Dirilis24": { voorkeuren: "HALL E", voertuigFoto: "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", locatie: "50.87462776809204, 4.368742282726083" },
-            "Hoes": { voorkeuren: "WILL ORDER MULTIPLE TIMES UNTILL 09:00 +/-", voertuigFoto: "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=2b2xlw4f&dl", locatie: "50.87863544649588, 4.370189232755779" },
-            "Delidis": { voorkeuren: "DELIVERY AT ANDIPRIM. RAMP IS AT STARFRUIT DOCKS", voertuigFoto: "https://www.agf.nl/remote/https/agfstorage.blob.core.windows.net/misc/AGF_nl/2024/01/29/andiprim3.jpg?preset=ContentFullSmall", locatie: "50.87742460861507, 4.373868204100107" },
-            "Lejeune": { voorkeuren: "DELIVERY AT ANDIPRIM OR SINT-KATELIJNE-WAVER", voertuigFoto: "https://www.agf.nl/remote/https/agfstorage.blob.core.windows.net/misc/AGF_nl/2024/01/29/andiprim3.jpg?preset=ContentFullSmall", locatie: "50.87742460861507, 4.373868204100107" },
-            "Keirsmaekers": { voorkeuren: "DELIVERY AT SINT-KATELIJNE-WAVER OR ANDIPRIM. COULD BE HERE ON THURSDAY", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2215678, 4.4078901" },
-            "Restofrais": { voorkeuren: "Leveringen voor openingstijd", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2230123, 4.4106789" },
-            "Naia": { voorkeuren: "Specifieke losplaats achterzijde", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2245678, 4.4134567" },
-            "DeSaeger": { voorkeuren: "Alleen namiddagleveringen", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2260123, 4.4162345" },
-            "Alain Cloquette": { voorkeuren: "Speciale behandeling vereist", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2275678, 4.4190123" },
-            "Exofi": { voorkeuren: "Leveringen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2290123, 4.4217901" },
-            "Vanderpooten": { voorkeuren: "Vaste leverdag op donderdag", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2305678, 4.4245679" },
-            "Rhino": { voorkeuren: "Zware leveringen, speciale apparatuur nodig", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2320123, 4.4273457" },
-            "Tertholen": { voorkeuren: "Altijd vragen naar dhr. Janssens", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2335678, 4.4301235" },
-            "De Smet Jean": { voorkeuren: "Leveringen alleen 's middags", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2350123, 4.4329013" },
-            "Willy Wouters": { voorkeuren: "Bel 30 minuten voor aankomst", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2365678, 4.4356791" },
-            "Noradin": { voorkeuren: "Leveringen via achteringang", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2380123, 4.4384569" }
+            "Hoes": { voorkeuren: "Leveringen alleen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2240454, 4.4167634" },
+            "Delidis": { voorkeuren: "Flexibele leveringstijden", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2192156, 4.4028673" },
             // Voeg hier meer klantgegevens toe...
         };
 
         const zoekInput = document.getElementById('klant-zoek');
         const klantLijst = document.getElementById('klant-lijst');
         const klantInfo = document.getElementById('klant-info');
+        const backButton = document.getElementById('back-button');
 
         // Klantenlijst tonen
         function toonKlanten(filter = '') {
@@ -116,7 +117,18 @@
             locatieLink.href = `https://www.google.com/maps/search/?api=1&query=${klant.locatie}`;
             
             klantInfo.classList.remove('hidden');
+            klantLijst.classList.add('hidden');
+            zoekInput.classList.add('hidden');
+            backButton.classList.remove('hidden');
         }
+
+        // Terug naar de klantenlijst
+        backButton.onclick = () => {
+            klantInfo.classList.add('hidden');
+            klantLijst.classList.remove('hidden');
+            zoekInput.classList.remove('hidden');
+            backButton.classList.add('hidden');
+        };
 
         zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));
 
