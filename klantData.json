@@ -69,7 +69,7 @@
         "voertuigFoto": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl", 
         "locatie Andiprim": "50.87746735752994, 4.373915702116713",
-        "locatie Own Truck": "50.877831976525336, 4.370717231621229",
+        "locatie Own Truck": "50.877831976525336, 4.370717231621229"
     },
     "Dirilis24 06:30": { 
         "Info": "HALL E, try to combine it with Willy Wouters", 
@@ -110,5 +110,5 @@
         "Info": "Son & dad are parked next to eachother. They refer to them as 'fruitgarden 1 and 2' ",
         "voertuigFoto": "",
         "locatie": "50.877338431408056, 4.368681389862328"
-    },
+    }
 }
