@@ -1,14 +1,8 @@
 {
-    "Hoes": { 
-        "Instructions": "Could order extra stuff until 09:00", 
-        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
-        "locatie": "51.2240454, 4.4167634" 
-    },
-    "Delidis": { 
-        "voorkeuren": "Thursday: own truck, /n other days it needs to be delivered at Andiprim", 
-        "voertuigFoto": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
-        "locatie Andiprim": "50.87746735752994, 4.373915702116713",
-        "locatie Own Truck": "50.877831976525336, 4.370717231621229" 
+    "Cora": {
+        "voorkeuren": "At Van Lier, you must visit the small office on the right side when entering the warehouse to let them know that you delivered it.",
+        "voertuigFoto": "https://lh3.googleusercontent.com/p/AF1QipNZEM-Oc_v4y5tvbq-w9sHLLY4eqgVmEWJ0a5YA=s680-w680-h510",
+        "locatie": "50.87789077819844, 4.370138802680394"
     },
     "Tertholen": {
         "voorkeuren": "LEFT WAREHOUSE ON THE PICTURE= C31",
@@ -19,6 +13,22 @@
         "voorkeuren": "RIGHT WAREHOUSE IN THE PICTURE= C30",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
         "locatie": "50.87422376311202, 4.366673280546562"
+    },
+    "Fast and Fresh": {
+        "voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Bouvry between 05:30 and 06:00.",
+        "voertuigFoto": "",
+        "locatie": "50.87744851368797, 4.368868283511946"
+    },
+    "Hoes": { 
+        "Instructions": "Could order extra stuff until 09:00", 
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
+        "locatie": "51.2240454, 4.4167634" 
+    },
+    "Delidis": { 
+        "voorkeuren": "Thursday: own truck, /n other days it needs to be delivered at Andiprim", 
+        "voertuigFoto": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
+        "locatie Andiprim": "50.87746735752994, 4.373915702116713",
+        "locatie Own Truck": "50.877831976525336, 4.370717231621229" 
     },
     "Wyla": {
         "voorkeuren": "",
@@ -35,20 +45,10 @@
         "voertuigFoto": "",
         "locatie": ""
     },
-    "Fast and Fresh": {
-        "voorkeuren": "",
-        "voertuigFoto": "",
-        "locatie": ""
-    },
     "Dirilis24": { 
         "Location": "HALL E", 
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", 
         "locatie": "50.87462776809204, 4.368742282726083" 
-    },
-    "Cora": {
-        "voorkeuren": "",
-        "voertuigFoto": "",
-        "locatie": ""
     },
     "Naia": {
         "voorkeuren": "",
