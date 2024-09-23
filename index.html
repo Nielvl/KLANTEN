@@ -125,7 +125,8 @@
             const klant = klantData[naam];
             document.getElementById('klant-naam').textContent = naam;
             document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
-            document.getElementById('klant-voertuig').src = klant.voertuigFoto;
+            document.getElementById('klant-voertuig').src = klant.voertuigFoto, klant.voertuigFoto1, klant.voertuigFoto2;
+           
             
             const locatieLink = document.getElementById('klant-locatie');
             locatieLink.textContent = klant.locatie;
