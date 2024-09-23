@@ -39,14 +39,22 @@
         .back-button:hover {
             background-color: #218838;
         }
+        .klant-details {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .klant-info {
+            flex: 1 1 50%;
+            padding-right: 20px;
+        }
         img {
-            max-width: 300px; /* Stel een maximale breedte in voor de afbeeldingen */
-            width: 100%; /* Past de breedte aan de container aan */
-            height: auto; /* Houdt de aspect-ratio van de afbeelding */
+            flex: 1 1 50%;
+            max-width: 100%;
+            height: auto;
         }
         @media (max-width: 768px) {
-            img {
-                max-width: 70%; /* Past de breedte aan voor kleinere schermen zoals een iPad */
+            .klant-info, img {
+                flex: 1 1 100%;
             }
         }
     </style>
@@ -59,12 +67,14 @@
             <input type="text" id="klant-zoek" placeholder="Zoek een klant..." class="w-full p-2 mb-4 border rounded">
             <ul id="klant-lijst" class="mb-4 max-h-40 overflow-y-auto"></ul>
 
-            <div id="klant-info" class="hidden">
-                <button id="back-button" class="back-button hidden">Terug naar klantenlijst</button>
-                <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
-                <p id="klant-voorkeuren" class="mb-2"></p>
+            <div id="klant-info-container" class="hidden klant-details">
+                <div id="klant-info" class="klant-info">
+                    <button id="back-button" class="back-button hidden">Terug naar klantenlijst</button>
+                    <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
+                    <p id="klant-voorkeuren" class="mb-2"></p>
+                    <p class="mb-2">GPS Coördinaten: <a id="klant-locatie" href="" target="_blank" class="text-blue-500 hover:underline"></a></p>
+                </div>
                 <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4">
-                <p class="mb-2">GPS Coördinaten: <a id="klant-locatie" href="" target="_blank" class="text-blue-500 hover:underline"></a></p>
             </div>
         </div>
     </div>
@@ -74,24 +84,12 @@
             "Dirilis24": { voorkeuren: "HALL E", voertuigFoto: "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", locatie: "50.87462776809204, 4.368742282726083" },
             "Hoes": { voorkeuren: "Leveringen alleen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2240454, 4.4167634" },
             "Delidis": { voorkeuren: "Flexibele leveringstijden", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2192156, 4.4028673" },
-            "Lejeune": { voorkeuren: "Vroege leveringen gewenst", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2201234, 4.4050987" },
-            "Keirsmaekers": { voorkeuren: "Bellen voor aankomst", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2215678, 4.4078901" },
-            "Restofrais": { voorkeuren: "Leveringen voor openingstijd", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2230123, 4.4106789" },
-            "Naia": { voorkeuren: "Specifieke losplaats achterzijde", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2245678, 4.4134567" },
-            "DeSaeger": { voorkeuren: "Alleen namiddagleveringen", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2260123, 4.4162345" },
-            "Alain Cloquette": { voorkeuren: "Speciale behandeling vereist", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2275678, 4.4190123" },
-            "Exofi": { voorkeuren: "Leveringen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2290123, 4.4217901" },
-            "Vanderpooten": { voorkeuren: "Vaste leverdag op donderdag", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2305678, 4.4245679" },
-            "Rhino": { voorkeuren: "Zware leveringen, speciale apparatuur nodig", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2320123, 4.4273457" },
-            "Tertholen": { voorkeuren: "Altijd vragen naar dhr. Janssens", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2335678, 4.4301235" },
-            "De Smet Jean": { voorkeuren: "Leveringen alleen 's middags", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2350123, 4.4329013" },
-            "Willy Wouters": { voorkeuren: "Bel 30 minuten voor aankomst", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2365678, 4.4356791" },
-            "Noradin": { voorkeuren: "Leveringen via achteringang", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2380123, 4.4384569" }
             // Voeg hier meer klantgegevens toe...
         };
 
         const zoekInput = document.getElementById('klant-zoek');
         const klantLijst = document.getElementById('klant-lijst');
+        const klantInfoContainer = document.getElementById('klant-info-container');
         const klantInfo = document.getElementById('klant-info');
         const backButton = document.getElementById('back-button');
 
@@ -129,7 +127,7 @@
             locatieLink.textContent = klant.locatie;
             locatieLink.href = `https://www.google.com/maps/search/?api=1&query=${klant.locatie}`;
             
-            klantInfo.classList.remove('hidden');
+            klantInfoContainer.classList.remove('hidden');
             klantLijst.classList.add('hidden');
             zoekInput.classList.add('hidden');
             backButton.classList.remove('hidden');
@@ -137,7 +135,7 @@
 
         // Terug naar de klantenlijst
         backButton.onclick = () => {
-            klantInfo.classList.add('hidden');
+            klantInfoContainer.classList.add('hidden');
             klantLijst.classList.remove('hidden');
             zoekInput.classList.remove('hidden');
             backButton.classList.add('hidden');
