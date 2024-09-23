@@ -80,12 +80,16 @@
     </div>
 
     <script>
-        const klantData = {
-            "Dirilis24": { voorkeuren: "HALL E", voertuigFoto: "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", locatie: "50.87462776809204, 4.368742282726083" },
-            "Hoes": { voorkeuren: "Leveringen alleen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2240454, 4.4167634" },
-            "Delidis": { voorkeuren: "Flexibele leveringstijden", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2192156, 4.4028673" },
-            // Voeg hier meer klantgegevens toe...
-        };
+        let klantData = {};
+
+        // Klantgegevens laden vanuit een extern JSON-bestand
+        fetch('klantData.json')
+            .then(response => response.json())
+            .then(data => {
+                klantData = data;
+                toonKlanten(); // Toon de klanten zodra de data is geladen
+            })
+            .catch(error => console.error('Error loading customer data:', error));
 
         const zoekInput = document.getElementById('klant-zoek');
         const klantLijst = document.getElementById('klant-lijst');
@@ -142,9 +146,6 @@
         };
 
         zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));
-
-        // Toon standaard alle klanten
-        toonKlanten();
     </script>
 </body>
 </html>
