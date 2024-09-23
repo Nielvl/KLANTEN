@@ -14,59 +14,69 @@
         <div class="p-8">
             <h1 class="text-2xl font-bold mb-4">Klantenbeheer voor Heftruckchauffeur</h1>
             
-            <label for="klant-select" class="block mb-2">Selecteer een klant:</label>
-            <select id="klant-select" class="w-full p-2 mb-4 border rounded">
-                <option value="">-- Selecteer een klant --</option>
-                <option value="klant1">Klant 1</option>
-                <option value="klant2">Klant 2</option>
-                <option value="klant3">Klant 3</option>
-            </select>
+            <input type="text" id="klant-zoek" placeholder="Zoek een klant..." class="w-full p-2 mb-4 border rounded">
+            <ul id="klant-lijst" class="mb-4 max-h-40 overflow-y-auto"></ul>
 
             <div id="klant-info" class="hidden">
-                <h2 class="text-xl font-semibold mb-2">Klantinformatie</h2>
+                <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
                 <p id="klant-voorkeuren" class="mb-2"></p>
                 <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
-                <p id="klant-locatie" class="mb-2"></p>
+                <p class="mb-2">GPS Coördinaten: <a id="klant-locatie" href="" target="_blank" class="text-blue-500 hover:underline"></a></p>
             </div>
         </div>
     </div>
 
     <script>
         const klantData = {
-            klant1: {
-                naam: "Bedrijf A",
-                voorkeuren: "Voorkeur voor ochtendleveringen, altijd bellen voor aankomst",
-                voertuigFoto: "/api/placeholder/400/300",
-                locatie: "51.2194475, 4.4024643"
-            },
-            klant2: {
-                naam: "Bedrijf B",
-                voorkeuren: "Leveringen alleen op dinsdag en donderdag, parkeren aan de achterkant",
-                voertuigFoto: "/api/placeholder/400/300",
-                locatie: "51.2240454, 4.4167634"
-            },
-            klant3: {
-                naam: "Bedrijf C",
-                voorkeuren: "Flexibele leveringstijden, melden bij de receptie",
-                voertuigFoto: "/api/placeholder/400/300",
-                locatie: "51.2192156, 4.4028673"
-            }
+            "Dirilis24": { voorkeuren: "Voorkeur voor ochtendleveringen", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2194475, 4.4024643" },
+            "Hoes": { voorkeuren: "Leveringen alleen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2240454, 4.4167634" },
+            "Delidis": { voorkeuren: "Flexibele leveringstijden", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2192156, 4.4028673" },
+            "Lejeune": { voorkeuren: "Vroege leveringen gewenst", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2201234, 4.4050987" },
+            "Keirsmaekers": { voorkeuren: "Bellen voor aankomst", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2215678, 4.4078901" },
+            "Restofrais": { voorkeuren: "Leveringen voor openingstijd", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2230123, 4.4106789" },
+            "Naia": { voorkeuren: "Specifieke losplaats achterzijde", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2245678, 4.4134567" },
+            "DeSaeger": { voorkeuren: "Alleen namiddagleveringen", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2260123, 4.4162345" },
+            "Alain Cloquette": { voorkeuren: "Speciale behandeling vereist", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2275678, 4.4190123" },
+            "Exofi": { voorkeuren: "Leveringen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2290123, 4.4217901" },
+            "Vanderpooten": { voorkeuren: "Vaste leverdag op donderdag", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2305678, 4.4245679" },
+            "Rhino": { voorkeuren: "Zware leveringen, speciale apparatuur nodig", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2320123, 4.4273457" },
+            "Tertholen": { voorkeuren: "Altijd vragen naar dhr. Janssens", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2335678, 4.4301235" },
+            "De Smet Jean": { voorkeuren: "Leveringen alleen 's middags", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2350123, 4.4329013" },
+            "Willy Wouters": { voorkeuren: "Bel 30 minuten voor aankomst", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2365678, 4.4356791" },
+            "Noradin": { voorkeuren: "Leveringen via achteringang", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2380123, 4.4384569" }
         };
 
-        document.getElementById('klant-select').addEventListener('change', function() {
-            const klantInfo = document.getElementById('klant-info');
-            const geselecteerdeKlant = this.value;
+        const zoekInput = document.getElementById('klant-zoek');
+        const klantLijst = document.getElementById('klant-lijst');
+        const klantInfo = document.getElementById('klant-info');
 
-            if (geselecteerdeKlant) {
-                const klant = klantData[geselecteerdeKlant];
-                document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
-                document.getElementById('klant-voertuig').src = klant.voertuigFoto;
-                document.getElementById('klant-locatie').textContent = `GPS Coördinaten: ${klant.locatie}`;
-                klantInfo.classList.remove('hidden');
-            } else {
-                klantInfo.classList.add('hidden');
-            }
-        });
+        function toonKlanten(filter = '') {
+            klantLijst.innerHTML = '';
+            Object.keys(klantData).filter(naam => naam.toLowerCase().includes(filter.toLowerCase())).forEach(naam => {
+                const li = document.createElement('li');
+                li.textContent = naam;
+                li.className = 'cursor-pointer hover:bg-gray-200 p-2';
+                li.onclick = () => toonKlantInfo(naam);
+                klantLijst.appendChild(li);
+            });
+        }
+
+        function toonKlantInfo(naam) {
+            const klant = klantData[naam];
+            document.getElementById('klant-naam').textContent = naam;
+            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
+            document.getElementById('klant-voertuig').src = klant.voertuigFoto;
+            
+            const locatieLink = document.getElementById('klant-locatie');
+            locatieLink.textContent = klant.locatie;
+            locatieLink.href = `https://www.google.com/maps/search/?api=1&query=${klant.locatie}`;
+            
+            klantInfo.classList.remove('hidden');
+        }
+
+        zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));
+
+        toonKlanten();
     </script>
 </body>
 </html>
