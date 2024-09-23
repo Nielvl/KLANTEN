@@ -7,14 +7,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
     <style>
         .hidden { display: none; }
-        img { 
-            max-width: 100%; /* Zorgt ervoor dat afbeeldingen niet groter worden dan de container */
-            height: auto; 
+        .klant-kader {
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
         }
-        @media (max-width: 768px) {
-            img {
-                max-width: 70%; /* Past de breedte aan voor kleinere schermen zoals een iPad */
-            }
+        .details-button {
+            padding: 5px 10px;
+            background-color: #007BFF; 
+            color: white; 
+            border: none; 
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .details-button:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -38,24 +49,39 @@
     <script>
         const klantData = {
             "Dirilis24": { voorkeuren: "HALL E", voertuigFoto: "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", locatie: "50.87462776809204, 4.368742282726083" },
-            // Je klantendata hier...
+            "Hoes": { voorkeuren: "Leveringen alleen op afspraak", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2240454, 4.4167634" },
+            "Delidis": { voorkeuren: "Flexibele leveringstijden", voertuigFoto: "/api/placeholder/400/300", locatie: "51.2192156, 4.4028673" },
+            // Voeg hier meer klantgegevens toe...
         };
 
         const zoekInput = document.getElementById('klant-zoek');
         const klantLijst = document.getElementById('klant-lijst');
         const klantInfo = document.getElementById('klant-info');
 
+        // Klantenlijst tonen
         function toonKlanten(filter = '') {
             klantLijst.innerHTML = '';
             Object.keys(klantData).filter(naam => naam.toLowerCase().includes(filter.toLowerCase())).forEach(naam => {
                 const li = document.createElement('li');
-                li.textContent = naam;
-                li.className = 'cursor-pointer hover:bg-gray-200 p-2';
-                li.onclick = () => toonKlantInfo(naam);
+                li.className = 'klant-kader';
+
+                // Voeg de klantnaam toe
+                const klantNaam = document.createElement('span');
+                klantNaam.textContent = naam;
+                li.appendChild(klantNaam);
+
+                // Voeg de "See Details"-knop toe
+                const detailsButton = document.createElement('button');
+                detailsButton.textContent = 'See Details';
+                detailsButton.className = 'details-button';
+                detailsButton.onclick = () => toonKlantInfo(naam);
+                li.appendChild(detailsButton);
+
                 klantLijst.appendChild(li);
             });
         }
 
+        // Klantinformatie tonen wanneer op "See Details" wordt geklikt
         function toonKlantInfo(naam) {
             const klant = klantData[naam];
             document.getElementById('klant-naam').textContent = naam;
@@ -71,6 +97,7 @@
 
         zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));
 
+        // Toon standaard alle klanten
         toonKlanten();
     </script>
 </body>
