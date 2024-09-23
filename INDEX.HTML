@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klantenbeheer voor Heftruckchauffeur</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-3">
+        <div class="p-8">
+            <h1 class="text-2xl font-bold mb-4">Klantenbeheer voor Heftruckchauffeur</h1>
+            
+            <label for="klant-select" class="block mb-2">Selecteer een klant:</label>
+            <select id="klant-select" class="w-full p-2 mb-4 border rounded">
+                <option value="">-- Selecteer een klant --</option>
+                <option value="klant1">Klant 1</option>
+                <option value="klant2">Klant 2</option>
+                <option value="klant3">Klant 3</option>
+            </select>
+
+            <div id="klant-info" class="hidden">
+                <h2 class="text-xl font-semibold mb-2">Klantinformatie</h2>
+                <p id="klant-voorkeuren" class="mb-2"></p>
+                <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
+                <p id="klant-locatie" class="mb-2"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const klantData = {
+            klant1: {
+                naam: "Bedrijf A",
+                voorkeuren: "Voorkeur voor ochtendleveringen, altijd bellen voor aankomst",
+                voertuigFoto: "/api/placeholder/400/300",
+                locatie: "51.2194475, 4.4024643"
+            },
+            klant2: {
+                naam: "Bedrijf B",
+                voorkeuren: "Leveringen alleen op dinsdag en donderdag, parkeren aan de achterkant",
+                voertuigFoto: "/api/placeholder/400/300",
+                locatie: "51.2240454, 4.4167634"
+            },
+            klant3: {
+                naam: "Bedrijf C",
+                voorkeuren: "Flexibele leveringstijden, melden bij de receptie",
+                voertuigFoto: "/api/placeholder/400/300",
+                locatie: "51.2192156, 4.4028673"
+            }
+        };
+
+        document.getElementById('klant-select').addEventListener('change', function() {
+            const klantInfo = document.getElementById('klant-info');
+            const geselecteerdeKlant = this.value;
+
+            if (geselecteerdeKlant) {
+                const klant = klantData[geselecteerdeKlant];
+                document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
+                document.getElementById('klant-voertuig').src = klant.voertuigFoto;
+                document.getElementById('klant-locatie').textContent = `GPS Coördinaten: ${klant.locatie}`;
+                klantInfo.classList.remove('hidden');
+            } else {
+                klantInfo.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
