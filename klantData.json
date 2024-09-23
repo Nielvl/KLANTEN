@@ -64,8 +64,15 @@
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
         "locatie": "51.2240454, 4.4167634" 
     },
-    "Delidis 08:30": { 
-        "Voorkeuren": "Thursday: own truck, /n other days it needs to be delivered at Andiprim", 
+    "Delidis 08:00": { 
+        "Voorkeuren": " Either they have their own truck or we deliver it at Andiprim, in general it is written on the delivery note. It can be combined with Delidis", 
+        "voertuigFoto1": "https://www.imageneuf.be/onewebmedia/Camion%20Starfresh.jpg?etag=%225f083-5c5e9592%22&sourceContentType=image%2Fjpeg", 
+        "voertuigFoto2": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl", 
+        "locatie Andiprim": "50.87746735752994, 4.373915702116713",
+        "locatie Own Truck": "50.877831976525336, 4.370717231621229"
+    },
+    "Star Fresh Liége 08:00": { 
+        "Voorkeuren": "Thursday: own truck, other days it needs to be delivered at Andiprim and can be combined with Star Fresh Liége", 
         "voertuigFoto1": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
         "voertuigFoto2": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl", 
         "locatie Andiprim": "50.87746735752994, 4.373915702116713",
