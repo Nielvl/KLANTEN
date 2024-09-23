@@ -1,17 +1,18 @@
 {
     "Dirilis24": { 
-        "voorkeuren": "HALL E", 
+        "Location": "HALL E", 
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", 
         "locatie": "50.87462776809204, 4.368742282726083" 
     },
     "Hoes": { 
-        "voorkeuren": "Leveringen alleen op afspraak", 
-        "voertuigFoto": "/api/placeholder/400/300", 
+        "Instructions": "Could order extra stuff until 09:00", 
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
         "locatie": "51.2240454, 4.4167634" 
     },
     "Delidis": { 
-        "voorkeuren": "Flexibele leveringstijden", 
-        "voertuigFoto": "/api/placeholder/400/300", 
-        "locatie": "51.2192156, 4.4028673" 
+        "voorkeuren": "Thursday: own truck, /n other days it needs to be delivered at Andiprim", 
+        "voertuigFoto": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
+        "locatie Andiprim": "50.87746735752994, 4.373915702116713",
+        "locatie Own Truck": "50.877831976525336, 4.370717231621229" 
     }
 }
