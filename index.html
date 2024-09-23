@@ -16,24 +16,6 @@
             justify-content: space-between; 
             align-items: center;
         }
-        .details-button {<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klantenbeheer voor Heftruckchauffeur</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
-    <style>
-        .hidden { display: none; }
-        .klant-kader {
-            border: 1px solid #ccc; 
-            border-radius: 8px; 
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-        }
         .details-button {
             padding: 5px 10px;
             background-color: #007BFF; 
@@ -84,8 +66,8 @@
             
             <input type="text" id="klant-zoek" placeholder="Zoek een klant..." class="w-full p-2 mb-4 border rounded">
             <div class="flex justify-between mb-4">
-                <button id="sort-button" class="details-button">Sort alphabetic</button>
-                <button id="original-button" class="details-button hidden">Original sorting</button>
+                <button id="sort-button" class="details-button">Sorteer Alfabetisch</button>
+                <button id="original-button" class="details-button hidden">Originele Volgorde</button>
             </div>
             <ul id="klant-lijst" class="mb-4 max-h-40 overflow-y-auto"></ul>
 
@@ -191,140 +173,6 @@
             originalButton.classList.add('hidden');
             sortButton.classList.remove('hidden');
         };
-    </script>
-</body>
-</html>
-
-            padding: 5px 10px;
-            background-color: #007BFF; 
-            color: white; 
-            border: none; 
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .details-button:hover {
-            background-color: #0056b3;
-        }
-        .back-button {
-            padding: 5px 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        .back-button:hover {
-            background-color: #218838;
-        }
-        .klant-details {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .klant-info {
-            flex: 1 1 50%;
-            padding-right: 20px;
-        }
-        img {
-            flex: 1 1 50%;
-            max-width: 100%;
-            height: auto;
-        }
-        @media (max-width: 768px) {
-            .klant-info, img {
-                flex: 1 1 100%;
-            }
-        }
-    </style>
-</head>
-<body class="bg-gray-100 p-8">
-    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-3">
-        <div class="p-8">
-            <h1 class="text-2xl font-bold mb-4">Klantenbeheer voor Heftruckchauffeur</h1>
-            
-            <input type="text" id="klant-zoek" placeholder="Zoek een klant..." class="w-full p-2 mb-4 border rounded">
-            <ul id="klant-lijst" class="mb-4 max-h-40 overflow-y-auto"></ul>
-
-            <div id="klant-info-container" class="hidden klant-details">
-                <div id="klant-info" class="klant-info">
-                    <button id="back-button" class="back-button hidden">Terug naar klantenlijst</button>
-                    <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
-                    <p id="klant-voorkeuren" class="mb-2"></p>
-                    <p class="mb-2">GPS Coördinaten: <a id="klant-locatie" href="" target="_blank" class="text-blue-500 hover:underline"></a></p>
-                </div>
-                <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4">
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let klantData = {};
-
-        // Klantgegevens laden vanuit een extern JSON-bestand
-        fetch('klantData.json')
-            .then(response => response.json())
-            .then(data => {
-                klantData = data;
-                toonKlanten(); // Toon de klanten zodra de data is geladen
-            })
-            .catch(error => console.error('Error loading customer data:', error));
-
-        const zoekInput = document.getElementById('klant-zoek');
-        const klantLijst = document.getElementById('klant-lijst');
-        const klantInfoContainer = document.getElementById('klant-info-container');
-        const klantInfo = document.getElementById('klant-info');
-        const backButton = document.getElementById('back-button');
-
-        // Klantenlijst tonen
-        function toonKlanten(filter = '') {
-            klantLijst.innerHTML = '';
-            Object.keys(klantData).filter(naam => naam.toLowerCase().includes(filter.toLowerCase())).forEach(naam => {
-                const li = document.createElement('li');
-                li.className = 'klant-kader';
-
-                // Voeg de klantnaam toe
-                const klantNaam = document.createElement('span');
-                klantNaam.textContent = naam;
-                li.appendChild(klantNaam);
-
-                // Voeg de "See Details"-knop toe
-                const detailsButton = document.createElement('button');
-                detailsButton.textContent = 'See Details';
-                detailsButton.className = 'details-button';
-                detailsButton.onclick = () => toonKlantInfo(naam);
-                li.appendChild(detailsButton);
-
-                klantLijst.appendChild(li);
-            });
-        }
-
-        // Klantinformatie tonen wanneer op "See Details" wordt geklikt
-        function toonKlantInfo(naam) {
-            const klant = klantData[naam];
-            document.getElementById('klant-naam').textContent = naam;
-            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
-            document.getElementById('klant-voertuig').src = klant.voertuigFoto, klant.voertuigFoto1, klant.voertuigFoto2;
-           
-            
-            const locatieLink = document.getElementById('klant-locatie');
-            locatieLink.textContent = klant.locatie;
-            locatieLink.href = `https://www.google.com/maps/search/?api=1&query=${klant.locatie}`;
-            
-            klantInfoContainer.classList.remove('hidden');
-            klantLijst.classList.add('hidden');
-            zoekInput.classList.add('hidden');
-            backButton.classList.remove('hidden');
-        }
-
-        // Terug naar de klantenlijst
-        backButton.onclick = () => {
-            klantInfoContainer.classList.add('hidden');
-            klantLijst.classList.remove('hidden');
-            zoekInput.classList.remove('hidden');
-            backButton.classList.add('hidden');
-        };
-
-        zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));
     </script>
 </body>
 </html>
