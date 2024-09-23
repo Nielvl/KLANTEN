@@ -1,4 +1,20 @@
 {
+    "Dirilis24": { 
+        "Location": "HALL E", 
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", 
+        "locatie": "50.87462776809204, 4.368742282726083" 
+    },
+    "Hoes": { 
+        "Instructions": "Could order extra stuff until 09:00", 
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
+        "locatie": "51.2240454, 4.4167634" 
+    },
+    "Delidis": { 
+        "voorkeuren": "Thursday: own truck, /n other days it needs to be delivered at Andiprim", 
+        "voertuigFoto": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
+        "locatie Andiprim": "50.87746735752994, 4.373915702116713",
+        "locatie Own Truck": "50.877831976525336, 4.370717231621229" 
+    },
     "Rhino 03:30": {
         "Info": "Inside hall E, we usually drop off the pallet next to the office",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/wy5evvpv3x4vcwzgcb5z4/Foto-20-09-2024-08-19-46.jpg?rlkey=t47ponuugflxprlnzofvilxc0&st=vqvhmljr&dl",
@@ -20,11 +36,11 @@
         "locatie": "50.87422376311202, 4.366673280546562"
     },
     "De Winne Guy 05:30": {
-        "Info": "The truck looks like an ex 'ringoot' truck, white and blue. ",
+        "Info": "The truck looks like an ex 'ringoot' truck, white and blue.",
         "voertuigFoto": "",
         "locatie": "50.877286606244205, 4.371222838032669"
     },
-     "Thiry Gent": {
+    "Thiry Gent": {
         "Info": "Pallets are left outside on the parking next to the warehouse of Jonckheere, the very last warehous.",
         "voertuigFoto": "",
         "locatie": "50.87842984876467, 4.369662969458868"
@@ -39,7 +55,7 @@
         "voertuigFoto": "",
         "locatie": "50.87744851368797, 4.368868283511946"
     },
-     "Wyla 06:00": {
+    "Wyla 06:00": {
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87684386075354, 4.369225607132123"
@@ -107,9 +123,8 @@
         "locatie": "50.873728452988615, 4.36709559769328"
     },
     "Fruitgarden & Isam Achour 09:00": {
-        "Info": "Son & dad are parked next to eachother. They refer to them as 'fruitgarden 1 and 2' ",
+        "Info": "Son & dad are parked next to eachother. They refer to them as 'fruitgarden 1 and 2'",
         "voertuigFoto": "",
         "locatie": "50.877338431408056, 4.368681389862328"
-    },
     }
 }
