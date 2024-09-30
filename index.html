@@ -366,6 +366,14 @@
             let customerName = null;
 
             for (let line of lines) {
+                // Verwijder spaties aan het begin en einde van de regel
+                line = line.trim();
+
+                // Negeer regels die beginnen met "tel:", "fax:", "gsm:" of "BE"
+                if (/^(tel:|fax:|gsm:|BE)/i.test(line)) {
+                    continue;
+                }
+
                 // Zoek naar klantnummer (6 cijfers, niet beginnend met 433 of 434)
                 const numberMatch = line.match(/\b(?!433|434)\d{6}\b/);
                 if (numberMatch && !customerNumber) {
