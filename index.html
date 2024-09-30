@@ -11,32 +11,30 @@
         .klant-kader {
             border: 1px solid #ccc; 
             border-radius: 8px; 
-            padding: 10px;
-            margin-bottom: 10px;
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
+            padding: 16px;
+            margin-bottom: 16px;
         }
         .details-button, .mail-button, .photo-button {
-            padding: 5px 10px;
+            padding: 8px 16px;
             background-color: #007BFF; 
             color: white; 
             border: none; 
             border-radius: 5px;
             cursor: pointer;
-            margin-left: 5px;
+            transition: background-color 0.3s;
         }
         .details-button:hover, .mail-button:hover, .photo-button:hover {
             background-color: #0056b3;
         }
         .back-button {
-            padding: 5px 10px;
+            padding: 8px 16px;
             background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-bottom: 20px;
+            transition: background-color 0.3s;
         }
         .back-button:hover {
             background-color: #218838;
@@ -134,24 +132,26 @@
 
                 // Voeg de klantnaam en tijdsindicatie toe
                 const klantNaamEnTijd = document.createElement('div');
+                klantNaamEnTijd.className = 'mb-4';
                 const naamDelen = naam.split(' ');
                 const tijd = naamDelen.pop();
                 const klantNaam = naamDelen.join(' ');
-                klantNaamEnTijd.innerHTML = `<span>${klantNaam}</span><br><span class="text-sm text-gray-500">${tijd}</span>`;
+                klantNaamEnTijd.innerHTML = `<span class="font-semibold text-lg">${klantNaam}</span><br><span class="text-sm text-gray-500">${tijd}</span>`;
                 li.appendChild(klantNaamEnTijd);
 
                 // Voeg de knoppen toe
                 const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'flex justify-between items-center';
                 
                 const detailsButton = document.createElement('button');
                 detailsButton.textContent = 'See Details';
-                detailsButton.className = 'details-button';
+                detailsButton.className = 'details-button flex-grow mr-2';
                 detailsButton.onclick = () => toonKlantInfo(naam);
                 buttonContainer.appendChild(detailsButton);
 
                 const mailButton = document.createElement('button');
                 mailButton.textContent = 'Send Mail';
-                mailButton.className = 'mail-button';
+                mailButton.className = 'mail-button flex-grow';
                 mailButton.onclick = () => sendMail(naam);
                 buttonContainer.appendChild(mailButton);
 
