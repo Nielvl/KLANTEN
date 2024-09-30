@@ -109,6 +109,7 @@
             })
             .then(response => {
                 console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -116,8 +117,12 @@
             })
             .then(data => {
                 console.log('Received data:', data);
-                if (data && data.customers && Array.isArray(data.customers)) {
-                    klantData = data.customers;
+                if (data && typeof data === 'object') {
+                    klantData = Object.entries(data).map(([key, value]) => ({
+                        id: key,
+                        name: key,
+                        ...value
+                    }));
                     origineleVolgorde = klantData.map(klant => klant.id);
                     console.log('Processed customer data:', klantData);
                     lastLoadTime = currentTime;
@@ -129,7 +134,9 @@
             })
             .catch(error => {
                 console.error('Error loading customer data:', error);
-                alert('Error loading customer data. Please try again later.');
+                console.error('Error details:', error.message);
+                console.error('Error stack:', error.stack);
+                alert('Error loading customer data. Please check the console for more details and try again later.');
             });
         }
 
@@ -166,15 +173,15 @@
             let klanten = klantData.filter(klant => 
                 klant.name.toLowerCase().includes(filter.toLowerCase()) ||
                 (klant.customerNumber && klant.customerNumber.includes(filter)) ||
-                (klant.timeSlot && klant.timeSlot.toLowerCase().includes(filter.toLowerCase()))
+                (klant.name.split(' ')[0] && klant.name.split(' ')[0].toLowerCase().includes(filter.toLowerCase()))
             );
 
             if (sorteer) {
                 klanten.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sorteerOpTijd) {
                 klanten.sort((a, b) => {
-                    const timeA = a.timeSlot || '';
-                    const timeB = b.timeSlot || '';
+                    const timeA = a.name.split(' ')[1] || '';
+                    const timeB = b.name.split(' ')[1] || '';
                     return timeA.localeCompare(timeB);
                 });
             } else {
@@ -193,7 +200,6 @@
                 klantInfoDiv.innerHTML = `
                     <span class="font-semibold text-lg">${klant.name}</span><br>
                     <span class="text-sm text-gray-500">Customer number: ${klant.customerNumber || 'Not available'}</span><br>
-                    <span class="text-sm text-gray-500">${klant.timeSlot || 'No time slot'}</span>
                 `;
                 div.appendChild(klantInfoDiv);
 
@@ -235,9 +241,9 @@
                     <button class="back-button">Back</button>
                 </div>
                 <div class="w-full">
-                    <h2 class="text-xl font-semibold mb-2">${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}</h2>
+                    <h2 class="text-xl font-semibold mb-2">${klant.name}</h2>
                     <p class="mb-2">Customer number: ${klant.customerNumber || 'Not available'}</p>
-                    <p class="mb-2">Preferences: ${klant.voorkeuren || 'No preferences specified'}</p>
+                    <p class="mb-2">Preferences: ${klant.Voorkeuren || 'No preferences specified'}</p>
                 </div>
                 <div id="map-${klantId}" class="w-full mb-4" style="height: 300px;"></div>
                 <div id="photo-buttons-${klantId}" class="w-full mb-4"></div>
@@ -312,7 +318,9 @@
         };
 
         originalButton.onclick = () => {
-            toonKlanten(zoekInput.value);
+            t
+
+oonKlanten(zoekInput.value);
             originalButton.classList.add('hidden');
             sortButton.classList.remove('hidden');
             sortTimeButton.classList.remove('hidden');
