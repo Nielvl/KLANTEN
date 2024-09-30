@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -16,7 +17,7 @@
             margin-bottom: 16px;
             background-color: white;
         }
-        .details-button, .mail-button, .photo-button {
+        .details-button, .mail-button, .photo-button, .capture-button {
             padding: 8px 16px;
             background-color: #007BFF; 
             color: white; 
@@ -25,7 +26,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
         }
-        .details-button:hover, .mail-button:hover, .photo-button:hover {
+        .details-button:hover, .mail-button:hover, .photo-button:hover, .capture-button:hover {
             background-color: #0056b3;
         }
         .back-button {
@@ -74,7 +75,9 @@
             <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
             <button id="sort-time-button" class="details-button mb-2">Sort by time</button>
             <button id="original-button" class="details-button hidden mb-2">Original order</button>
+            <button id="capture-button" class="capture-button mb-2">Scan delivery note</button>
         </div>
+        <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <div id="klant-lijst" class="mb-8"></div>
     </div>
 
@@ -254,6 +257,117 @@
             document.getElementById('sort-button').classList.remove('hidden');
             document.getElementById('sort-time-button').classList.remove('hidden');
         };
+
+        // OCR functionality
+        const captureButton = document.getElementById('capture-button');
+        const fileInput = document.getElementById('file-input');
+
+        captureButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const compressedImage = compressImage(img);
+                        processImage(compressedImage);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function compressImage(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = img.width;
+            let height = img.height;
+            const maxWidth = 1000;
+            const maxHeight = 1000;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            return canvas.toDataURL('image/jpeg', 0.7);
+        }
+
+        function processImage(imageData) {
+            Tesseract.recognize(imageData, 'eng+nld', {
+                logger: m => console.log(m)
+            }).then(({ data: { text } }) => {
+                console.log("Extracted text:", text);
+                const customerInfo = extractCustomerInfo(text);
+                if (customerInfo) {
+                    console.log("Customer information found:", customerInfo);
+                    if (customerInfo.customerNumber) {
+                        document.getElementById('klant-zoek').value = customerInfo.customerNumber;
+                        toonKlanten(customerInfo.customerNumber);
+                    } else if (customerInfo.customerName) {
+                        document.getElementById('klant-zoek').value = customerInfo.customerName;
+                        toonKlanten(customerInfo.customerName);
+                    }
+                } else {
+                    console.log("No customer information found");
+                    alert('No customer information found in the image. Please try again with a clearer photo.');
+                }
+            });
+        }
+
+        function extractCustomerInfo(text) {
+            const lines = text.split('\n');
+            let customerNumber = null;
+            let customerName = null;
+
+            for (let line of lines) {
+                line = line.trim();
+
+                if (/^(tel:|fax:|gsm:|BE)/i.test(line)) {
+                    continue;
+                }
+
+                const numberMatch = line.match(/\b(?!433|434)\d{6}\b/);
+                if (numberMatch && !customerNumber) {
+                    customerNumber = numberMatch[0];
+                    console.log("Found customer number:", customerNumber);
+                }
+
+                const nameMatch = line.match(/^[A-Za-z\s]+$/);
+                if (nameMatch && !customerName) {
+                    customerName = nameMatch[0].trim();
+                    console.log("Found customer name:", customerName);
+                }
+
+                if (customerNumber && customerName) {
+                    break;
+                }
+            }
+
+            if (!customerNumber && !customerName) {
+                return null;
+            }
+
+            return { customerNumber, customerName };
+        }
 
         // Load customer data when the page loads
         document.addEventListener('DOMContentLoaded', laadKlantData);
