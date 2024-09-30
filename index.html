@@ -272,7 +272,18 @@
                     method: 'POST',
                     body: formData
                 });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const result = await response.json();
+                console.log("OCR API response:", result);
+
+                if (result.IsErroredOnProcessing) {
+                    throw new Error(`OCR processing error: ${result.ErrorMessage}`);
+                }
+
                 if (result.ParsedResults && result.ParsedResults.length > 0) {
                     return result.ParsedResults[0].ParsedText;
                 } else {
@@ -285,13 +296,23 @@
         }
 
         function extractCustomerNumber(text) {
+            if (!text) {
+                console.log("Geen tekst om te verwerken");
+                return null;
+            }
+
+            console.log("Geëxtraheerde tekst:", text);
+
             const lines = text.split('\n');
             for (let line of lines) {
                 const match = line.match(/\b\d{6,}\b/);
                 if (match) {
+                    console.log("Gevonden klantnummer:", match[0]);
                     return match[0];
                 }
             }
+
+            console.log("Geen klantnummer gevonden in de tekst");
             return null;
         }
 
@@ -306,19 +327,27 @@
                 reader.onload = async (e) => {
                     try {
                         const imageData = e.target.result.split(',')[1];
+                        console.log("Afbeelding geladen, start OCR-verwerking");
                         const text = await performOCR(imageData);
+                        console.log("OCR-verwerking voltooid");
                         console.log("Gedetecteerde tekst:", text);
                         const customerNumber = extractCustomerNumber(text);
                         if (customerNumber) {
+                            console.log("Klantnummer gevonden:", customerNumber);
                             zoekInput.value = customerNumber;
                             toonKlanten(customerNumber);
                         } else {
-                            alert('Geen klantnummer gevonden in de afbeelding.');
+                            console.log("Geen klantnummer gevonden");
+                            alert('Geen klantnummer gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
                         }
                     } catch (error) {
                         console.error('Fout bij het verwerken van de afbeelding:', error);
-                        alert('Er is een fout opgetreden bij het verwerken van de afbeelding.');
+                        alert(`Er is een fout opgetreden bij het verwerken van de afbeelding: ${error.message}`);
                     }
+                };
+                reader.onerror = (error) => {
+                    console.error('Fout bij het lezen van het bestand:', error);
+                    alert('Er is een fout opgetreden bij het lezen van het bestand. Probeer het opnieuw.');
                 };
                 reader.readAsDataURL(file);
             }
