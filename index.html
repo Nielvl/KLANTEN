@@ -6,7 +6,6 @@
     <title>Klantenbeheer voor Heftruckchauffeur</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8LJ0Q0Se0O8Q38FPvC31zxIj8i05q35M"></script>
-    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -257,6 +256,46 @@
             sortTimeButton.classList.remove('hidden');
         };
 
+        async function performOCR(imageData) {
+            const apiKey = 'K81580366488957'; // OCR.space API-sleutel
+            const apiUrl = 'https://api.ocr.space/parse/image';
+
+            const formData = new FormData();
+            formData.append('apikey', apiKey);
+            formData.append('base64Image', imageData);
+            formData.append('language', 'nld'); // Nederlands
+            formData.append('detectOrientation', 'true');
+            formData.append('scale', 'true');
+            formData.append('isTable', 'false');
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.ParsedResults && result.ParsedResults.length > 0) {
+                    return result.ParsedResults[0].ParsedText;
+                } else {
+                    throw new Error('Geen tekst gevonden in de afbeelding');
+                }
+            } catch (error) {
+                console.error('Fout bij OCR-verwerking:', error);
+                throw error;
+            }
+        }
+
+        function extractCustomerNumber(text) {
+            const lines = text.split('\n');
+            for (let line of lines) {
+                const match = line.match(/\b\d{6,}\b/); // Zoekt naar een getal van 6 of meer cijfers
+                if (match) {
+                    return match[0];
+                }
+            }
+            return null;
+        }
+
         captureButton.onclick = () => {
             fileInput.click();
         };
@@ -265,40 +304,26 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        Tesseract.recognize(img, 'nld')
-                            .then(({ data: { text } }) => {
-                                const customerNumber = extractCustomerNumber(text);
-                                if (customerNumber) {
-                                    zoekInput.value = customerNumber;
-                                    toonKlanten(customerNumber);
-                                } else {
-                                    alert('Geen klantnummer gevonden in de afbeelding.');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error processing image:', error);
-                                alert('Er is een fout opgetreden bij het verwerken van de afbeelding.');
-                            });
-                    };
-                    img.src = e.target.result;
+                reader.onload = async (e) => {
+                    try {
+                        const imageData = e.target.result.split(',')[1]; // Haal base64-gecodeerde afbeeldingsgegevens op
+                        const text = await performOCR(imageData);
+                        console.log("Gedetecteerde tekst:", text);
+                        const customerNumber = extractCustomerNumber(text);
+                        if (customerNumber) {
+                            zoekInput.value = customerNumber;
+                            toonKlanten(customerNumber);
+                        } else {
+                            alert('Geen klantnummer gevonden in de afbeelding.');
+                        }
+                    } catch (error) {
+                        console.error('Fout bij het verwerken van de afbeelding:', error);
+                        alert('Er is een fout opgetreden bij het verwerken van de afbeelding.');
+                    }
                 };
                 reader.readAsDataURL(file);
             }
         };
-
-        function extractCustomerNumber(text) {
-            const lines = text.split('\n');
-            for (let line of lines) {
-                const match = line.match(/\b\d{5,}\b/); // Zoekt naar een getal van 4 of meer cijfers
-                if (match) {
-                    return match[0];
-                }
-            }
-            return null;
-        }
     </script>
 </body>
 </html>
