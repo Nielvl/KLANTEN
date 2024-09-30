@@ -49,7 +49,7 @@
             padding-right: 20px;
         }
         #map {
-            height: 400px;
+            height: 300px;
             width: 100%;
         }
         #klant-lijst {
@@ -77,20 +77,6 @@
         </div>
         <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <div id="klant-lijst" class="mb-8"></div>
-
-        <div id="klant-info-container" class="hidden klant-details">
-            <div id="klant-info" class="klant-info">
-                <button id="back-button" class="back-button mb-8">Terug naar klantenlijst</button>
-                <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
-                <p id="klant-nummer" class="mb-2"></p>
-                <p id="klant-voorkeuren" class="mb-2"></p>
-                <div id="map" class="mb-4"></div>
-                <div id="photo-buttons" class="mb-4"></div>
-            </div>
-            <div id="photo-container" class="hidden w-full">
-                <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
-            </div>
-        </div>
     </div>
 
     <script>
@@ -116,14 +102,9 @@
 
         const zoekInput = document.getElementById('klant-zoek');
         const klantLijst = document.getElementById('klant-lijst');
-        const klantInfoContainer = document.getElementById('klant-info-container');
-        const klantInfo = document.getElementById('klant-info');
-        const backButton = document.getElementById('back-button');
         const sortButton = document.getElementById('sort-button');
         const sortTimeButton = document.getElementById('sort-time-button');
         const originalButton = document.getElementById('original-button');
-        const photoContainer = document.getElementById('photo-container');
-        const photoButtons = document.getElementById('photo-buttons');
         const captureButton = document.getElementById('capture-button');
         const fileInput = document.getElementById('file-input');
 
@@ -150,6 +131,7 @@
             klanten.forEach(klant => {
                 const div = document.createElement('div');
                 div.className = 'klant-kader';
+                div.id = `klant-${klant.id}`;
 
                 const klantInfoDiv = document.createElement('div');
                 klantInfoDiv.className = 'mb-4';
@@ -183,30 +165,43 @@
 
         function toonKlantInfo(klantId) {
             const klant = klantData.find(k => k.id === klantId);
-            document.getElementById('klant-naam').textContent = `${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}`;
-            document.getElementById('klant-nummer').textContent = `Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}`;
-            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren || 'Geen voorkeuren opgegeven'}`;
+            const klantDiv = document.getElementById(`klant-${klantId}`);
             
-            klantInfoContainer.classList.remove('hidden');
-            klantLijst.classList.add('hidden');
-            zoekInput.classList.add('hidden');
-            backButton.classList.remove('hidden');
+            // Verwijder eventuele bestaande details
+            const bestaandeDetails = klantDiv.querySelector('.klant-details');
+            if (bestaandeDetails) {
+                bestaandeDetails.remove();
+            }
 
+            const detailsDiv = document.createElement('div');
+            detailsDiv.className = 'klant-details mt-4';
+            detailsDiv.innerHTML = `
+                <button class="back-button mb-4">Terug</button>
+                <h2 class="text-xl font-semibold mb-2">${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}</h2>
+                <p class="mb-2">Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}</p>
+                <p class="mb-2">Voorkeuren: ${klant.voorkeuren || 'Geen voorkeuren opgegeven'}</p>
+                <div id="map-${klantId}" class="mb-4" style="height: 300px;"></div>
+                <div id="photo-buttons-${klantId}" class="mb-4"></div>
+                <div id="photo-container-${klantId}" class="hidden w-full">
+                    <img id="klant-voertuig-${klantId}" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
+                </div>
+            `;
+
+            klantDiv.appendChild(detailsDiv);
+
+            // Voeg de kaart toe
             if (klant.locatie) {
                 const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
-                const map = new google.maps.Map(document.getElementById('map'), {
+                const map = new google.maps.Map(document.getElementById(`map-${klantId}`), {
                     center: { lat, lng },
                     zoom: 16,
                     mapTypeId: google.maps.MapTypeId.SATELLITE
                 });
                 new google.maps.Marker({ position: { lat, lng }, map: map });
-                document.getElementById('map').classList.remove('hidden');
-            } else {
-                document.getElementById('map').classList.add('hidden');
             }
 
-            photoButtons.innerHTML = '';
-            photoContainer.classList.add('hidden');
+            // Voeg fotoknoppen toe
+            const photoButtonsContainer = document.getElementById(`photo-buttons-${klantId}`);
             const photos = [
                 { key: 'voertuigFoto', label: 'Foto 1' },
                 { key: 'voertuigFoto1', label: 'Foto 2' },
@@ -218,16 +213,22 @@
                     const button = document.createElement('button');
                     button.textContent = photo.label;
                     button.className = 'photo-button mr-2 mb-2';
-                    button.onclick = () => toonFoto(klant[photo.key]);
-                    photoButtons.appendChild(button);
+                    button.onclick = () => toonFoto(klant[photo.key], klantId);
+                    photoButtonsContainer.appendChild(button);
                 }
             });
+
+            // Voeg terugknop functionaliteit toe
+            const backButton = detailsDiv.querySelector('.back-button');
+            backButton.onclick = () => {
+                detailsDiv.remove();
+            };
         }
 
-        function toonFoto(url) {
-            const img = document.getElementById('klant-voertuig');
+        function toonFoto(url, klantId) {
+            const img = document.getElementById(`klant-voertuig-${klantId}`);
             img.src = url;
-            photoContainer.classList.remove('hidden');
+            document.getElementById(`photo-container-${klantId}`).classList.remove('hidden');
         }
 
         function sendMail(klantId) {
@@ -236,14 +237,6 @@
             const body = encodeURIComponent(`De klant ${klant.name} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
-
-        backButton.onclick = () => {
-            klantInfoContainer.classList.add('hidden');
-            klantLijst.classList.remove('hidden');
-            zoekInput.classList.remove('hidden');
-            backButton.classList.add('hidden');
-            photoContainer.classList.add('hidden');
-        };
 
         zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));
 
