@@ -293,17 +293,12 @@
 
         function extractCustomerName(text) {
             const lines = text.split('\n');
-            // We gaan ervan uit dat de eerste niet-lege regel de klantnaam bevat
             for (let line of lines) {
                 line = line.trim();
-                if (line) {
-                    // We nemen aan dat de klantnaam het eerste woord of de eerste twee woorden zijn
-                    const words = line.split(' ');
-                    if (words.length >= 2) {
-                        return words.slice(0, 2).join(' ');
-                    } else if (words.length === 1) {
-                        return words[0];
-                    }
+                if (line.length >= 7) {
+                    // We nemen de eerste 5 of meer karakters, tot aan de eerste komma of het einde van de regel
+                    const endIndex = line.indexOf(',') > 5 ? line.indexOf(',') : line.length;
+                    return line.slice(0, Math.max(endIndex, 5));
                 }
             }
             return null;
