@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Management for Forklift Driver</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8LJ0Q0Se0O8Q38FPvC31zxIj8i05q35M"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -85,7 +86,6 @@
         let origineleVolgorde = [];
 
         function laadKlantData() {
-            // Add a timestamp to the URL to prevent caching
             const timestamp = new Date().getTime();
             const url = `https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-WgnkGm7iFgE37FAqiZ5V0Iz9YroVUh.json?t=${timestamp}`;
 
@@ -100,16 +100,13 @@
                 .catch(error => console.error('Error loading customer data:', error));
         }
 
-        // Reload data every 5 minutes
-        setInterval(laadKlantData, 1 * 60 * 1000);
+        setInterval(laadKlantData, 5 * 60 * 1000);
 
-        // Function to manually reload data
         function herlaadGegevens() {
             laadKlantData();
             alert('Customer data is being reloaded. The list will update shortly.');
         }
 
-        // Initial data load
         laadKlantData();
 
         const zoekInput = document.getElementById('klant-zoek');
@@ -180,7 +177,6 @@
             const klant = klantData.find(k => k.id === klantId);
             const klantDiv = document.getElementById(`klant-${klantId}`);
             
-            // Remove existing details if any
             const bestaandeDetails = klantDiv.querySelector('.klant-details');
             if (bestaandeDetails) {
                 bestaandeDetails.remove();
@@ -206,18 +202,15 @@
 
             klantDiv.appendChild(detailsDiv);
 
-            // Add the map
             if (klant.locatie) {
                 const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
-                const map = new google.maps.Map(document.getElementById(`map-${klantId}`), {
-                    center: { lat, lng },
-                    zoom: 16,
-                    mapTypeId: google.maps.MapTypeId.SATELLITE
-                });
-                new google.maps.Marker({ position: { lat, lng }, map: map });
+                const map = L.map(`map-${klantId}`).setView([lat, lng], 18);
+                L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+                }).addTo(map);
+                L.marker([lat, lng]).addTo(map);
             }
 
-            // Add photo buttons
             const photoButtonsContainer = document.getElementById(`photo-buttons-${klantId}`);
             const photos = [
                 { key: 'voertuigFoto', label: 'Photo 1' },
@@ -235,7 +228,6 @@
                 }
             });
 
-            // Add back button functionality
             const backButton = detailsDiv.querySelector('.back-button');
             backButton.onclick = () => {
                 detailsDiv.remove();
@@ -284,7 +276,6 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
 
-            // Calculate new dimensions while maintaining aspect ratio
             let width = img.width;
             let height = img.height;
             const maxWidth = 1000;
@@ -305,10 +296,8 @@
             canvas.width = width;
             canvas.height = height;
 
-            // Draw the image on the canvas with new dimensions
             ctx.drawImage(img, 0, 0, width, height);
 
-            // Convert the canvas to a compressed JPEG dataURL
             return canvas.toDataURL('image/jpeg', 0.7);
         }
 
@@ -391,29 +380,24 @@
             let customerName = null;
 
             for (let line of lines) {
-                // Remove spaces at the beginning and end of the line
                 line = line.trim();
 
-                // Ignore lines starting with "tel:", "fax:", "gsm:" or "BE"
                 if (/^(tel:|fax:|gsm:|BE)/i.test(line)) {
                     continue;
                 }
 
-                // Look for customer number (6 digits, not starting with 433 or 434)
                 const numberMatch = line.match(/\b(?!433|434)\d{6}\b/);
                 if (numberMatch && !customerNumber) {
                     customerNumber = numberMatch[0];
                     console.log("Found customer number:", customerNumber);
                 }
 
-                // Look for customer name (series of words without numbers)
                 const nameMatch = line.match(/^[A-Za-z\s]+$/);
                 if (nameMatch && !customerName) {
                     customerName = nameMatch[0].trim();
                     console.log("Found customer name:", customerName);
                 }
 
-                // Stop if we've found both
                 if (customerNumber && customerName) {
                     break;
                 }

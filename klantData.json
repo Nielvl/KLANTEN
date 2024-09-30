@@ -23,7 +23,7 @@
         "name": "LAHAYE LARDIES SPRL",
         "customerNumber": "401000",
         "timeSlot": "",
-        "voorkeuren": "",
+        "voorkeuren": "WILL COLLECT HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
       },
@@ -32,7 +32,7 @@
         "name": "GOKCE",
         "customerNumber": "400759",
         "timeSlot": "",
-        "voorkeuren": "",
+        "voorkeuren": "WILL COLLECT HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
       },
@@ -41,9 +41,9 @@
         "name": "VEMACRO BV",
         "customerNumber": "4000187",
         "timeSlot": "",
-        "voorkeuren": "",
+        "voorkeuren": "PREFERS TO BE DELIVERED AT M57",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.87597895833556, 4.370438667853808"
       },
       {
         "id": "de-smet-jean",
@@ -59,7 +59,7 @@
         "name": "GFRESH ITALIAN FOOD",
         "customerNumber": "4000375",
         "timeSlot": "",
-        "voorkeuren": "",
+        "voorkeuren": "WILL COLLECT HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
       },
@@ -67,17 +67,17 @@
         "id": "van-dijck-freres",
         "name": "VAN DIJCK FRERES NV",
         "customerNumber": "400569",
-        "timeSlot": "",
-        "voorkeuren": "",
+        "timeSlot": "06:30",
+        "voorkeuren": "COULD BE A VAN OR A TRUCK, WHEN IT'S A VAN THEY NEED IT QUICK, THE TRUCK WILL LEAVE AROUND 07:30 +/-",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.87677800229558, 4.371743796279549"
       },
       {
         "id": "ad-global",
         "name": "AD-GLOBAL (oud DANFRUITS)",
         "customerNumber": "400770",
         "timeSlot": "",
-        "voorkeuren": "",
+        "voorkeuren": "WILL COLLECT HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
       },
@@ -86,7 +86,7 @@
         "name": "HOES FRUITS sa",
         "customerNumber": "400643",
         "timeSlot": "08:30",
-        "voorkeuren": "Could order extra stuff until 09:00",
+        "voorkeuren": "Could order extra stuff until 08:00",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl",
         "locatie": "51.2240454, 4.4167634"
       },
@@ -94,10 +94,10 @@
         "id": "allgro",
         "name": "ALLGRO",
         "customerNumber": "400815",
-        "timeSlot": "",
-        "voorkeuren": "",
+        "timeSlot": "09:00",
+        "voorkeuren": "WILL LOAD AT SUPERFRUIT. THE DRIVER WILL ANNOUNCE HIMSELF WHEN HE'S READY TO LOAD",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.87786331412451, 4.368525418151219"
       },
       {
         "id": "jacques-remy",
@@ -109,22 +109,13 @@
         "locatie": "50.87814991581628, 4.370361855333375"
       },
       {
-        "id": "reheul-nick",
-        "name": "REHEUL Nick",
-        "customerNumber": "4000110",
-        "timeSlot": "",
-        "voorkeuren": "",
-        "voertuigFoto": "",
-        "locatie": ""
-      },
-      {
         "id": "vandeweghe-stieven",
         "name": "VANDEWEGHE STIEVEN",
         "customerNumber": "4000979",
-        "timeSlot": "",
+        "timeSlot": "08:00",
         "voorkeuren": "",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.877795245567484, 4.370730212366253"
       },
       {
         "id": "desaeger",
