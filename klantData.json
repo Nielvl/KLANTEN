@@ -1,238 +1,381 @@
 {
-    "Rhino 03:30": {
-        "Voorkeuren": "Inside hall E, we usually drop off the pallet next to the office",
+    "customers": [
+      {
+        "id": "rhino",
+        "name": "Rhino",
+        "timeSlot": "03:30",
+        "voorkeuren": "Inside hall E, we usually drop off the pallet next to the office",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/wy5evvpv3x4vcwzgcb5z4/Foto-20-09-2024-08-19-46.jpg?rlkey=t47ponuugflxprlnzofvilxc0&st=vqvhmljr&dl",
         "locatie": "50.87525018115413, 4.367670170036867"
-    },
-    "Cora 03:45": {
-        "Voorkeuren": "At Van Lier, you must visit the small office on the right side when entering the warehouse to let them know that you delivered it.",
+      },
+      {
+        "id": "cora",
+        "name": "Cora",
+        "timeSlot": "03:45",
+        "voorkeuren": "At Van Lier, you must visit the small office on the right side when entering the warehouse to let them know that you delivered it.",
         "voertuigFoto": "https://lh3.googleusercontent.com/p/AF1QipNZEM-Oc_v4y5tvbq-w9sHLLY4eqgVmEWJ0a5YA=s680-w680-h510",
         "locatie": "50.87789077819844, 4.370138802680394"
-    },
-    "Tertholen 04:30": {
-        "Voorkeuren": "LEFT WAREHOUSE ON THE PICTURE= C31",
+      },
+      {
+        "id": "tertholen",
+        "name": "Tertholen",
+        "timeSlot": "04:30",
+        "voorkeuren": "LEFT WAREHOUSE ON THE PICTURE= C31",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
         "locatie": "50.87422376311202, 4.366673280546562"
-    },
-    "De Smet Jean 04:30": {
-        "Voorkeuren": "RIGHT WAREHOUSE IN THE PICTURE= C30",
+      },
+      {
+        "id": "de-smet-jean",
+        "name": "De Smet Jean",
+        "timeSlot": "04:30",
+        "voorkeuren": "RIGHT WAREHOUSE IN THE PICTURE= C30",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
         "locatie": "50.87422376311202, 4.366673280546562"
-    },
-    "De Winne Guy 05:30": {
-        "Voorkeuren": "The truck looks like an ex 'ringoot' truck, white and blue.",
+      },
+      {
+        "id": "de-winne-guy",
+        "name": "De Winne Guy",
+        "timeSlot": "05:30",
+        "voorkeuren": "The truck looks like an ex 'ringoot' truck, white and blue.",
         "voertuigFoto": "",
         "locatie": "50.877286606244205, 4.371222838032669"
-    },
-    "Thiry Gent 05:00": {
-        "Voorkeuren": "Pallets are left outside on the parking next to the warehouse of Jonckheere, the very last warehous.",
+      },
+      {
+        "id": "thiry-gent",
+        "name": "Thiry Gent",
+        "timeSlot": "05:00",
+        "voorkeuren": "Pallets are left outside on the parking next to the warehouse of Jonckheere, the very last warehous.",
         "voertuigFoto": "",
         "locatie": "50.87842984876467, 4.369662969458868"
-    },
-    "Fast and Fresh 06:00": {
-        "Voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Bouvry between 05:30 and 06:00.",
+      },
+      {
+        "id": "fast-and-fresh",
+        "name": "Fast and Fresh",
+        "timeSlot": "06:00",
+        "voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Bouvry between 05:30 and 06:00.",
         "voertuigFoto": "",
         "locatie": "50.87744851368797, 4.368868283511946"
-    },
-    "Bouvry 06:00": {
-        "Voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Fast & Fresh between 05:30 and 06:00.",
+      },
+      {
+        "id": "bouvry",
+        "name": "Bouvry",
+        "timeSlot": "06:00",
+        "voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Fast & Fresh between 05:30 and 06:00.",
         "voertuigFoto": "",
         "locatie": "50.87744851368797, 4.368868283511946"
-    },
-    "Wyla 06:00": {
+      },
+      {
+        "id": "wyla",
+        "name": "Wyla",
+        "timeSlot": "06:00",
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87684386075354, 4.369225607132123"
-    },
-    "Horeca Totaal 06:00": {
-        "Voorkeuren": "Jean Marie Trans (JM TRANS), other side of the building",
+      },
+      {
+        "id": "horeca-totaal",
+        "name": "Horeca Totaal",
+        "timeSlot": "06:00",
+        "voorkeuren": "Jean Marie Trans (JM TRANS), other side of the building",
         "voertuigFoto": "",
         "locatie": "50.87732455993015, 4.36878502799219"
-    },
-    "Verdigro 06:00": {
-        "Voorkeuren": "Van Lier OR Could have his own truck. IF YOU NEED TO DROP IT OFF AT VAN LIER THEN ALWAYS ANNOUNCE IT IN THE SMALL OFFICE",
+      },
+      {
+        "id": "verdigro",
+        "name": "Verdigro",
+        "timeSlot": "06:00",
+        "voorkeuren": "Van Lier OR Could have his own truck. IF YOU NEED TO DROP IT OFF AT VAN LIER THEN ALWAYS ANNOUNCE IT IN THE SMALL OFFICE",
         "voertuigFoto": "",
         "locatie": "50.87788295752422, 4.370364990537037"
-    },
-    "Restofrais 05:30 - 06:00": {
+      },
+      {
+        "id": "restofrais",
+        "name": "Restofrais",
+        "timeSlot": "05:30 - 06:00",
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87841375413854, 4.370329582359883"
-    },
-    "Hoes 08:30": { 
-        "Voorkeuren": "Could order extra stuff until 09:00", 
-        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl", 
-        "locatie": "51.2240454, 4.4167634" 
-    },
-    "Delidis 08:00": { 
-        "Voorkeuren": "Either they have their own truck or we deliver it at Andiprim, in general it is written on the delivery note. It can be combined with Delidis", 
-        "voertuigFoto": "https://www.imageneuf.be/onewebmedia/Camion%20Starfresh.jpg?etag=%225f083-5c5e9592%22&sourceContentType=image%2Fjpeg", 
+      },
+      {
+        "id": "hoes",
+        "name": "Hoes",
+        "timeSlot": "08:30",
+        "voorkeuren": "Could order extra stuff until 09:00",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/f1p6z6cfwx4pk8dk4h8de/Foto-20-09-2024-08-41-02.jpg?rlkey=gljf49t3x95wh46672uagotda&st=m3w02yzo&dl",
+        "locatie": "51.2240454, 4.4167634"
+      },
+      {
+        "id": "delidis",
+        "name": "Delidis",
+        "timeSlot": "08:00",
+        "voorkeuren": "Either they have their own truck or we deliver it at Andiprim, in general it is written on the delivery note. It can be combined with Delidis",
+        "voertuigFoto": "https://www.imageneuf.be/onewebmedia/Camion%20Starfresh.jpg?etag=%225f083-5c5e9592%22&sourceContentType=image%2Fjpeg",
         "locatie": "50.877831976525336, 4.370717231621229"
-    },
-    "Andiprim": { 
-        "Voorkeuren": "Only drop off pallets that are wrapped in plastic. No matter the size...", 
-        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl", 
+      },
+      {
+        "id": "andiprim",
+        "name": "Andiprim",
+        "timeSlot": "",
+        "voorkeuren": "Only drop off pallets that are wrapped in plastic. No matter the size...",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl",
         "locatie": "50.877831976525336, 4.370717231621229"
-    },
-    "Star Fresh Liége 08:00": { 
-        "Voorkeuren": "Thursday: own truck, other days it needs to be delivered at Andiprim and can be combined with Star Fresh Liége", 
-        "voertuigFoto1": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg", 
-        "voertuigFoto2": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl", 
+      },
+      {
+        "id": "star-fresh-liege",
+        "name": "Star Fresh Liége",
+        "timeSlot": "08:00",
+        "voorkeuren": "Thursday: own truck, other days it needs to be delivered at Andiprim and can be combined with Star Fresh Liége",
+        "voertuigFoto1": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg",
+        "voertuigFoto2": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl",
         "locatie": "50.877831976525336, 4.370717231621229"
-    },
-    "Dirilis24 06:30": { 
-        "Voorkeuren": "HALL E, try to combine it with Willy Wouters", 
-        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx", 
-        "locatie": "50.87462776809204, 4.368742282726083" 
-    },
-    "Naia 07:00 - 08:00": {
-        "Voorkeuren": "",
+      },
+      {
+        "id": "dirilis24",
+        "name": "Dirilis24",
+        "timeSlot": "06:30",
+        "voorkeuren": "HALL E, try to combine it with Willy Wouters",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/g82sv9j7oozcnpvtwm812/Foto-20-09-2024-08-20-10.jpg?rlkey=uiapcpzm695i7q6kygnrpf9tz&st=1hrivbqx",
+        "locatie": "50.87462776809204, 4.368742282726083"
+      },
+      {
+        "id": "naia",
+        "name": "Naia",
+        "timeSlot": "07:00 - 08:00",
+        "voorkeuren": "",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/rm0vjklq3zh3pwmwzz208/Foto-20-09-2024-09-27-13.jpg?rlkey=n2atucev9i2ds33uowi1an81v&st=mp2eadid&dl",
         "locatie": "50.87814991581628, 4.370361855333375"
-    },
-    "Jacques Remy 07:00 - 08:00": {
+      },
+      {
+        "id": "jacques-remy",
+        "name": "Jacques Remy",
+        "timeSlot": "07:00 - 08:00",
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87814991581628, 4.370361855333375"
-    },
-    "Duva 07:00": {
-        "Voorkeuren": "Generally will load himseld but there is a possibility he wants to load with JM trans.",
+      },
+      {
+        "id": "duva",
+        "name": "Duva",
+        "timeSlot": "07:00",
+        "voorkeuren": "Generally will load himseld but there is a possibility he wants to load with JM trans.",
         "voertuigFoto": "",
         "locatie": "50.87648084669674, 4.372139229885923"
-    },
-    "Fresh Spegelaere 06:30-07:00": {
-        "Voorkeuren": "JM trans, in front of Van Lier",
+      },
+      {
+        "id": "fresh-spegelaere",
+        "name": "Fresh Spegelaere",
+        "timeSlot": "06:30-07:00",
+        "voorkeuren": "JM trans, in front of Van Lier",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/v194i3usrh1efrt31p231/Foto-20-09-2024-07-26-21.jpg?rlkey=07qlqdm7qpqo297p34ztpsvbx&st=evvm03l9&dl",
         "locatie": "50.87788295752422, 4.370364990537037"
-    },
-    "Jupitor 09:00": {
-        "Voorkeuren": "Rents a small warehouse on the side of the MaBru",
+      },
+      {
+        "id": "jupitor",
+        "name": "Jupitor",
+        "timeSlot": "09:00",
+        "voorkeuren": "Rents a small warehouse on the side of the MaBru",
         "voertuigFoto": "",
         "locatie": "50.873728452988615, 4.36709559769328"
-    },
-    "Yassalina 09:00": {
-        "Voorkeuren": "Rents a small warehouse on the side of the MaBru",
+      },
+      {
+        "id": "yassalina",
+        "name": "Yassalina",
+        "timeSlot": "09:00",
+        "voorkeuren": "Rents a small warehouse on the side of the MaBru",
         "voertuigFoto": "",
         "locatie": "50.873728452988615, 4.36709559769328"
-    },
-    "Fruitgarden & Isam Achour 09:00": {
-        "Voorkeuren": "Son & dad are parked next to eachother. They refer to them as 'fruitgarden 1 and 2'",
+      },
+      {
+        "id": "fruitgarden-isam-achour",
+        "name": "Fruitgarden & Isam Achour",
+        "timeSlot": "09:00",
+        "voorkeuren": "Son & dad are parked next to eachother. They refer to them as 'fruitgarden 1 and 2'",
         "voertuigFoto": "",
         "locatie": "50.877338431408056, 4.368681389862328"
-    },
-    "WOUTERS Willy en Co": {
-        "Voorkeuren": "BETWEEN HALL F AND E",
+      },
+      {
+        "id": "wouters-willy-en-co",
+        "name": "WOUTERS Willy en Co",
+        "timeSlot": "",
+        "voorkeuren": "BETWEEN HALL F AND E",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/lzye1cwza8eg2cbzjrba1/Foto-20-09-2024-08-19-06.jpg?rlkey=iqsv2cphaku96uh3duf0qvhl1&st=tico27my&dl",
         "locatie": "50.875344706078735, 4.367802424045308"
-    },
-    "DE FRUITTOREN bv": {
-        "Voorkeuren": "WILL PICK UP HIMSELF",
+      },
+      {
+        "id": "de-fruittoren-bv",
+        "name": "DE FRUITTOREN bv",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "EUROFRUITS  Marcinelle": {
-        "Voorkeuren": "WHEN ASKED TO BE DELIVERED AT AIDA THEN MAKE SURE IT IS BEFORE 04:00",
+      },
+      {
+        "id": "eurofruits-marcinelle",
+        "name": "EUROFRUITS Marcinelle",
+        "timeSlot": "",
+        "voorkeuren": "WHEN ASKED TO BE DELIVERED AT AIDA THEN MAKE SURE IT IS BEFORE 04:00",
         "voertuigFoto": "",
         "locatie": "50.87779783451739, 4.370724335522305"
-    },
-    "VANDERPOOTEN PRIMEURS nv": {
-        "Voorkeuren": "HALL D",
+      },
+      {
+        "id": "vanderpooten-primeurs-nv",
+        "name": "VANDERPOOTEN PRIMEURS nv",
+        "timeSlot": "",
+        "voorkeuren": "HALL D",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "VLAEMYNCK": {
-        "Voorkeuren": "USES A TRANSPORT COMPANY SO WILL PROBABLY CHANGE FROM TIME TO TIME. ONLY DELIVER WHEN WE SAY YOU ARE ALLOWED TO DO SO.",
+      },
+      {
+        "id": "vlaemynck",
+        "name": "VLAEMYNCK",
+        "timeSlot": "",
+        "voorkeuren": "USES A TRANSPORT COMPANY SO WILL PROBABLY CHANGE FROM TIME TO TIME. ONLY DELIVER WHEN WE SAY YOU ARE ALLOWED TO DO SO.",
         "voertuigFoto": "",
         "locatie": "50.87838663226401, 4.3702672701005145"
-    },
-    "TIRTIAUX & FRUITS SRL  (DELHAISE LES JUMEAUX)": {
-        "Voorkeuren": "WILL PICK UP HIMSELF",
+      },
+      {
+        "id": "tirtiaux-fruits-srl",
+        "name": "TIRTIAUX & FRUITS SRL (DELHAISE LES JUMEAUX)",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "VAN DEN EEDE nv": {
-        "Voorkeuren": "WILL PICK UP HIMSELF",
+      },
+      {
+        "id": "van-den-eede-nv",
+        "name": "VAN DEN EEDE nv",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "ARDA CAN": {
-        "Voorkeuren": "",
+      },
+      {
+        "id": "arda-can",
+        "name": "ARDA CAN",
+        "timeSlot": "",
+        "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87722842635207, 4.371240658126023"
-    },
-    "T'SAS": {
-        "Voorkeuren": "WILL PICK UP HIMSELF",
+      },
+      {
+        "id": "tsas",
+        "name": "T'SAS",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "VANDERSCHRICK Kwekerijverpakking bv": {
-        "Voorkeuren": "WILL PICK UP HIMSELF",
+      },
+      {
+        "id": "vanderschrick-kwekerijverpakking-bv",
+        "name": "VANDERSCHRICK Kwekerijverpakking bv",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "FOODEXPRESS NC BV": {
-        "Voorkeuren": "WILL PICK UP HIMSELF",
+      },
+      {
+        "id": "foodexpress-nc-bv",
+        "name": "FOODEXPRESS NC BV",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "RODIERS NV": {
-        "Voorkeuren": "",
+      },
+      {
+        "id": "rodiers-nv",
+        "name": "RODIERS NV",
+        "timeSlot": "",
+        "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.877077031510964, 4.371443679384686"
-    },
-    "VDS FOOD  Wavre": {
-        "Voorkeuren": "WILL PICK UP HIMSELF AND WILL PARK AT FRUDICOM",
+      },
+      {
+        "id": "vds-food-wavre",
+        "name": "VDS FOOD Wavre",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF AND WILL PARK AT FRUDICOM",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "VDS Food  NV   BXL": {
-        "Voorkeuren": "WILL PICK UP HIMSELF AND WILL PARK AT FRUDICOM",
+      },
+      {
+        "id": "vds-food-nv-bxl",
+        "name": "VDS Food NV BXL",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF AND WILL PARK AT FRUDICOM",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "DE NAEGHEL": {
-        "Voorkeuren": "",
+      },
+      {
+        "id": "de-naeghel",
+        "name": "DE NAEGHEL",
+        "timeSlot": "",
+        "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.87560192445967, 4.371706648734485"
-    },
-    "BODSON PRIMEURS sprl": {
-        "Voorkeuren": "WILL BE AT RINGOOT",
+      },
+      {
+        "id": "bodson-primeurs-sprl",
+        "name": "BODSON PRIMEURS sprl",
+        "timeSlot": "",
+        "voorkeuren": "WILL BE AT RINGOOT",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "RINGOOT": {
-        "Voorkeuren": "",
+      },
+      {
+        "id": "ringoot",
+        "name": "RINGOOT",
+        "timeSlot": "",
+        "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.876675529864485, 4.371465206429906"
-    },
-    "GREENYARD FRESH DIRECT": {
-        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+      },
+      {
+        "id": "greenyard-fresh-direct",
+        "name": "GREENYARD FRESH DIRECT",
+        "timeSlot": "",
+        "voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "GREENYARD SERVICE 5": {
-        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+      },
+      {
+        "id": "greenyard-service-5",
+        "name": "GREENYARD SERVICE 5",
+        "timeSlot": "",
+        "voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "GREENYARD MG": {
-        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+      },
+      {
+        "id": "greenyard-mg",
+        "name": "GREENYARD MG",
+        "timeSlot": "",
+        "voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "GREENYARD TRADE": {
-        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+      },
+      {
+        "id": "greenyard-trade",
+        "name": "GREENYARD TRADE",
+        "timeSlot": "",
+        "voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "HANOS NEDERLAND Internationale Horeca Groothandel": {
-        "Voorkeuren": "",
+      },
+      {
+        "id": "hanos-nederland",
+        "name": "HANOS NEDERLAND Internationale Horeca Groothandel",
+        "timeSlot": "",
+        "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": ""
-    },
-    "PEPINSTER": {
-        "Voorkeuren": "",
+      },
+      {
+        "id": "pepinster",
+        "name": "PEPINSTER",
+        "timeSlot": "",
+        "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": ""
-    }
-}
+      }
+    ]
+  }

@@ -96,7 +96,7 @@
             .then(response => response.json())
             .then(data => {
                 klantData = data;
-                origineleVolgorde = Object.keys(klantData);
+                origineleVolgorde = data.customers.map(klant => klant.id);
                 toonKlanten(); // Toon de klanten zodra de data is geladen
             })
             .catch(error => console.error('Error loading customer data:', error));
@@ -117,45 +117,44 @@
         // Klantenlijst tonen
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
             klantLijst.innerHTML = '';
-            let klantenNamen = Object.keys(klantData).filter(naam => naam.toLowerCase().includes(filter.toLowerCase()));
+            let klanten = klantData.customers.filter(klant => 
+                klant.name.toLowerCase().includes(filter.toLowerCase()) ||
+                klant.timeSlot.includes(filter)
+            );
+
             if (sorteer) {
-                klantenNamen.sort();
+                klanten.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sorteerOpTijd) {
-                klantenNamen.sort((a, b) => {
-                    const timeA = a.split(' ').pop();
-                    const timeB = b.split(' ').pop();
-                    return timeA.localeCompare(timeB);
-                });
+                klanten.sort((a, b) => a.timeSlot.localeCompare(b.timeSlot));
             } else {
-                klantenNamen = origineleVolgorde.filter(naam => naam.toLowerCase().includes(filter.toLowerCase()));
+                klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
             }
-            klantenNamen.forEach(naam => {
+
+            klanten.forEach(klant => {
                 const li = document.createElement('li');
                 li.className = 'klant-kader';
 
-                // Voeg de klantnaam en tijdsindicatie toe
                 const klantNaamEnTijd = document.createElement('div');
                 klantNaamEnTijd.className = 'mb-4';
-                const naamDelen = naam.split(' ');
-                const tijd = naamDelen.pop();
-                const klantNaam = naamDelen.join(' ');
-                klantNaamEnTijd.innerHTML = `<span class="font-semibold text-lg">${klantNaam}</span><br><span class="text-sm text-gray-500">${tijd}</span>`;
+                klantNaamEnTijd.innerHTML = `
+                    <span class="font-semibold text-lg">${klant.name}</span><br>
+                    <span class="text-sm text-gray-500">${klant.timeSlot}</span>
+                `;
                 li.appendChild(klantNaamEnTijd);
 
-                // Voeg de knoppen toe
                 const buttonContainer = document.createElement('div');
                 buttonContainer.className = 'flex flex-wrap justify-between items-center';
                 
                 const detailsButton = document.createElement('button');
                 detailsButton.textContent = 'See Details';
                 detailsButton.className = 'details-button flex-grow mr-2 mb-2';
-                detailsButton.onclick = () => toonKlantInfo(naam);
+                detailsButton.onclick = () => toonKlantInfo(klant.id);
                 buttonContainer.appendChild(detailsButton);
 
                 const mailButton = document.createElement('button');
                 mailButton.textContent = 'Send Mail';
                 mailButton.className = 'mail-button flex-grow mb-2';
-                mailButton.onclick = () => sendMail(naam);
+                mailButton.onclick = () => sendMail(klant.id);
                 buttonContainer.appendChild(mailButton);
 
                 li.appendChild(buttonContainer);
@@ -165,10 +164,10 @@
         }
 
         // Klantinformatie tonen wanneer op "See Details" wordt geklikt
-        function toonKlantInfo(naam) {
-            const klant = klantData[naam];
-            document.getElementById('klant-naam').textContent = naam;
-            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.Voorkeuren || klant.voorkeuren}`;
+        function toonKlantInfo(klantId) {
+            const klant = klantData.customers.find(k => k.id === klantId);
+            document.getElementById('klant-naam').textContent = `${klant.name} - ${klant.timeSlot}`;
+            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
             
             klantInfoContainer.classList.remove('hidden');
             klantLijst.classList.add('hidden');
@@ -212,9 +211,10 @@
         }
 
         // E-mail versturen
-        function sendMail(naam) {
-            const subject = encodeURIComponent(`Klant ${naam} is afgeleverd`);
-            const body = encodeURIComponent(`De klant ${naam} is afgeleverd.`);
+        function sendMail(klantId) {
+            const klant = klantData.customers.find(k => k.id === klantId);
+            const subject = encodeURIComponent(`Klant ${klant.name} is afgeleverd`);
+            const body = encodeURIComponent(`De klant ${klant.name} is afgeleverd.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
