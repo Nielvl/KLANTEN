@@ -295,7 +295,7 @@
             }
         }
 
-        function extractCustomerNumber(text) {
+        function extractCustomerInfo(text) {
             if (!text) {
                 console.log("Geen tekst om te verwerken");
                 return null;
@@ -304,16 +304,36 @@
             console.log("Geëxtraheerde tekst:", text);
 
             const lines = text.split('\n');
+            let customerNumber = null;
+            let customerName = null;
+
             for (let line of lines) {
-                const match = line.match(/\b\d{6,}\b/);
-                if (match) {
-                    console.log("Gevonden klantnummer:", match[0]);
-                    return match[0];
+                // Zoek naar klantnummer (6 of meer cijfers)
+                const numberMatch = line.match(/\b\d{6,}\b/);
+                if (numberMatch && !customerNumber) {
+                    customerNumber = numberMatch[0];
+                    console.log("Gevonden klantnummer:", customerNumber);
+                }
+
+                // Zoek naar klantnaam (reeks van woorden zonder cijfers)
+                const nameMatch = line.match(/^[A-Za-z\s]+$/);
+                if (nameMatch && !customerName) {
+                    customerName = nameMatch[0].trim();
+                    console.log("Gevonden klantnaam:", customerName);
+                }
+
+                // Stop als we beide hebben gevonden
+                if (customerNumber && customerName) {
+                    break;
                 }
             }
 
-            console.log("Geen klantnummer gevonden in de tekst");
-            return null;
+            if (!customerNumber && !customerName) {
+                console.log("Geen klantinformatie gevonden in de tekst");
+                return null;
+            }
+
+            return { customerNumber, customerName };
         }
 
         captureButton.onclick = () => {
@@ -331,14 +351,19 @@
                         const text = await performOCR(base64Image);
                         console.log("OCR-verwerking voltooid");
                         console.log("Gedetecteerde tekst:", text);
-                        const customerNumber = extractCustomerNumber(text);
-                        if (customerNumber) {
-                            console.log("Klantnummer gevonden:", customerNumber);
-                            zoekInput.value = customerNumber;
-                            toonKlanten(customerNumber);
+                        const customerInfo = extractCustomerInfo(text);
+                        if (customerInfo) {
+                            console.log("Klantinformatie gevonden:", customerInfo);
+                            if (customerInfo.customerNumber) {
+                                zoekInput.value = customerInfo.customerNumber;
+                                toonKlanten(customerInfo.customerNumber);
+                            } else if (customerInfo.customerName) {
+                                zoekInput.value = customerInfo.customerName;
+                                toonKlanten(customerInfo.customerName);
+                            }
                         } else {
-                            console.log("Geen klantnummer gevonden");
-                            alert('Geen klantnummer gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
+                            console.log("Geen klantinformatie gevonden");
+                            alert('Geen klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
                         }
                     } catch (error) {
                         console.error('Fout bij het verwerken van de afbeelding:', error);
