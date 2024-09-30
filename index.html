@@ -69,7 +69,7 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold mb-4">Customer Management for Forklift Driver</h1>
         
-        <input type="text" id="klant-zoek" placeholder="Search for a customer (name or time slot)..." class="w-full p-2 mb-8 border rounded">
+        <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
         <div class="flex flex-wrap justify-between mb-8">
             <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
             <button id="sort-time-button" class="details-button mb-2">Sort by time</button>
@@ -83,7 +83,7 @@
         let origineleVolgorde = [];
 
         function laadKlantData() {
-            const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-jhm4BBdSkcOHvJD7LpAU2Cr6w9PtFp.json';
+            const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-BnVkOnm7SAxhNgKeHIzJU3O98daM5m.json';
 
             fetch(url)
                 .then(response => {
@@ -94,19 +94,14 @@
                 })
                 .then(data => {
                     console.log('Received data:', data);
-                    klantData = Object.entries(data).map(([key, value]) => ({
-                        id: key,
-                        name: key.split(' ').slice(0, -1).join(' '),
-                        timeSlot: key.split(' ').pop(),
-                        voorkeuren: value.Voorkeuren || '',
-                        locatie: value.locatie || '',
-                        voertuigFoto: value.voertuigFoto || '',
-                        voertuigFoto1: value.voertuigFoto1 || '',
-                        voertuigFoto2: value.voertuigFoto2 || ''
-                    }));
-                    origineleVolgorde = klantData.map(klant => klant.id);
-                    console.log('Processed customer data:', klantData);
-                    toonKlanten();
+                    if (data && data.customers && Array.isArray(data.customers)) {
+                        klantData = data.customers;
+                        origineleVolgorde = klantData.map(klant => klant.id);
+                        console.log('Processed customer data:', klantData);
+                        toonKlanten();
+                    } else {
+                        throw new Error('Invalid data structure received from the server.');
+                    }
                 })
                 .catch(error => {
                     console.error('Error loading customer data:', error);
@@ -121,13 +116,18 @@
             
             let klanten = klantData.filter(klant => 
                 klant.name.toLowerCase().includes(filter.toLowerCase()) ||
-                klant.timeSlot.toLowerCase().includes(filter.toLowerCase())
+                (klant.customerNumber && klant.customerNumber.includes(filter)) ||
+                (klant.timeSlot && klant.timeSlot.toLowerCase().includes(filter.toLowerCase()))
             );
 
             if (sorteer) {
                 klanten.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sorteerOpTijd) {
-                klanten.sort((a, b) => a.timeSlot.localeCompare(b.timeSlot));
+                klanten.sort((a, b) => {
+                    const timeA = a.timeSlot || '';
+                    const timeB = b.timeSlot || '';
+                    return timeA.localeCompare(timeB);
+                });
             } else {
                 klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
             }
@@ -139,7 +139,8 @@
                 div.innerHTML = `
                     <div class="mb-4">
                         <span class="font-semibold text-lg">${klant.name}</span><br>
-                        <span class="text-sm text-gray-500">${klant.timeSlot}</span>
+                        <span class="text-sm text-gray-500">Customer number: ${klant.customerNumber}</span><br>
+                        <span class="text-sm text-gray-500">${klant.timeSlot || 'No time slot'}</span>
                     </div>
                     <div class="flex flex-wrap justify-between items-center">
                         <button class="details-button flex-grow mr-2 mb-2" onclick="toonKlantInfo('${klant.id}')">Details</button>
@@ -168,7 +169,8 @@
                 </div>
                 <div class="w-full">
                     <h2 class="text-xl font-semibold mb-2">${klant.name}</h2>
-                    <p class="mb-2">Time slot: ${klant.timeSlot}</p>
+                    <p class="mb-2">Customer number: ${klant.customerNumber}</p>
+                    <p class="mb-2">Time slot: ${klant.timeSlot || 'No time slot'}</p>
                     <p class="mb-2">Preferences: ${klant.voorkeuren || 'No preferences specified'}</p>
                 </div>
                 <div id="map-${klantId}" class="w-full mb-4" style="height: 300px;"></div>
@@ -225,8 +227,8 @@
         function sendMail(klantId) {
             console.log('Sending email for customer ID:', klantId);
             const klant = klantData.find(k => k.id === klantId);
-            const subject = encodeURIComponent(`Customer ${klant.name} has been delivered`);
-            const body = encodeURIComponent(`The customer ${klant.name} has been delivered.`);
+            const subject = encodeURIComponent(`Customer ${klant.name} (Customer number: ${klant.customerNumber}) has been delivered`);
+            const body = encodeURIComponent(`The customer ${klant.name} (Customer number: ${klant.customerNumber}) has been delivered.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
