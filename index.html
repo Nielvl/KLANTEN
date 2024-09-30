@@ -317,18 +317,13 @@
             }).then(({ data: { text } }) => {
                 console.log("Extracted text:", text);
                 const customerInfo = extractCustomerInfo(text);
-                if (customerInfo) {
-                    console.log("Customer information found:", customerInfo);
-                    if (customerInfo.customerNumber) {
-                        document.getElementById('klant-zoek').value = customerInfo.customerNumber;
-                        toonKlanten(customerInfo.customerNumber);
-                    } else if (customerInfo.customerName) {
-                        document.getElementById('klant-zoek').value = customerInfo.customerName;
-                        toonKlanten(customerInfo.customerName);
-                    }
+                if (customerInfo && customerInfo.isValid) {
+                    console.log("Valid customer information found:", customerInfo);
+                    document.getElementById('klant-zoek').value = customerInfo.customerNumber;
+                    toonKlanten(customerInfo.customerNumber);
                 } else {
-                    console.log("No customer information found");
-                    alert('No customer information found in the image. Please try again with a clearer photo.');
+                    console.log("No valid customer information found");
+                    alert('Er is iets niet juist. Geen geldige klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
                 }
             });
         }
@@ -341,32 +336,27 @@
             for (let line of lines) {
                 line = line.trim();
 
-                if (/^(tel:|fax:|gsm:|BE)/i.test(line)) {
-                    continue;
-                }
-
-                const numberMatch = line.match(/\b(?!433|434)\d{6}\b/);
+                const numberMatch = line.match(/\b\d{6,7}\b/);
                 if (numberMatch && !customerNumber) {
                     customerNumber = numberMatch[0];
                     console.log("Found customer number:", customerNumber);
                 }
 
-                const nameMatch = line.match(/^[A-Za-z\s]+$/);
-                if (nameMatch && !customerName) {
-                    customerName = nameMatch[0].trim();
-                    console.log("Found customer name:", customerName);
-                }
-
-                if (customerNumber && customerName) {
-                    break;
+                if (customerNumber) {
+                    const matchedCustomer = klantData.find(klant => klant.customerNumber === customerNumber);
+                    if (matchedCustomer) {
+                        customerName = matchedCustomer.name;
+                        console.log("Found matching customer name:", customerName);
+                        break;
+                    }
                 }
             }
 
-            if (!customerNumber && !customerName) {
-                return null;
+            if (customerNumber && customerName) {
+                return { customerNumber, customerName, isValid: true };
             }
 
-            return { customerNumber, customerName };
+            return { isValid: false };
         }
 
         // Load customer data when the page loads
