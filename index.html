@@ -318,9 +318,9 @@
                 console.log("Extracted text:", text);
                 const customerInfo = extractCustomerInfo(text);
                 if (customerInfo && customerInfo.isValid) {
-                    console.log("Valid customer information found:", customerInfo);
-                    document.getElementById('klant-zoek').value = customerInfo.customerNumber;
-                    toonKlanten(customerInfo.customerNumber);
+                        console.log("Valid customer information found:", customerInfo);
+                        document.getElementById('klant-zoek').value = customerInfo.searchTerm;
+                        toonKlanten(customerInfo.searchTerm);
                 } else {
                     console.log("No valid customer information found");
                     alert('Er is iets niet juist. Geen geldige klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
@@ -336,24 +336,27 @@
             for (let line of lines) {
                 line = line.trim();
 
-                const numberMatch = line.match(/\b\d{6,7}\b/);
-                if (numberMatch && !customerNumber) {
+                const numberMatch = line.match(/\b(?!433|434|435|436|437)\d{6,7}\b/);
+                if (numberMatch) {
                     customerNumber = numberMatch[0];
                     console.log("Found customer number:", customerNumber);
-                }
-
-                if (customerNumber) {
-                    const matchedCustomer = klantData.find(klant => klant.customerNumber === customerNumber);
-                    if (matchedCustomer) {
-                        customerName = matchedCustomer.name;
-                        console.log("Found matching customer name:", customerName);
-                        break;
-                    }
+                    return { searchTerm: customerNumber, isValid: true };
                 }
             }
 
-            if (customerNumber && customerName) {
-                return { customerNumber, customerName, isValid: true };
+            // If no customer number is found, search for a customer name
+            for (let line of lines) {
+                line = line.trim();
+                if (line.length > 3 && !/^\d+$/.test(line)) {  // Ignore lines that are just numbers
+                    const matchedCustomer = klantData.find(klant => 
+                        klant.name.toLowerCase().includes(line.toLowerCase())
+                    );
+                    if (matchedCustomer) {
+                        customerName = matchedCustomer.name;
+                        console.log("Found matching customer name:", customerName);
+                        return { searchTerm: customerName, isValid: true };
+                    }
+                }
             }
 
             return { isValid: false };
