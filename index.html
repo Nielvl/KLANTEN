@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Klantenbeheer voor Heftruckchauffeur</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8LJ0Q0Se0O8Q38FPvC31zxIj8i05q35M"></script>
     <style>
         .hidden { display: none; }
@@ -17,7 +17,7 @@
             justify-content: space-between; 
             align-items: center;
         }
-        .details-button, .mail-button {
+        .details-button, .mail-button, .photo-button {
             padding: 5px 10px;
             background-color: #007BFF; 
             color: white; 
@@ -26,7 +26,7 @@
             cursor: pointer;
             margin-left: 5px;
         }
-        .details-button:hover, .mail-button:hover {
+        .details-button:hover, .mail-button:hover, .photo-button:hover {
             background-color: #0056b3;
         }
         .back-button {
@@ -49,17 +49,12 @@
             flex: 1 1 50%;
             padding-right: 20px;
         }
-        img {
-            flex: 1 1 50%;
-            max-width: 100%;
-            height: auto;
-        }
         #map {
             height: 400px;
             width: 100%;
         }
         @media (max-width: 768px) {
-            .klant-info, img {
+            .klant-info {
                 flex: 1 1 100%;
             }
         }
@@ -76,16 +71,19 @@
                 <button id="sort-time-button" class="details-button">Sort by Time</button>
                 <button id="original-button" class="details-button hidden">Original sorting</button>
             </div>
-            <ul id="klant-lijst" class="mb-8 max-h-40 overflow-y-auto"></ul>
+            <ul id="klant-lijst" class="mb-8 max-h-96 overflow-y-auto"></ul>
 
             <div id="klant-info-container" class="hidden klant-details">
                 <div id="klant-info" class="klant-info">
-                    <button id="back-button" class="back-button hidden">Terug naar klantenlijst</button>
+                    <button id="back-button" class="back-button mb-8">Terug naar klantenlijst</button>
                     <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
                     <p id="klant-voorkeuren" class="mb-2"></p>
                     <div id="map" class="mb-4"></div>
+                    <div id="photo-buttons" class="mb-4"></div>
                 </div>
-                <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4">
+                <div id="photo-container" class="hidden w-full">
+                    <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
+                </div>
             </div>
         </div>
     </div>
@@ -112,6 +110,8 @@
         const sortButton = document.getElementById('sort-button');
         const sortTimeButton = document.getElementById('sort-time-button');
         const originalButton = document.getElementById('original-button');
+        const photoContainer = document.getElementById('photo-container');
+        const photoButtons = document.getElementById('photo-buttons');
 
         // Klantenlijst tonen
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
@@ -166,7 +166,6 @@
             const klant = klantData[naam];
             document.getElementById('klant-naam').textContent = naam;
             document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.Voorkeuren || klant.voorkeuren}`;
-            document.getElementById('klant-voertuig').src = klant.voertuigFoto || klant.voertuigFoto1 || '';
             
             klantInfoContainer.classList.remove('hidden');
             klantLijst.classList.add('hidden');
@@ -181,6 +180,32 @@
                 mapTypeId: google.maps.MapTypeId.SATELLITE
             });
             new google.maps.Marker({ position: { lat, lng }, map: map });
+
+            // Foto knoppen toevoegen
+            photoButtons.innerHTML = '';
+            photoContainer.classList.add('hidden');
+            const photos = [
+                { key: 'voertuigFoto', label: 'Foto 1' },
+                { key: 'voertuigFoto1', label: 'Foto 2' },
+                { key: 'voertuigFoto2', label: 'Foto 3' }
+            ];
+
+            photos.forEach(photo => {
+                if (klant[photo.key]) {
+                    const button = document.createElement('button');
+                    button.textContent = photo.label;
+                    button.className = 'photo-button mr-2 mb-2';
+                    button.onclick = () => toonFoto(klant[photo.key]);
+                    photoButtons.appendChild(button);
+                }
+            });
+        }
+
+        // Foto tonen
+        function toonFoto(url) {
+            const img = document.getElementById('klant-voertuig');
+            img.src = url;
+            photoContainer.classList.remove('hidden');
         }
 
         // E-mail versturen
@@ -196,6 +221,7 @@
             klantLijst.classList.remove('hidden');
             zoekInput.classList.remove('hidden');
             backButton.classList.add('hidden');
+            photoContainer.classList.add('hidden');
         };
 
         zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));

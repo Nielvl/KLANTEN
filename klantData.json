@@ -119,5 +119,120 @@
         "Voorkeuren": "Son & dad are parked next to eachother. They refer to them as 'fruitgarden 1 and 2'",
         "voertuigFoto": "",
         "locatie": "50.877338431408056, 4.368681389862328"
+    },
+    "WOUTERS Willy en Co": {
+        "Voorkeuren": "BETWEEN HALL F AND E",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/lzye1cwza8eg2cbzjrba1/Foto-20-09-2024-08-19-06.jpg?rlkey=iqsv2cphaku96uh3duf0qvhl1&st=tico27my&dl",
+        "locatie": "50.875344706078735, 4.367802424045308"
+    },
+    "DE FRUITTOREN bv": {
+        "Voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "EUROFRUITS  Marcinelle": {
+        "Voorkeuren": "WHEN ASKED TO BE DELIVERED AT AIDA THEN MAKE SURE IT IS BEFORE 04:00",
+        "voertuigFoto": "",
+        "locatie": "50.87779783451739, 4.370724335522305"
+    },
+    "VANDERPOOTEN PRIMEURS nv": {
+        "Voorkeuren": "HALL D",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "VLAEMYNCK": {
+        "Voorkeuren": "USES A TRANSPORT COMPANY SO WILL PROBABLY CHANGE FROM TIME TO TIME. ONLY DELIVER WHEN WE SAY YOU ARE ALLOWED TO DO SO.",
+        "voertuigFoto": "",
+        "locatie": "50.87838663226401, 4.3702672701005145"
+    },
+    "TIRTIAUX & FRUITS SRL  (DELHAISE LES JUMEAUX)": {
+        "Voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "VAN DEN EEDE nv": {
+        "Voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "ARDA CAN": {
+        "Voorkeuren": "",
+        "voertuigFoto": "",
+        "locatie": "50.87722842635207, 4.371240658126023"
+    },
+    "T'SAS": {
+        "Voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "VANDERSCHRICK Kwekerijverpakking bv": {
+        "Voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "FOODEXPRESS NC BV": {
+        "Voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "RODIERS NV": {
+        "Voorkeuren": "",
+        "voertuigFoto": "",
+        "locatie": "50.877077031510964, 4.371443679384686"
+    },
+    "VDS FOOD  Wavre": {
+        "Voorkeuren": "WILL PICK UP HIMSELF AND WILL PARK AT FRUDICOM",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "VDS Food  NV   BXL": {
+        "Voorkeuren": "WILL PICK UP HIMSELF AND WILL PARK AT FRUDICOM",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "DE NAEGHEL": {
+        "Voorkeuren": "",
+        "voertuigFoto": "",
+        "locatie": "50.87560192445967, 4.371706648734485"
+    },
+    "BODSON PRIMEURS sprl": {
+        "Voorkeuren": "WILL BE AT RINGOOT",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "RINGOOT": {
+        "Voorkeuren": "",
+        "voertuigFoto": "",
+        "locatie": "50.876675529864485, 4.371465206429906"
+    },
+    "GREENYARD FRESH DIRECT": {
+        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "GREENYARD SERVICE 5": {
+        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "GREENYARD MG": {
+        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "GREENYARD TRADE": {
+        "Voorkeuren": "NEEDS TO DEPART WITH OUR OWN TRUCK",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "HANOS NEDERLAND Internationale Horeca Groothandel": {
+        "Voorkeuren": "",
+        "voertuigFoto": "",
+        "locatie": ""
+    },
+    "PEPINSTER": {
+        "Voorkeuren": "",
+        "voertuigFoto": "",
+        "locatie": ""
     }
 }
