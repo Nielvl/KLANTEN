@@ -6,6 +6,7 @@
     <title>Klantenbeheer voor Heftruckchauffeur</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8LJ0Q0Se0O8Q38FPvC31zxIj8i05q35M"></script>
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -58,30 +59,30 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 p-8">
-    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl m-3">
-        <div class="p-8">
-            <h1 class="text-2xl font-bold mb-4">Klantenbeheer voor Heftruckchauffeur</h1>
-            
-            <input type="text" id="klant-zoek" placeholder="Search a client..." class="w-full p-2 mb-8 border rounded">
-            <div class="flex justify-between mb-8">
-                <button id="sort-button" class="details-button">Sort Alphabetic</button>
-                <button id="sort-time-button" class="details-button">Sort by Time</button>
-                <button id="original-button" class="details-button hidden">Original sorting</button>
-            </div>
-            <ul id="klant-lijst" class="mb-8 max-h-96 overflow-y-auto"></ul>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-4">Klantenbeheer voor Heftruckchauffeur</h1>
+        
+        <input type="text" id="klant-zoek" placeholder="Search a client..." class="w-full p-2 mb-8 border rounded">
+        <div class="flex flex-wrap justify-between mb-8">
+            <button id="sort-button" class="details-button mb-2">Sort Alphabetic</button>
+            <button id="sort-time-button" class="details-button mb-2">Sort by Time</button>
+            <button id="original-button" class="details-button hidden mb-2">Original sorting</button>
+            <button id="capture-button" class="details-button mb-2">Capture Delivery Note</button>
+        </div>
+        <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
+        <ul id="klant-lijst" class="mb-8 max-h-96 overflow-y-auto"></ul>
 
-            <div id="klant-info-container" class="hidden klant-details">
-                <div id="klant-info" class="klant-info">
-                    <button id="back-button" class="back-button mb-8">Terug naar klantenlijst</button>
-                    <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
-                    <p id="klant-voorkeuren" class="mb-2"></p>
-                    <div id="map" class="mb-4"></div>
-                    <div id="photo-buttons" class="mb-4"></div>
-                </div>
-                <div id="photo-container" class="hidden w-full">
-                    <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
-                </div>
+        <div id="klant-info-container" class="hidden klant-details">
+            <div id="klant-info" class="klant-info">
+                <button id="back-button" class="back-button mb-8">Terug naar klantenlijst</button>
+                <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
+                <p id="klant-voorkeuren" class="mb-2"></p>
+                <div id="map" class="mb-4"></div>
+                <div id="photo-buttons" class="mb-4"></div>
+            </div>
+            <div id="photo-container" class="hidden w-full">
+                <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
             </div>
         </div>
     </div>
@@ -110,6 +111,8 @@
         const originalButton = document.getElementById('original-button');
         const photoContainer = document.getElementById('photo-container');
         const photoButtons = document.getElementById('photo-buttons');
+        const captureButton = document.getElementById('capture-button');
+        const fileInput = document.getElementById('file-input');
 
         // Klantenlijst tonen
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
@@ -141,17 +144,17 @@
 
                 // Voeg de knoppen toe
                 const buttonContainer = document.createElement('div');
-                buttonContainer.className = 'flex justify-between items-center';
+                buttonContainer.className = 'flex flex-wrap justify-between items-center';
                 
                 const detailsButton = document.createElement('button');
                 detailsButton.textContent = 'See Details';
-                detailsButton.className = 'details-button flex-grow mr-2';
+                detailsButton.className = 'details-button flex-grow mr-2 mb-2';
                 detailsButton.onclick = () => toonKlantInfo(naam);
                 buttonContainer.appendChild(detailsButton);
 
                 const mailButton = document.createElement('button');
                 mailButton.textContent = 'Send Mail';
-                mailButton.className = 'mail-button flex-grow';
+                mailButton.className = 'mail-button flex-grow mb-2';
                 mailButton.onclick = () => sendMail(naam);
                 buttonContainer.appendChild(mailButton);
 
@@ -246,6 +249,50 @@
             sortButton.classList.remove('hidden');
             sortTimeButton.classList.remove('hidden');
         };
+
+        // Capture and process delivery note image
+        captureButton.onclick = () => {
+            fileInput.click();
+        };
+
+        fileInput.onchange = (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        Tesseract.recognize(img, 'nld')
+                            .then(({ data: { text } }) => {
+                                const customerName = extractCustomerName(text);
+                                if (customerName) {
+                                    zoekInput.value = customerName;
+                                    toonKlanten(customerName);
+                                } else {
+                                    alert('Geen klantnaam gevonden in de afbeelding.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error processing image:', error);
+                                alert('Er is een fout opgetreden bij het verwerken van de afbeelding.');
+                            });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        function extractCustomerName(text) {
+            // This is a simple example. You might need to adjust this based on the actual format of your delivery notes.
+            const lines = text.split('\n');
+            for (let line of lines) {
+                if (line.toLowerCase().includes('klant') || line.toLowerCase().includes('customer')) {
+                    return line.split(':')[1]?.trim();
+                }
+            }
+            return null;
+        }
     </script>
 </body>
 </html>
