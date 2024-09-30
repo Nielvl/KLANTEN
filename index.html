@@ -255,6 +255,64 @@
             sortTimeButton.classList.remove('hidden');
         };
 
+        function compressImage(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Bereken nieuwe dimensies met behoud van aspect ratio
+            let width = img.width;
+            let height = img.height;
+            const maxWidth = 1000;
+            const maxHeight = 1000;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            // Teken de afbeelding op het canvas met de nieuwe dimensies
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Converteer het canvas naar een gecomprimeerde JPEG-dataURL
+            return canvas.toDataURL('image/jpeg', 0.7);
+        }
+
+        async function processCompressedImage(compressedImageData) {
+            try {
+                console.log("Gecomprimeerde afbeelding geladen, start OCR-verwerking");
+                const text = await performOCR(compressedImageData);
+                console.log("OCR-verwerking voltooid");
+                console.log("Gedetecteerde tekst:", text);
+                const customerInfo = extractCustomerInfo(text);
+                if (customerInfo) {
+                    console.log("Klantinformatie gevonden:", customerInfo);
+                    if (customerInfo.customerNumber) {
+                        zoekInput.value = customerInfo.customerNumber;
+                        toonKlanten(customerInfo.customerNumber);
+                    } else if (customerInfo.customerName) {
+                        zoekInput.value = customerInfo.customerName;
+                        toonKlanten(customerInfo.customerName);
+                    }
+                } else {
+                    console.log("Geen klantinformatie gevonden");
+                    alert('Geen klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
+                }
+            } catch (error) {
+                console.error('Fout bij het verwerken van de afbeelding:', error);
+                alert(`Er is een fout opgetreden bij het verwerken van de afbeelding: ${error.message}`);
+            }
+        }
+
         async function performOCR(imageData) {
             const apiKey = 'K81580366488957';
             const apiUrl = 'https://api.ocr.space/parse/image';
@@ -344,31 +402,13 @@
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const base64Image = e.target.result;
-                        console.log("Afbeelding geladen, start OCR-verwerking");
-                        const text = await performOCR(base64Image);
-                        console.log("OCR-verwerking voltooid");
-                        console.log("Gedetecteerde tekst:", text);
-                        const customerInfo = extractCustomerInfo(text);
-                        if (customerInfo) {
-                            console.log("Klantinformatie gevonden:", customerInfo);
-                            if (customerInfo.customerNumber) {
-                                zoekInput.value = customerInfo.customerNumber;
-                                toonKlanten(customerInfo.customerNumber);
-                            } else if (customerInfo.customerName) {
-                                zoekInput.value = customerInfo.customerName;
-                                toonKlanten(customerInfo.customerName);
-                            }
-                        } else {
-                            console.log("Geen klantinformatie gevonden");
-                            alert('Geen klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
-                        }
-                    } catch (error) {
-                        console.error('Fout bij het verwerken van de afbeelding:', error);
-                        alert(`Er is een fout opgetreden bij het verwerken van de afbeelding: ${error.message}`);
-                    }
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const compressedImage = compressImage(img);
+                        processCompressedImage(compressedImage);
+                    };
+                    img.src = e.target.result;
                 };
                 reader.onerror = (error) => {
                     console.error('Fout bij het lezen van het bestand:', error);
