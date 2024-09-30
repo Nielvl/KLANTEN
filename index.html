@@ -94,8 +94,7 @@
                 return Promise.resolve();
             }
 
-            const timestamp = currentTime;
-            const url = `https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-jhm4BBdSkcOHvJD7LpAU2Cr6w9PtFp.json?t=${timestamp}`;
+            const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-jhm4BBdSkcOHvJD7LpAU2Cr6w9PtFp.json';
 
             console.log('Fetching data from:', url);
 
@@ -105,10 +104,12 @@
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
                     'Pragma': 'no-cache',
                     'Expires': '0'
-                }
+                },
+                cache: 'no-store'
             })
             .then(response => {
                 console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -116,25 +117,31 @@
             })
             .then(data => {
                 console.log('Received data:', data);
-                klantData = Object.entries(data).map(([key, value]) => ({
-                    id: key,
-                    name: key,
-                    timeSlot: key.split(' ').pop(),
-                    customerNumber: '',
-                    voorkeuren: value.Voorkeuren,
-                    locatie: value.locatie,
-                    voertuigFoto: value.voertuigFoto,
-                    voertuigFoto1: value.voertuigFoto1,
-                    voertuigFoto2: value.voertuigFoto2
-                }));
-                origineleVolgorde = klantData.map(klant => klant.id);
-                console.log('Processed customer data:', klantData);
-                lastLoadTime = currentTime;
-                toonKlanten();
-                console.log('Customer data loaded successfully');
+                if (typeof data === 'object' && data !== null) {
+                    klantData = Object.entries(data).map(([key, value]) => ({
+                        id: key,
+                        name: key,
+                        timeSlot: key.split(' ').pop(),
+                        customerNumber: '',
+                        voorkeuren: value.Voorkeuren || '',
+                        locatie: value.locatie || '',
+                        voertuigFoto: value.voertuigFoto || '',
+                        voertuigFoto1: value.voertuigFoto1 || '',
+                        voertuigFoto2: value.voertuigFoto2 || ''
+                    }));
+                    origineleVolgorde = klantData.map(klant => klant.id);
+                    console.log('Processed customer data:', klantData);
+                    lastLoadTime = currentTime;
+                    toonKlanten();
+                    console.log('Customer data loaded successfully');
+                } else {
+                    throw new Error('Invalid data structure received from the server.');
+                }
             })
             .catch(error => {
                 console.error('Error loading customer data:', error);
+                console.error('Error details:', error.message);
+                console.error('Error stack:', error.stack);
                 alert('Error loading customer data. Please check the console for more details and try again later.');
             });
         }
@@ -143,6 +150,7 @@
             console.log('Manually reloading data...');
             laadKlantData(true)
                 .then(() => {
+                    console.log('Data reload completed');
                     alert('Customer data has been reloaded successfully.');
                 })
                 .catch(error => {
@@ -152,10 +160,11 @@
         }
 
         // Initial load
-        laadKlantData();
-
-        // Set up interval for periodic reloading
-        setInterval(() => laadKlantData(), RELOAD_INTERVAL);
+        document.addEventListener('DOMContentLoaded', () => {
+            laadKlantData();
+            // Set up interval for periodic reloading
+            setInterval(() => laadKlantData(), RELOAD_INTERVAL);
+        });
 
         const zoekInput = document.getElementById('klant-zoek');
         const klantLijst = document.getElementById('klant-lijst');
@@ -488,6 +497,12 @@
                 };
                 reader.readAsDataURL(file);
             }
+        };
+
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error('Uncaught error:', error);
+            alert('An unexpected error occurred. Please check the console for more details.');
+            return true;
         };
     </script>
 </body>
