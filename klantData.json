@@ -1,6 +1,15 @@
 {
     "customers": [
       {
+        "id": "thiry-gent",
+        "name": "THIRY GENT",
+        "customerNumber": "400616",
+        "timeSlot": "06:00",
+        "voorkeuren": "warehouse nr 1, it's a transporting company so the truck will change from time to time.",
+        "voertuigFoto": "",
+        "locatie": "50.87836494079864, 4.369754586022119"
+      },
+      {
         "id": "verdoodt-frans",
         "name": "VERDOODT FRANS bv",
         "customerNumber": "400779",
@@ -19,8 +28,8 @@
         "locatie": ""
       },
       {
-        "id": "gosce",
-        "name": "GOSCE",
+        "id": "gokce",
+        "name": "GOKCE",
         "customerNumber": "400759",
         "timeSlot": "",
         "voorkeuren": "",
