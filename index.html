@@ -84,46 +84,72 @@
     <script>
         let klantData = [];
         let origineleVolgorde = [];
+        let lastLoadTime = 0;
+        const RELOAD_INTERVAL = 5 * 60 * 1000; // 5 minuten
 
-        function laadKlantData() {
-            const timestamp = new Date().getTime();
-            const url = `https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-WgnkGm7iFgE37FAqiZ5V0Iz9YroVUh.json?t=${timestamp}`;
+        function laadKlantData(forceReload = false) {
+            const currentTime = new Date().getTime();
+            if (!forceReload && (currentTime - lastLoadTime < RELOAD_INTERVAL)) {
+                console.log('Skipping reload, not enough time has passed');
+                return Promise.resolve();
+            }
+
+            const timestamp = currentTime;
+            const url = `https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-kWlvXUgCYRmViLfFhG9QxqZY8TCiE8.json?t=${timestamp}`;
 
             console.log('Fetching data from:', url);
 
-            fetch(url)
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Received data:', data);
-                    if (data && data.customers && Array.isArray(data.customers)) {
-                        klantData = data.customers;
-                        origineleVolgorde = klantData.map(klant => klant.id);
-                        console.log('Processed customer data:', klantData);
-                        toonKlanten();
-                        console.log('Customer data loaded successfully');
-                    } else {
-                        console.error('Invalid data structure:', data);
-                        alert('Error: Invalid data structure received from the server.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading customer data:', error);
-                    alert('Error loading customer data. Please try again later.');
-                });
+            return fetch(url, { 
+                method: 'GET',
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Received data:', data);
+                if (data && data.customers && Array.isArray(data.customers)) {
+                    klantData = data.customers;
+                    origineleVolgorde = klantData.map(klant => klant.id);
+                    console.log('Processed customer data:', klantData);
+                    lastLoadTime = currentTime;
+                    toonKlanten();
+                    console.log('Customer data loaded successfully');
+                } else {
+                    throw new Error('Invalid data structure received from the server.');
+                }
+            })
+            .catch(error => {
+                console.error('Error loading customer data:', error);
+                alert('Error loading customer data. Please try again later.');
+            });
         }
-
-        setInterval(laadKlantData, 5 * 60 * 1000);
 
         function herlaadGegevens() {
             console.log('Manually reloading data...');
-            laadKlantData();
-            alert('Customer data is being reloaded. The list will update shortly.');
+            laadKlantData(true)
+                .then(() => {
+                    alert('Customer data has been reloaded successfully.');
+                })
+                .catch(error => {
+                    console.error('Error reloading data:', error);
+                    alert('Failed to reload customer data. Please try again.');
+                });
         }
 
+        // Initial load
         laadKlantData();
+
+        // Set up interval for periodic reloading
+        setInterval(() => laadKlantData(), RELOAD_INTERVAL);
 
         const zoekInput = document.getElementById('klant-zoek');
         const klantLijst = document.getElementById('klant-lijst');
