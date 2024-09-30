@@ -119,13 +119,13 @@
             klantLijst.innerHTML = '';
             let klanten = klantData.customers.filter(klant => 
                 klant.name.toLowerCase().includes(filter.toLowerCase()) ||
-                klant.timeSlot.includes(filter)
+                (klant.timeSlot && klant.timeSlot.includes(filter))
             );
 
             if (sorteer) {
                 klanten.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sorteerOpTijd) {
-                klanten.sort((a, b) => a.timeSlot.localeCompare(b.timeSlot));
+                klanten.sort((a, b) => (a.timeSlot || '').localeCompare(b.timeSlot || ''));
             } else {
                 klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
             }
@@ -138,7 +138,7 @@
                 klantNaamEnTijd.className = 'mb-4';
                 klantNaamEnTijd.innerHTML = `
                     <span class="font-semibold text-lg">${klant.name}</span><br>
-                    <span class="text-sm text-gray-500">${klant.timeSlot}</span>
+                    <span class="text-sm text-gray-500">${klant.timeSlot || 'No time slot'}</span>
                 `;
                 li.appendChild(klantNaamEnTijd);
 
@@ -166,8 +166,8 @@
         // Klantinformatie tonen wanneer op "See Details" wordt geklikt
         function toonKlantInfo(klantId) {
             const klant = klantData.customers.find(k => k.id === klantId);
-            document.getElementById('klant-naam').textContent = `${klant.name} - ${klant.timeSlot}`;
-            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
+            document.getElementById('klant-naam').textContent = `${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}`;
+            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren || 'Geen voorkeuren opgegeven'}`;
             
             klantInfoContainer.classList.remove('hidden');
             klantLijst.classList.add('hidden');
@@ -175,13 +175,18 @@
             backButton.classList.remove('hidden');
 
             // Google Maps initialiseren
-            const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: { lat, lng },
-                zoom: 16,
-                mapTypeId: google.maps.MapTypeId.SATELLITE
-            });
-            new google.maps.Marker({ position: { lat, lng }, map: map });
+            if (klant.locatie) {
+                const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
+                const map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat, lng },
+                    zoom: 16,
+                    mapTypeId: google.maps.MapTypeId.SATELLITE
+                });
+                new google.maps.Marker({ position: { lat, lng }, map: map });
+                document.getElementById('map').classList.remove('hidden');
+            } else {
+                document.getElementById('map').classList.add('hidden');
+            }
 
             // Foto knoppen toevoegen
             photoButtons.innerHTML = '';
@@ -284,7 +289,6 @@
         };
 
         function extractCustomerName(text) {
-            // This is a simple example. You might need to adjust this based on the actual format of your delivery notes.
             const lines = text.split('\n');
             for (let line of lines) {
                 if (line.toLowerCase().includes('klant') || line.toLowerCase().includes('customer')) {
