@@ -119,6 +119,9 @@
             klantLijst.innerHTML = '';
             let klanten = klantData.customers.filter(klant => 
                 klant.name.toLowerCase().includes(filter.toLowerCase()) ||
+                (filter.toLowerCase().split(' ').every(word => 
+                    klant.name.toLowerCase().includes(word)
+                )) ||
                 (klant.timeSlot && klant.timeSlot.includes(filter))
             );
 
@@ -290,9 +293,17 @@
 
         function extractCustomerName(text) {
             const lines = text.split('\n');
+            // We gaan ervan uit dat de eerste niet-lege regel de klantnaam bevat
             for (let line of lines) {
-                if (line.toLowerCase().includes('klant') || line.toLowerCase().includes('customer')) {
-                    return line.split(':')[1]?.trim();
+                line = line.trim();
+                if (line) {
+                    // We nemen aan dat de klantnaam het eerste woord of de eerste twee woorden zijn
+                    const words = line.split(' ');
+                    if (words.length >= 2) {
+                        return words.slice(0, 2).join(' ');
+                    } else if (words.length === 1) {
+                        return words[0];
+                    }
                 }
             }
             return null;
