@@ -366,8 +366,8 @@
             let customerName = null;
 
             for (let line of lines) {
-                // Zoek naar klantnummer (6 of meer cijfers)
-                const numberMatch = line.match(/\b\d{6,}\b/);
+                // Zoek naar klantnummer (6 cijfers, niet beginnend met 433 of 434)
+                const numberMatch = line.match(/\b(?!433|434)\d{6}\b/);
                 if (numberMatch && !customerNumber) {
                     customerNumber = numberMatch[0];
                     console.log("Gevonden klantnummer:", customerNumber);
