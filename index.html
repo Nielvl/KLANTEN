@@ -74,6 +74,7 @@
             <button id="sort-time-button" class="details-button mb-2">Sort by time</button>
             <button id="original-button" class="details-button hidden mb-2">Original order</button>
             <button id="capture-button" class="details-button mb-2">Scan delivery note</button>
+            <button id="reload-button" class="details-button mb-2">Reload Data</button>
         </div>
         <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <div id="klant-lijst" class="mb-8"></div>
@@ -84,18 +85,29 @@
         let origineleVolgorde = [];
 
         function laadKlantData() {
-            fetch('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-WgnkGm7iFgE37FAqiZ5V0Iz9YroVUh.json')
+            // Add a timestamp to the URL to prevent caching
+            const timestamp = new Date().getTime();
+            const url = `https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-WgnkGm7iFgE37FAqiZ5V0Iz9YroVUh.json?t=${timestamp}`;
+
+            fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     klantData = data.customers;
                     origineleVolgorde = klantData.map(klant => klant.id);
                     toonKlanten();
+                    console.log('Customer data reloaded successfully');
                 })
                 .catch(error => console.error('Error loading customer data:', error));
         }
 
         // Reload data every 5 minutes
         setInterval(laadKlantData, 5 * 60 * 1000);
+
+        // Function to manually reload data
+        function herlaadGegevens() {
+            laadKlantData();
+            alert('Customer data is being reloaded. The list will update shortly.');
+        }
 
         // Initial data load
         laadKlantData();
@@ -107,6 +119,7 @@
         const originalButton = document.getElementById('original-button');
         const captureButton = document.getElementById('capture-button');
         const fileInput = document.getElementById('file-input');
+        const reloadButton = document.getElementById('reload-button');
 
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
             klantLijst.innerHTML = '';
@@ -264,6 +277,8 @@
             sortButton.classList.remove('hidden');
             sortTimeButton.classList.remove('hidden');
         };
+
+        reloadButton.onclick = herlaadGegevens;
 
         function compressImage(img) {
             const canvas = document.createElement('canvas');
