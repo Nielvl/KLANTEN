@@ -96,7 +96,7 @@
             .then(response => response.json())
             .then(data => {
                 klantData = data;
-                origineleVolgorde = data.customers.map(klant => klant.id);
+                origineleVolgorde = Object.keys(klantData);
                 toonKlanten();
             })
             .catch(error => console.error('Error loading customer data:', error));
@@ -116,33 +116,32 @@
 
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
             klantLijst.innerHTML = '';
-            let klanten = klantData.customers.filter(klant => 
-                klant.name.toLowerCase().includes(filter.toLowerCase()) ||
-                klant.customerNumber.includes(filter) ||
+            let klanten = Object.entries(klantData).filter(([klantId, klant]) => 
+                klantId.toLowerCase().includes(filter.toLowerCase()) ||
                 (klant.customerNumber && klant.customerNumber.includes(filter)) ||
                 (klant.timeSlot && klant.timeSlot.toLowerCase().includes(filter.toLowerCase()))
             );
 
             if (sorteer) {
-                klanten.sort((a, b) => a.name.localeCompare(b.name));
+                klanten.sort((a, b) => a[0].localeCompare(b[0]));
             } else if (sorteerOpTijd) {
                 klanten.sort((a, b) => {
-                    if (!a.timeSlot) return 1;
-                    if (!b.timeSlot) return -1;
-                    return a.timeSlot.localeCompare(b.timeSlot);
+                    const timeA = a[1].timeSlot || '';
+                    const timeB = b[1].timeSlot || '';
+                    return timeA.localeCompare(timeB);
                 });
             } else {
-                klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
+                klanten.sort((a, b) => origineleVolgorde.indexOf(a[0]) - origineleVolgorde.indexOf(b[0]));
             }
 
-            klanten.forEach(klant => {
+            klanten.forEach(([klantId, klant]) => {
                 const li = document.createElement('li');
                 li.className = 'klant-kader';
 
                 const klantInfoDiv = document.createElement('div');
                 klantInfoDiv.className = 'mb-4';
                 klantInfoDiv.innerHTML = `
-                    <span class="font-semibold text-lg">${klant.name}</span><br>
+                    <span class="font-semibold text-lg">${klantId}</span><br>
                     <span class="text-sm text-gray-500">Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}</span><br>
                     <span class="text-sm text-gray-500">${klant.timeSlot || 'Geen tijdslot'}</span>
                 `;
@@ -154,13 +153,13 @@
                 const detailsButton = document.createElement('button');
                 detailsButton.textContent = 'Details';
                 detailsButton.className = 'details-button flex-grow mr-2 mb-2';
-                detailsButton.onclick = () => toonKlantInfo(klant.id);
+                detailsButton.onclick = () => toonKlantInfo(klantId);
                 buttonContainer.appendChild(detailsButton);
 
                 const mailButton = document.createElement('button');
                 mailButton.textContent = 'Verstuur e-mail';
                 mailButton.className = 'mail-button flex-grow mb-2';
-                mailButton.onclick = () => sendMail(klant.id);
+                mailButton.onclick = () => sendMail(klantId);
                 buttonContainer.appendChild(mailButton);
 
                 li.appendChild(buttonContainer);
@@ -170,10 +169,10 @@
         }
 
         function toonKlantInfo(klantId) {
-            const klant = klantData.customers.find(k => k.id === klantId);
-            document.getElementById('klant-naam').textContent = `${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}`;
+            const klant = klantData[klantId];
+            document.getElementById('klant-naam').textContent = `${klantId} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}`;
             document.getElementById('klant-nummer').textContent = `Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}`;
-            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren || 'Geen voorkeuren opgegeven'}`;
+            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.Voorkeuren || 'Geen voorkeuren opgegeven'}`;
             
             klantInfoContainer.classList.remove('hidden');
             klantLijst.classList.add('hidden');
@@ -219,9 +218,9 @@
         }
 
         function sendMail(klantId) {
-            const klant = klantData.customers.find(k => k.id === klantId);
-            const subject = encodeURIComponent(`Klant ${klant.name} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd`);
-            const body = encodeURIComponent(`De klant ${klant.name} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd.`);
+            const klant = klantData[klantId];
+            const subject = encodeURIComponent(`Klant ${klantId} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd`);
+            const body = encodeURIComponent(`De klant ${klantId} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
@@ -257,13 +256,13 @@
         };
 
         async function performOCR(imageData) {
-            const apiKey = 'K81580366488957'; // OCR.space API-sleutel
+            const apiKey = 'K81580366488957';
             const apiUrl = 'https://api.ocr.space/parse/image';
 
             const formData = new FormData();
             formData.append('apikey', apiKey);
             formData.append('base64Image', imageData);
-            formData.append('language', 'nld'); // Nederlands
+            formData.append('language', 'nld');
             formData.append('detectOrientation', 'true');
             formData.append('scale', 'true');
             formData.append('isTable', 'false');
@@ -288,7 +287,7 @@
         function extractCustomerNumber(text) {
             const lines = text.split('\n');
             for (let line of lines) {
-                const match = line.match(/\b\d{6,}\b/); // Zoekt naar een getal van 6 of meer cijfers
+                const match = line.match(/\b\d{6,}\b/);
                 if (match) {
                     return match[0];
                 }
@@ -306,7 +305,7 @@
                 const reader = new FileReader();
                 reader.onload = async (e) => {
                     try {
-                        const imageData = e.target.result.split(',')[1]; // Haal base64-gecodeerde afbeeldingsgegevens op
+                        const imageData = e.target.result.split(',')[1];
                         const text = await performOCR(imageData);
                         console.log("Gedetecteerde tekst:", text);
                         const customerNumber = extractCustomerNumber(text);
