@@ -89,20 +89,36 @@
             const timestamp = new Date().getTime();
             const url = `https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-WgnkGm7iFgE37FAqiZ5V0Iz9YroVUh.json?t=${timestamp}`;
 
+            console.log('Fetching data from:', url);
+
             fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    klantData = data.customers;
-                    origineleVolgorde = klantData.map(klant => klant.id);
-                    toonKlanten();
-                    console.log('Customer data reloaded successfully');
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    return response.json();
                 })
-                .catch(error => console.error('Error loading customer data:', error));
+                .then(data => {
+                    console.log('Received data:', data);
+                    if (data && data.customers && Array.isArray(data.customers)) {
+                        klantData = data.customers;
+                        origineleVolgorde = klantData.map(klant => klant.id);
+                        console.log('Processed customer data:', klantData);
+                        toonKlanten();
+                        console.log('Customer data loaded successfully');
+                    } else {
+                        console.error('Invalid data structure:', data);
+                        alert('Error: Invalid data structure received from the server.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading customer data:', error);
+                    alert('Error loading customer data. Please try again later.');
+                });
         }
 
         setInterval(laadKlantData, 5 * 60 * 1000);
 
         function herlaadGegevens() {
+            console.log('Manually reloading data...');
             laadKlantData();
             alert('Customer data is being reloaded. The list will update shortly.');
         }
@@ -119,6 +135,7 @@
         const reloadButton = document.getElementById('reload-button');
 
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
+            console.log('Displaying customers. Filter:', filter, 'Sort:', sorteer, 'Sort by time:', sorteerOpTijd);
             klantLijst.innerHTML = '';
             let klanten = klantData.filter(klant => 
                 klant.name.toLowerCase().includes(filter.toLowerCase()) ||
@@ -137,6 +154,8 @@
             } else {
                 klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
             }
+
+            console.log('Filtered and sorted customers:', klanten);
 
             klanten.forEach(klant => {
                 const div = document.createElement('div');
@@ -174,6 +193,7 @@
         }
 
         function toonKlantInfo(klantId) {
+            console.log('Displaying customer info for ID:', klantId);
             const klant = klantData.find(k => k.id === klantId);
             const klantDiv = document.getElementById(`klant-${klantId}`);
             
@@ -235,12 +255,14 @@
         }
 
         function toonFoto(url, klantId) {
+            console.log('Displaying photo for customer ID:', klantId);
             const img = document.getElementById(`klant-voertuig-${klantId}`);
             img.src = url;
             document.getElementById(`photo-container-${klantId}`).classList.remove('hidden');
         }
 
         function sendMail(klantId) {
+            console.log('Sending email for customer ID:', klantId);
             const klant = klantData.find(k => k.id === klantId);
             const subject = encodeURIComponent(`Customer ${klant.name} (Customer number: ${klant.customerNumber || 'Not available'}) has been delivered`);
             const body = encodeURIComponent(`The customer ${klant.name} (Customer number: ${klant.customerNumber || 'Not available'}) has been delivered.`);
