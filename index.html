@@ -69,60 +69,35 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold mb-4">Customer Management for Forklift Driver</h1>
         
-        <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
+        <input type="text" id="klant-zoek" placeholder="Search for a customer (name or time slot)..." class="w-full p-2 mb-8 border rounded">
         <div class="flex flex-wrap justify-between mb-8">
             <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
             <button id="sort-time-button" class="details-button mb-2">Sort by time</button>
             <button id="original-button" class="details-button hidden mb-2">Original order</button>
-            <button id="capture-button" class="details-button mb-2">Scan delivery note</button>
-            <button id="reload-button" class="details-button mb-2">Reload Data</button>
         </div>
-        <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <div id="klant-lijst" class="mb-8"></div>
     </div>
 
     <script>
         let klantData = [];
         let origineleVolgorde = [];
-        let lastLoadTime = 0;
-        const RELOAD_INTERVAL = 5 * 60 * 1000; // 5 minuten
 
-        function laadKlantData(forceReload = false) {
-            const currentTime = new Date().getTime();
-            if (!forceReload && (currentTime - lastLoadTime < RELOAD_INTERVAL)) {
-                console.log('Skipping reload, not enough time has passed');
-                return Promise.resolve();
-            }
-
+        function laadKlantData() {
             const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-jhm4BBdSkcOHvJD7LpAU2Cr6w9PtFp.json';
 
-            console.log('Fetching data from:', url);
-
-            return fetch(url, { 
-                method: 'GET',
-                headers: {
-                    'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                },
-                cache: 'no-store'
-            })
-            .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Received data:', data);
-                if (typeof data === 'object' && data !== null) {
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Received data:', data);
                     klantData = Object.entries(data).map(([key, value]) => ({
                         id: key,
-                        name: key,
+                        name: key.split(' ').slice(0, -1).join(' '),
                         timeSlot: key.split(' ').pop(),
-                        customerNumber: '',
                         voorkeuren: value.Voorkeuren || '',
                         locatie: value.locatie || '',
                         voertuigFoto: value.voertuigFoto || '',
@@ -131,104 +106,46 @@
                     }));
                     origineleVolgorde = klantData.map(klant => klant.id);
                     console.log('Processed customer data:', klantData);
-                    lastLoadTime = currentTime;
                     toonKlanten();
-                    console.log('Customer data loaded successfully');
-                } else {
-                    throw new Error('Invalid data structure received from the server.');
-                }
-            })
-            .catch(error => {
-                console.error('Error loading customer data:', error);
-                console.error('Error details:', error.message);
-                console.error('Error stack:', error.stack);
-                alert('Error loading customer data. Please check the console for more details and try again later.');
-            });
-        }
-
-        function herlaadGegevens() {
-            console.log('Manually reloading data...');
-            laadKlantData(true)
-                .then(() => {
-                    console.log('Data reload completed');
-                    alert('Customer data has been reloaded successfully.');
                 })
                 .catch(error => {
-                    console.error('Error reloading data:', error);
-                    alert('Failed to reload customer data. Please try again.');
+                    console.error('Error loading customer data:', error);
+                    alert('Error loading customer data. Please check the console for more details.');
                 });
         }
 
-        // Initial load
-        document.addEventListener('DOMContentLoaded', () => {
-            laadKlantData();
-            // Set up interval for periodic reloading
-            setInterval(() => laadKlantData(), RELOAD_INTERVAL);
-        });
-
-        const zoekInput = document.getElementById('klant-zoek');
-        const klantLijst = document.getElementById('klant-lijst');
-        const sortButton = document.getElementById('sort-button');
-        const sortTimeButton = document.getElementById('sort-time-button');
-        const originalButton = document.getElementById('original-button');
-        const captureButton = document.getElementById('capture-button');
-        const fileInput = document.getElementById('file-input');
-        const reloadButton = document.getElementById('reload-button');
-
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
             console.log('Displaying customers. Filter:', filter, 'Sort:', sorteer, 'Sort by time:', sorteerOpTijd);
+            const klantLijst = document.getElementById('klant-lijst');
             klantLijst.innerHTML = '';
+            
             let klanten = klantData.filter(klant => 
                 klant.name.toLowerCase().includes(filter.toLowerCase()) ||
-                (klant.customerNumber && klant.customerNumber.includes(filter)) ||
-                (klant.timeSlot && klant.timeSlot.toLowerCase().includes(filter.toLowerCase()))
+                klant.timeSlot.toLowerCase().includes(filter.toLowerCase())
             );
 
             if (sorteer) {
                 klanten.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sorteerOpTijd) {
-                klanten.sort((a, b) => {
-                    const timeA = a.timeSlot || '';
-                    const timeB = b.timeSlot || '';
-                    return timeA.localeCompare(timeB);
-                });
+                klanten.sort((a, b) => a.timeSlot.localeCompare(b.timeSlot));
             } else {
                 klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
             }
-
-            console.log('Filtered and sorted customers:', klanten);
 
             klanten.forEach(klant => {
                 const div = document.createElement('div');
                 div.className = 'klant-kader';
                 div.id = `klant-${klant.id}`;
-
-                const klantInfoDiv = document.createElement('div');
-                klantInfoDiv.className = 'mb-4';
-                klantInfoDiv.innerHTML = `
-                    <span class="font-semibold text-lg">${klant.name}</span><br>
-                    <span class="text-sm text-gray-500">Customer number: ${klant.customerNumber || 'Not available'}</span><br>
-                    <span class="text-sm text-gray-500">${klant.timeSlot || 'No time slot'}</span>
+                div.innerHTML = `
+                    <div class="mb-4">
+                        <span class="font-semibold text-lg">${klant.name}</span><br>
+                        <span class="text-sm text-gray-500">${klant.timeSlot}</span>
+                    </div>
+                    <div class="flex flex-wrap justify-between items-center">
+                        <button class="details-button flex-grow mr-2 mb-2" onclick="toonKlantInfo('${klant.id}')">Details</button>
+                        <button class="mail-button flex-grow mb-2" onclick="sendMail('${klant.id}')">Send email</button>
+                    </div>
                 `;
-                div.appendChild(klantInfoDiv);
-
-                const buttonContainer = document.createElement('div');
-                buttonContainer.className = 'flex flex-wrap justify-between items-center';
-                
-                const detailsButton = document.createElement('button');
-                detailsButton.textContent = 'Details';
-                detailsButton.className = 'details-button flex-grow mr-2 mb-2';
-                detailsButton.onclick = () => toonKlantInfo(klant.id);
-                buttonContainer.appendChild(detailsButton);
-
-                const mailButton = document.createElement('button');
-                mailButton.textContent = 'Send email';
-                mailButton.className = 'mail-button flex-grow mb-2';
-                mailButton.onclick = () => sendMail(klant.id);
-                buttonContainer.appendChild(mailButton);
-
-                div.appendChild(buttonContainer);
-
                 klantLijst.appendChild(div);
             });
         }
@@ -247,12 +164,11 @@
             detailsDiv.className = 'klant-details mt-4';
             detailsDiv.innerHTML = `
                 <div class="w-full mb-4">
-                    <button class="back-button">Back</button>
+                    <button class="back-button" onclick="verbergKlantInfo('${klantId}')">Back</button>
                 </div>
                 <div class="w-full">
                     <h2 class="text-xl font-semibold mb-2">${klant.name}</h2>
-                    <p class="mb-2">Customer number: ${klant.customerNumber || 'Not available'}</p>
-                    <p class="mb-2">Time slot: ${klant.timeSlot || 'No time slot'}</p>
+                    <p class="mb-2">Time slot: ${klant.timeSlot}</p>
                     <p class="mb-2">Preferences: ${klant.voorkeuren || 'No preferences specified'}</p>
                 </div>
                 <div id="map-${klantId}" class="w-full mb-4" style="height: 300px;"></div>
@@ -289,11 +205,14 @@
                     photoButtonsContainer.appendChild(button);
                 }
             });
+        }
 
-            const backButton = detailsDiv.querySelector('.back-button');
-            backButton.onclick = () => {
+        function verbergKlantInfo(klantId) {
+            const klantDiv = document.getElementById(`klant-${klantId}`);
+            const detailsDiv = klantDiv.querySelector('.klant-details');
+            if (detailsDiv) {
                 detailsDiv.remove();
-            };
+            }
         }
 
         function toonFoto(url, klantId) {
@@ -306,204 +225,36 @@
         function sendMail(klantId) {
             console.log('Sending email for customer ID:', klantId);
             const klant = klantData.find(k => k.id === klantId);
-            const subject = encodeURIComponent(`Customer ${klant.name} (Customer number: ${klant.customerNumber || 'Not available'}) has been delivered`);
-            const body = encodeURIComponent(`The customer ${klant.name} (Customer number: ${klant.customerNumber || 'Not available'}) has been delivered.`);
+            const subject = encodeURIComponent(`Customer ${klant.name} has been delivered`);
+            const body = encodeURIComponent(`The customer ${klant.name} has been delivered.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
-        zoekInput.addEventListener('input', (e) => toonKlanten(e.target.value));
+        document.getElementById('klant-zoek').addEventListener('input', (e) => toonKlanten(e.target.value));
 
-        sortButton.onclick = () => {
-            toonKlanten(zoekInput.value, true);
-            sortButton.classList.add('hidden');
-            sortTimeButton.classList.add('hidden');
-            originalButton.classList.remove('hidden');
+        document.getElementById('sort-button').onclick = () => {
+            toonKlanten(document.getElementById('klant-zoek').value, true);
+            document.getElementById('sort-button').classList.add('hidden');
+            document.getElementById('sort-time-button').classList.add('hidden');
+            document.getElementById('original-button').classList.remove('hidden');
         };
 
-        sortTimeButton.onclick = () => {
-            toonKlanten(zoekInput.value, false, true);
-            sortButton.classList.add('hidden');
-            sortTimeButton.classList.add('hidden');
-            originalButton.classList.remove('hidden');
+        document.getElementById('sort-time-button').onclick = () => {
+            toonKlanten(document.getElementById('klant-zoek').value, false, true);
+            document.getElementById('sort-button').classList.add('hidden');
+            document.getElementById('sort-time-button').classList.add('hidden');
+            document.getElementById('original-button').classList.remove('hidden');
         };
 
-        originalButton.onclick = () => {
-            toonKlanten(zoekInput.value);
-            originalButton.classList.add('hidden');
-            sortButton.classList.remove('hidden');
-            sortTimeButton.classList.remove('hidden');
+        document.getElementById('original-button').onclick = () => {
+            toonKlanten(document.getElementById('klant-zoek').value);
+            document.getElementById('original-button').classList.add('hidden');
+            document.getElementById('sort-button').classList.remove('hidden');
+            document.getElementById('sort-time-button').classList.remove('hidden');
         };
 
-        reloadButton.onclick = herlaadGegevens;
-
-        function compressImage(img) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            let width = img.width;
-            let height = img.height;
-            const maxWidth = 1000;
-            const maxHeight = 1000;
-
-            if (width > height) {
-                if (width > maxWidth) {
-                    height *= maxWidth / width;
-                    width = maxWidth;
-                }
-            } else {
-                if (height > maxHeight) {
-                    width *= maxHeight / height;
-                    height = maxHeight;
-                }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-
-            ctx.drawImage(img, 0, 0, width, height);
-
-            return canvas.toDataURL('image/jpeg', 0.7);
-        }
-
-        async function processCompressedImage(compressedImageData) {
-            try {
-                console.log("Compressed image loaded, starting OCR processing");
-                const text = await performOCR(compressedImageData);
-                console.log("OCR processing completed");
-                console.log("Detected text:", text);
-                const customerInfo = extractCustomerInfo(text);
-                if (customerInfo) {
-                    console.log("Customer information found:", customerInfo);
-                    if (customerInfo.customerNumber) {
-                        zoekInput.value = customerInfo.customerNumber;
-                        toonKlanten(customerInfo.customerNumber);
-                    } else if (customerInfo.customerName) {
-                        zoekInput.value = customerInfo.customerName;
-                        toonKlanten(customerInfo.customerName);
-                    }
-                } else {
-                    console.log("No customer information found");
-                    alert('No customer information found in the image. Please try again with a clearer photo.');
-                }
-            } catch (error) {
-                console.error('Error processing the image:', error);
-                alert(`An error occurred while processing the image: ${error.message}`);
-            }
-        }
-
-        async function performOCR(imageData) {
-            const apiKey = 'K81580366488957';
-            const apiUrl = 'https://api.ocr.space/parse/image';
-
-            const formData = new FormData();
-            formData.append('apikey', apiKey);
-            formData.append('base64Image', imageData);
-            formData.append('language', 'dut');
-            formData.append('detectOrientation', 'true');
-            formData.append('scale', 'true');
-            formData.append('isTable', 'false');
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log("OCR API response:", result);
-
-                if (result.IsErroredOnProcessing) {
-                    throw new Error(`OCR processing error: ${result.ErrorMessage}`);
-                }
-
-                if (result.ParsedResults && result.ParsedResults.length > 0) {
-                    return result.ParsedResults[0].ParsedText;
-                } else {
-                    throw new Error('No text found in the image');
-                }
-            } catch (error) {
-                console.error('Error during OCR processing:', error);
-                throw error;
-            }
-        }
-
-        function extractCustomerInfo(text) {
-            if (!text) {
-                console.log("No text to process");
-                return null;
-            }
-
-            console.log("Extracted text:", text);
-
-            const lines = text.split('\n');
-            let customerNumber = null;
-            let customerName = null;
-
-            for (let line of lines) {
-                line = line.trim();
-
-                if (/^(tel:|fax:|gsm:|BE)/i.test(line)) {
-                    continue;
-                }
-
-                const numberMatch = line.match(/\b(?!433|434)\d{6}\b/);
-                if (numberMatch && !customerNumber) {
-                    customerNumber = numberMatch[0];
-                    console.log("Found customer number:", customerNumber);
-                }
-
-                const nameMatch = line.match(/^[A-Za-z\s]+$/);
-                if (nameMatch && !customerName) {
-                    customerName = nameMatch[0].trim();
-                    console.log("Found customer name:", customerName);
-                }
-
-                if (customerNumber && customerName) {
-                    break;
-                }
-            }
-
-            if (!customerNumber && !customerName) {
-                console.log("No customer information found in the text");
-                return null;
-            }
-
-            return { customerNumber, customerName };
-        }
-
-        captureButton.onclick = () => {
-            fileInput.click();
-        };
-
-        fileInput.onchange = (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const compressedImage = compressImage(img);
-                        processCompressedImage(compressedImage);
-                    };
-                    img.src = e.target.result;
-                };
-                reader.onerror = (error) => {
-                    console.error('Error reading the file:', error);
-                    alert('An error occurred while reading the file. Please try again.');
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        window.onerror = function(message, source, lineno, colno, error) {
-            console.error('Uncaught error:', error);
-            alert('An unexpected error occurred. Please check the console for more details.');
-            return true;
-        };
+        // Load customer data when the page loads
+        document.addEventListener('DOMContentLoaded', laadKlantData);
     </script>
 </body>
 </html>
