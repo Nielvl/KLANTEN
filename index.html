@@ -63,12 +63,12 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold mb-4">Klantenbeheer voor Heftruckchauffeur</h1>
         
-        <input type="text" id="klant-zoek" placeholder="Search a client..." class="w-full p-2 mb-8 border rounded">
+        <input type="text" id="klant-zoek" placeholder="Zoek een klant (naam, nummer of tijdslot)..." class="w-full p-2 mb-8 border rounded">
         <div class="flex flex-wrap justify-between mb-8">
-            <button id="sort-button" class="details-button mb-2">Sort Alphabetic</button>
-            <button id="sort-time-button" class="details-button mb-2">Sort by Time</button>
-            <button id="original-button" class="details-button hidden mb-2">Original sorting</button>
-            <button id="capture-button" class="details-button mb-2">Capture Delivery Note</button>
+            <button id="sort-button" class="details-button mb-2">Sorteer alfabetisch</button>
+            <button id="sort-time-button" class="details-button mb-2">Sorteer op tijd</button>
+            <button id="original-button" class="details-button hidden mb-2">Originele volgorde</button>
+            <button id="capture-button" class="details-button mb-2">Scan leverbon</button>
         </div>
         <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <ul id="klant-lijst" class="mb-8 max-h-96 overflow-y-auto"></ul>
@@ -77,6 +77,7 @@
             <div id="klant-info" class="klant-info">
                 <button id="back-button" class="back-button mb-8">Terug naar klantenlijst</button>
                 <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
+                <p id="klant-nummer" class="mb-2"></p>
                 <p id="klant-voorkeuren" class="mb-2"></p>
                 <div id="map" class="mb-4"></div>
                 <div id="photo-buttons" class="mb-4"></div>
@@ -92,12 +93,12 @@
         let origineleVolgorde = [];
 
         // Klantgegevens laden vanuit een extern JSON-bestand
-        fetch('klantData.json')
+        fetch('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/snippet-PBpx4bR2a5CPvHft3UrV6UAP7kYyRk.txt')
             .then(response => response.json())
             .then(data => {
                 klantData = data;
                 origineleVolgorde = data.customers.map(klant => klant.id);
-                toonKlanten(); // Toon de klanten zodra de data is geladen
+                toonKlanten();
             })
             .catch(error => console.error('Error loading customer data:', error));
 
@@ -114,21 +115,23 @@
         const captureButton = document.getElementById('capture-button');
         const fileInput = document.getElementById('file-input');
 
-        // Klantenlijst tonen
         function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
             klantLijst.innerHTML = '';
             let klanten = klantData.customers.filter(klant => 
                 klant.name.toLowerCase().includes(filter.toLowerCase()) ||
-                (filter.toLowerCase().split(' ').every(word => 
-                    klant.name.toLowerCase().includes(word)
-                )) ||
-                (klant.timeSlot && klant.timeSlot.includes(filter))
+                klant.customerNumber.includes(filter) ||
+                (klant.customerNumber && klant.customerNumber.includes(filter)) ||
+                (klant.timeSlot && klant.timeSlot.toLowerCase().includes(filter.toLowerCase()))
             );
 
             if (sorteer) {
                 klanten.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sorteerOpTijd) {
-                klanten.sort((a, b) => (a.timeSlot || '').localeCompare(b.timeSlot || ''));
+                klanten.sort((a, b) => {
+                    if (!a.timeSlot) return 1;
+                    if (!b.timeSlot) return -1;
+                    return a.timeSlot.localeCompare(b.timeSlot);
+                });
             } else {
                 klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
             }
@@ -137,25 +140,26 @@
                 const li = document.createElement('li');
                 li.className = 'klant-kader';
 
-                const klantNaamEnTijd = document.createElement('div');
-                klantNaamEnTijd.className = 'mb-4';
-                klantNaamEnTijd.innerHTML = `
+                const klantInfoDiv = document.createElement('div');
+                klantInfoDiv.className = 'mb-4';
+                klantInfoDiv.innerHTML = `
                     <span class="font-semibold text-lg">${klant.name}</span><br>
-                    <span class="text-sm text-gray-500">${klant.timeSlot || 'No time slot'}</span>
+                    <span class="text-sm text-gray-500">Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}</span><br>
+                    <span class="text-sm text-gray-500">${klant.timeSlot || 'Geen tijdslot'}</span>
                 `;
-                li.appendChild(klantNaamEnTijd);
+                li.appendChild(klantInfoDiv);
 
                 const buttonContainer = document.createElement('div');
                 buttonContainer.className = 'flex flex-wrap justify-between items-center';
                 
                 const detailsButton = document.createElement('button');
-                detailsButton.textContent = 'See Details';
+                detailsButton.textContent = 'Details';
                 detailsButton.className = 'details-button flex-grow mr-2 mb-2';
                 detailsButton.onclick = () => toonKlantInfo(klant.id);
                 buttonContainer.appendChild(detailsButton);
 
                 const mailButton = document.createElement('button');
-                mailButton.textContent = 'Send Mail';
+                mailButton.textContent = 'Verstuur e-mail';
                 mailButton.className = 'mail-button flex-grow mb-2';
                 mailButton.onclick = () => sendMail(klant.id);
                 buttonContainer.appendChild(mailButton);
@@ -166,10 +170,10 @@
             });
         }
 
-        // Klantinformatie tonen wanneer op "See Details" wordt geklikt
         function toonKlantInfo(klantId) {
             const klant = klantData.customers.find(k => k.id === klantId);
             document.getElementById('klant-naam').textContent = `${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}`;
+            document.getElementById('klant-nummer').textContent = `Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}`;
             document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren || 'Geen voorkeuren opgegeven'}`;
             
             klantInfoContainer.classList.remove('hidden');
@@ -177,7 +181,6 @@
             zoekInput.classList.add('hidden');
             backButton.classList.remove('hidden');
 
-            // Google Maps initialiseren
             if (klant.locatie) {
                 const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
                 const map = new google.maps.Map(document.getElementById('map'), {
@@ -191,7 +194,6 @@
                 document.getElementById('map').classList.add('hidden');
             }
 
-            // Foto knoppen toevoegen
             photoButtons.innerHTML = '';
             photoContainer.classList.add('hidden');
             const photos = [
@@ -211,22 +213,19 @@
             });
         }
 
-        // Foto tonen
         function toonFoto(url) {
             const img = document.getElementById('klant-voertuig');
             img.src = url;
             photoContainer.classList.remove('hidden');
         }
 
-        // E-mail versturen
         function sendMail(klantId) {
             const klant = klantData.customers.find(k => k.id === klantId);
-            const subject = encodeURIComponent(`Klant ${klant.name} is afgeleverd`);
-            const body = encodeURIComponent(`De klant ${klant.name} is afgeleverd.`);
+            const subject = encodeURIComponent(`Klant ${klant.name} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd`);
+            const body = encodeURIComponent(`De klant ${klant.name} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
-        // Terug naar de klantenlijst
         backButton.onclick = () => {
             klantInfoContainer.classList.add('hidden');
             klantLijst.classList.remove('hidden');
@@ -258,7 +257,6 @@
             sortTimeButton.classList.remove('hidden');
         };
 
-        // Capture and process delivery note image
         captureButton.onclick = () => {
             fileInput.click();
         };
@@ -272,12 +270,12 @@
                     img.onload = () => {
                         Tesseract.recognize(img, 'nld')
                             .then(({ data: { text } }) => {
-                                const customerName = extractCustomerName(text);
-                                if (customerName) {
-                                    zoekInput.value = customerName;
-                                    toonKlanten(customerName);
+                                const customerNumber = extractCustomerNumber(text);
+                                if (customerNumber) {
+                                    zoekInput.value = customerNumber;
+                                    toonKlanten(customerNumber);
                                 } else {
-                                    alert('Geen klantnaam gevonden in de afbeelding.');
+                                    alert('Geen klantnummer gevonden in de afbeelding.');
                                 }
                             })
                             .catch(error => {
@@ -291,14 +289,12 @@
             }
         };
 
-        function extractCustomerName(text) {
+        function extractCustomerNumber(text) {
             const lines = text.split('\n');
             for (let line of lines) {
-                line = line.trim();
-                if (line.length >= 7) {
-                    // We nemen de eerste 5 of meer karakters, tot aan de eerste komma of het einde van de regel
-                    const endIndex = line.indexOf(',') > 5 ? line.indexOf(',') : line.length;
-                    return line.slice(0, Math.max(endIndex, 5));
+                const match = line.match(/\b\d{5,}\b/); // Zoekt naar een getal van 4 of meer cijfers
+                if (match) {
+                    return match[0];
                 }
             }
             return null;
