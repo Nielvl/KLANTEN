@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Klantenbeheer voor Heftruckchauffeur</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8LJ0Q0Se0O8Q38FPvC31zxIj8i05q35M"></script>
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -16,15 +17,16 @@
             justify-content: space-between; 
             align-items: center;
         }
-        .details-button {
+        .details-button, .mail-button {
             padding: 5px 10px;
             background-color: #007BFF; 
             color: white; 
             border: none; 
             border-radius: 5px;
             cursor: pointer;
+            margin-left: 5px;
         }
-        .details-button:hover {
+        .details-button:hover, .mail-button:hover {
             background-color: #0056b3;
         }
         .back-button {
@@ -52,6 +54,10 @@
             max-width: 100%;
             height: auto;
         }
+        #map {
+            height: 400px;
+            width: 100%;
+        }
         @media (max-width: 768px) {
             .klant-info, img {
                 flex: 1 1 100%;
@@ -67,6 +73,7 @@
             <input type="text" id="klant-zoek" placeholder="Search a client..." class="w-full p-2 mb-8 border rounded">
             <div class="flex justify-between mb-8">
                 <button id="sort-button" class="details-button">Sort Alphabetic</button>
+                <button id="sort-time-button" class="details-button">Sort by Time</button>
                 <button id="original-button" class="details-button hidden">Original sorting</button>
             </div>
             <ul id="klant-lijst" class="mb-8 max-h-40 overflow-y-auto"></ul>
@@ -76,7 +83,7 @@
                     <button id="back-button" class="back-button hidden">Terug naar klantenlijst</button>
                     <h2 id="klant-naam" class="text-xl font-semibold mb-2"></h2>
                     <p id="klant-voorkeuren" class="mb-2"></p>
-                    <p class="mb-2">GPS Coördinaten: <a id="klant-locatie" href="" target="_blank" class="text-blue-500 hover:underline"></a></p>
+                    <div id="map" class="mb-4"></div>
                 </div>
                 <img id="klant-voertuig" src="" alt="Voertuig van de klant" class="mb-4">
             </div>
@@ -103,14 +110,21 @@
         const klantInfo = document.getElementById('klant-info');
         const backButton = document.getElementById('back-button');
         const sortButton = document.getElementById('sort-button');
+        const sortTimeButton = document.getElementById('sort-time-button');
         const originalButton = document.getElementById('original-button');
 
         // Klantenlijst tonen
-        function toonKlanten(filter = '', sorteer = false) {
+        function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
             klantLijst.innerHTML = '';
             let klantenNamen = Object.keys(klantData).filter(naam => naam.toLowerCase().includes(filter.toLowerCase()));
             if (sorteer) {
                 klantenNamen.sort();
+            } else if (sorteerOpTijd) {
+                klantenNamen.sort((a, b) => {
+                    const timeA = a.split(' ').pop();
+                    const timeB = b.split(' ').pop();
+                    return timeA.localeCompare(timeB);
+                });
             } else {
                 klantenNamen = origineleVolgorde.filter(naam => naam.toLowerCase().includes(filter.toLowerCase()));
             }
@@ -118,17 +132,30 @@
                 const li = document.createElement('li');
                 li.className = 'klant-kader';
 
-                // Voeg de klantnaam toe
-                const klantNaam = document.createElement('span');
-                klantNaam.textContent = naam;
-                li.appendChild(klantNaam);
+                // Voeg de klantnaam en tijdsindicatie toe
+                const klantNaamEnTijd = document.createElement('div');
+                const naamDelen = naam.split(' ');
+                const tijd = naamDelen.pop();
+                const klantNaam = naamDelen.join(' ');
+                klantNaamEnTijd.innerHTML = `<span>${klantNaam}</span><br><span class="text-sm text-gray-500">${tijd}</span>`;
+                li.appendChild(klantNaamEnTijd);
 
-                // Voeg de "See Details"-knop toe
+                // Voeg de knoppen toe
+                const buttonContainer = document.createElement('div');
+                
                 const detailsButton = document.createElement('button');
                 detailsButton.textContent = 'See Details';
                 detailsButton.className = 'details-button';
                 detailsButton.onclick = () => toonKlantInfo(naam);
-                li.appendChild(detailsButton);
+                buttonContainer.appendChild(detailsButton);
+
+                const mailButton = document.createElement('button');
+                mailButton.textContent = 'Send Mail';
+                mailButton.className = 'mail-button';
+                mailButton.onclick = () => sendMail(naam);
+                buttonContainer.appendChild(mailButton);
+
+                li.appendChild(buttonContainer);
 
                 klantLijst.appendChild(li);
             });
@@ -138,18 +165,29 @@
         function toonKlantInfo(naam) {
             const klant = klantData[naam];
             document.getElementById('klant-naam').textContent = naam;
-            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.voorkeuren}`;
-            document.getElementById('klant-voertuig').src = klant.voertuigFoto, klant.voertuigFoto1, klant.voertuigFoto2;
-           
-            
-            const locatieLink = document.getElementById('klant-locatie');
-            locatieLink.textContent = klant.locatie;
-            locatieLink.href = `https://www.google.com/maps/search/?api=1&query=${klant.locatie}`;
+            document.getElementById('klant-voorkeuren').textContent = `Voorkeuren: ${klant.Voorkeuren || klant.voorkeuren}`;
+            document.getElementById('klant-voertuig').src = klant.voertuigFoto || klant.voertuigFoto1 || '';
             
             klantInfoContainer.classList.remove('hidden');
             klantLijst.classList.add('hidden');
             zoekInput.classList.add('hidden');
             backButton.classList.remove('hidden');
+
+            // Google Maps initialiseren
+            const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
+            const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat, lng },
+                zoom: 16,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            });
+            new google.maps.Marker({ position: { lat, lng }, map: map });
+        }
+
+        // E-mail versturen
+        function sendMail(naam) {
+            const subject = encodeURIComponent(`Klant ${naam} is afgeleverd`);
+            const body = encodeURIComponent(`De klant ${naam} is afgeleverd.`);
+            window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
         // Terug naar de klantenlijst
@@ -165,13 +203,22 @@
         sortButton.onclick = () => {
             toonKlanten(zoekInput.value, true);
             sortButton.classList.add('hidden');
+            sortTimeButton.classList.add('hidden');
+            originalButton.classList.remove('hidden');
+        };
+
+        sortTimeButton.onclick = () => {
+            toonKlanten(zoekInput.value, false, true);
+            sortButton.classList.add('hidden');
+            sortTimeButton.classList.add('hidden');
             originalButton.classList.remove('hidden');
         };
 
         originalButton.onclick = () => {
-            toonKlanten(zoekInput.value, false);
+            toonKlanten(zoekInput.value);
             originalButton.classList.add('hidden');
             sortButton.classList.remove('hidden');
+            sortTimeButton.classList.remove('hidden');
         };
     </script>
 </body>
