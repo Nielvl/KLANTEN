@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Klantenbeheer voor Heftruckchauffeur</title>
+    <title>Customer Management for Forklift Driver</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8LJ0Q0Se0O8Q38FPvC31zxIj8i05q35M"></script>
     <style>
@@ -66,14 +66,14 @@
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
-        <h1 class="text-2xl font-bold mb-4">Klantenbeheer voor Heftruckchauffeur</h1>
+        <h1 class="text-2xl font-bold mb-4">Customer Management for Forklift Driver</h1>
         
-        <input type="text" id="klant-zoek" placeholder="Zoek een klant (naam, nummer of tijdslot)..." class="w-full p-2 mb-8 border rounded">
+        <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
         <div class="flex flex-wrap justify-between mb-8">
-            <button id="sort-button" class="details-button mb-2">Sorteer alfabetisch</button>
-            <button id="sort-time-button" class="details-button mb-2">Sorteer op tijd</button>
-            <button id="original-button" class="details-button hidden mb-2">Originele volgorde</button>
-            <button id="capture-button" class="details-button mb-2">Scan leverbon</button>
+            <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
+            <button id="sort-time-button" class="details-button mb-2">Sort by time</button>
+            <button id="original-button" class="details-button hidden mb-2">Original order</button>
+            <button id="capture-button" class="details-button mb-2">Scan delivery note</button>
         </div>
         <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <div id="klant-lijst" class="mb-8"></div>
@@ -94,10 +94,10 @@
                 .catch(error => console.error('Error loading customer data:', error));
         }
 
-        // Laad de gegevens elke 5 minuten opnieuw
+        // Reload data every 5 minutes
         setInterval(laadKlantData, 5 * 60 * 1000);
 
-        // Initiële data laden
+        // Initial data load
         laadKlantData();
 
         const zoekInput = document.getElementById('klant-zoek');
@@ -137,8 +137,8 @@
                 klantInfoDiv.className = 'mb-4';
                 klantInfoDiv.innerHTML = `
                     <span class="font-semibold text-lg">${klant.name}</span><br>
-                    <span class="text-sm text-gray-500">Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}</span><br>
-                    <span class="text-sm text-gray-500">${klant.timeSlot || 'Geen tijdslot'}</span>
+                    <span class="text-sm text-gray-500">Customer number: ${klant.customerNumber || 'Not available'}</span><br>
+                    <span class="text-sm text-gray-500">${klant.timeSlot || 'No time slot'}</span>
                 `;
                 div.appendChild(klantInfoDiv);
 
@@ -152,7 +152,7 @@
                 buttonContainer.appendChild(detailsButton);
 
                 const mailButton = document.createElement('button');
-                mailButton.textContent = 'Verstuur e-mail';
+                mailButton.textContent = 'Send email';
                 mailButton.className = 'mail-button flex-grow mb-2';
                 mailButton.onclick = () => sendMail(klant.id);
                 buttonContainer.appendChild(mailButton);
@@ -167,7 +167,7 @@
             const klant = klantData.find(k => k.id === klantId);
             const klantDiv = document.getElementById(`klant-${klantId}`);
             
-            // Verwijder eventuele bestaande details
+            // Remove existing details if any
             const bestaandeDetails = klantDiv.querySelector('.klant-details');
             if (bestaandeDetails) {
                 bestaandeDetails.remove();
@@ -176,20 +176,24 @@
             const detailsDiv = document.createElement('div');
             detailsDiv.className = 'klant-details mt-4';
             detailsDiv.innerHTML = `
-                <button class="back-button mb-4">Terug</button>
-                <h2 class="text-xl font-semibold mb-2">${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}</h2>
-                <p class="mb-2">Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}</p>
-                <p class="mb-2">Voorkeuren: ${klant.voorkeuren || 'Geen voorkeuren opgegeven'}</p>
-                <div id="map-${klantId}" class="mb-4" style="height: 300px;"></div>
-                <div id="photo-buttons-${klantId}" class="mb-4"></div>
+                <div class="w-full mb-4">
+                    <button class="back-button">Back</button>
+                </div>
+                <div class="w-full">
+                    <h2 class="text-xl font-semibold mb-2">${klant.name} ${klant.timeSlot ? '- ' + klant.timeSlot : ''}</h2>
+                    <p class="mb-2">Customer number: ${klant.customerNumber || 'Not available'}</p>
+                    <p class="mb-2">Preferences: ${klant.voorkeuren || 'No preferences specified'}</p>
+                </div>
+                <div id="map-${klantId}" class="w-full mb-4" style="height: 300px;"></div>
+                <div id="photo-buttons-${klantId}" class="w-full mb-4"></div>
                 <div id="photo-container-${klantId}" class="hidden w-full">
-                    <img id="klant-voertuig-${klantId}" src="" alt="Voertuig van de klant" class="mb-4 max-w-full h-auto">
+                    <img id="klant-voertuig-${klantId}" src="" alt="Customer's vehicle" class="mb-4 max-w-full h-auto">
                 </div>
             `;
 
             klantDiv.appendChild(detailsDiv);
 
-            // Voeg de kaart toe
+            // Add the map
             if (klant.locatie) {
                 const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
                 const map = new google.maps.Map(document.getElementById(`map-${klantId}`), {
@@ -200,12 +204,12 @@
                 new google.maps.Marker({ position: { lat, lng }, map: map });
             }
 
-            // Voeg fotoknoppen toe
+            // Add photo buttons
             const photoButtonsContainer = document.getElementById(`photo-buttons-${klantId}`);
             const photos = [
-                { key: 'voertuigFoto', label: 'Foto 1' },
-                { key: 'voertuigFoto1', label: 'Foto 2' },
-                { key: 'voertuigFoto2', label: 'Foto 3' }
+                { key: 'voertuigFoto', label: 'Photo 1' },
+                { key: 'voertuigFoto1', label: 'Photo 2' },
+                { key: 'voertuigFoto2', label: 'Photo 3' }
             ];
 
             photos.forEach(photo => {
@@ -218,7 +222,7 @@
                 }
             });
 
-            // Voeg terugknop functionaliteit toe
+            // Add back button functionality
             const backButton = detailsDiv.querySelector('.back-button');
             backButton.onclick = () => {
                 detailsDiv.remove();
@@ -233,8 +237,8 @@
 
         function sendMail(klantId) {
             const klant = klantData.find(k => k.id === klantId);
-            const subject = encodeURIComponent(`Klant ${klant.name} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd`);
-            const body = encodeURIComponent(`De klant ${klant.name} (Klantnummer: ${klant.customerNumber || 'Niet beschikbaar'}) is afgeleverd.`);
+            const subject = encodeURIComponent(`Customer ${klant.name} (Customer number: ${klant.customerNumber || 'Not available'}) has been delivered`);
+            const body = encodeURIComponent(`The customer ${klant.name} (Customer number: ${klant.customerNumber || 'Not available'}) has been delivered.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
@@ -265,7 +269,7 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
 
-            // Bereken nieuwe dimensies met behoud van aspect ratio
+            // Calculate new dimensions while maintaining aspect ratio
             let width = img.width;
             let height = img.height;
             const maxWidth = 1000;
@@ -286,22 +290,22 @@
             canvas.width = width;
             canvas.height = height;
 
-            // Teken de afbeelding op het canvas met de nieuwe dimensies
+            // Draw the image on the canvas with new dimensions
             ctx.drawImage(img, 0, 0, width, height);
 
-            // Converteer het canvas naar een gecomprimeerde JPEG-dataURL
+            // Convert the canvas to a compressed JPEG dataURL
             return canvas.toDataURL('image/jpeg', 0.7);
         }
 
         async function processCompressedImage(compressedImageData) {
             try {
-                console.log("Gecomprimeerde afbeelding geladen, start OCR-verwerking");
+                console.log("Compressed image loaded, starting OCR processing");
                 const text = await performOCR(compressedImageData);
-                console.log("OCR-verwerking voltooid");
-                console.log("Gedetecteerde tekst:", text);
+                console.log("OCR processing completed");
+                console.log("Detected text:", text);
                 const customerInfo = extractCustomerInfo(text);
                 if (customerInfo) {
-                    console.log("Klantinformatie gevonden:", customerInfo);
+                    console.log("Customer information found:", customerInfo);
                     if (customerInfo.customerNumber) {
                         zoekInput.value = customerInfo.customerNumber;
                         toonKlanten(customerInfo.customerNumber);
@@ -310,12 +314,12 @@
                         toonKlanten(customerInfo.customerName);
                     }
                 } else {
-                    console.log("Geen klantinformatie gevonden");
-                    alert('Geen klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
+                    console.log("No customer information found");
+                    alert('No customer information found in the image. Please try again with a clearer photo.');
                 }
             } catch (error) {
-                console.error('Fout bij het verwerken van de afbeelding:', error);
-                alert(`Er is een fout opgetreden bij het verwerken van de afbeelding: ${error.message}`);
+                console.error('Error processing the image:', error);
+                alert(`An error occurred while processing the image: ${error.message}`);
             }
         }
 
@@ -351,57 +355,57 @@
                 if (result.ParsedResults && result.ParsedResults.length > 0) {
                     return result.ParsedResults[0].ParsedText;
                 } else {
-                    throw new Error('Geen tekst gevonden in de afbeelding');
+                    throw new Error('No text found in the image');
                 }
             } catch (error) {
-                console.error('Fout bij OCR-verwerking:', error);
+                console.error('Error during OCR processing:', error);
                 throw error;
             }
         }
 
         function extractCustomerInfo(text) {
             if (!text) {
-                console.log("Geen tekst om te verwerken");
+                console.log("No text to process");
                 return null;
             }
 
-            console.log("Geëxtraheerde tekst:", text);
+            console.log("Extracted text:", text);
 
             const lines = text.split('\n');
             let customerNumber = null;
             let customerName = null;
 
             for (let line of lines) {
-                // Verwijder spaties aan het begin en einde van de regel
+                // Remove spaces at the beginning and end of the line
                 line = line.trim();
 
-                // Negeer regels die beginnen met "tel:", "fax:", "gsm:" of "BE"
+                // Ignore lines starting with "tel:", "fax:", "gsm:" or "BE"
                 if (/^(tel:|fax:|gsm:|BE)/i.test(line)) {
                     continue;
                 }
 
-                // Zoek naar klantnummer (6 cijfers, niet beginnend met 433 of 434)
+                // Look for customer number (6 digits, not starting with 433 or 434)
                 const numberMatch = line.match(/\b(?!433|434)\d{6}\b/);
                 if (numberMatch && !customerNumber) {
                     customerNumber = numberMatch[0];
-                    console.log("Gevonden klantnummer:", customerNumber);
+                    console.log("Found customer number:", customerNumber);
                 }
 
-                // Zoek naar klantnaam (reeks van woorden zonder cijfers)
+                // Look for customer name (series of words without numbers)
                 const nameMatch = line.match(/^[A-Za-z\s]+$/);
                 if (nameMatch && !customerName) {
                     customerName = nameMatch[0].trim();
-                    console.log("Gevonden klantnaam:", customerName);
+                    console.log("Found customer name:", customerName);
                 }
 
-                // Stop als we beide hebben gevonden
+                // Stop if we've found both
                 if (customerNumber && customerName) {
                     break;
                 }
             }
 
             if (!customerNumber && !customerName) {
-                console.log("Geen klantinformatie gevonden in de tekst");
+                console.log("No customer information found in the text");
                 return null;
             }
 
@@ -425,8 +429,8 @@
                     img.src = e.target.result;
                 };
                 reader.onerror = (error) => {
-                    console.error('Fout bij het lezen van het bestand:', error);
-                    alert('Er is een fout opgetreden bij het lezen van het bestand. Probeer het opnieuw.');
+                    console.error('Error reading the file:', error);
+                    alert('An error occurred while reading the file. Please try again.');
                 };
                 reader.readAsDataURL(file);
             }
