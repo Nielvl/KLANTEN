@@ -85,6 +85,9 @@
         let klantData = [];
         let origineleVolgorde = [];
 
+        // Load customer data when the page loads
+        document.addEventListener('DOMContentLoaded', laadKlantData);
+
         function laadKlantData() {
             const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-BnVkOnm7SAxhNgKeHIzJU3O98daM5m.json';
 
@@ -362,8 +365,7 @@
             return { isValid: false };
         }
 
-        // Load customer data when the page loads
-        document.addEventListener('DOMContentLoaded', laadKlantData);
+        
     </script>
 </body>
 </html>
