@@ -10,6 +10,15 @@
         "locatie": "50.87836494079864, 4.369754586022119"
       },
       {
+        "id": "wyla",
+        "name": "WYLA",
+        "customerNumber": "4000842",
+        "timeSlot": "05:30",
+        "voorkeuren": "WHITE TRUCK WITH A PLATFORM",
+        "voertuigFoto": "",
+        "locatie": "50.87687482582162, 4.369163161645167"
+      },
+      {
         "id": "verdoodt-frans",
         "name": "VERDOODT FRANS bv",
         "customerNumber": "400779",
