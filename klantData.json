@@ -100,6 +100,15 @@
         "locatie": "50.87786331412451, 4.368525418151219"
       },
       {
+        "id": "allfruits",
+        "name": "ALLFRTUIS",
+        "customerNumber": "4000278",
+        "timeSlot": "05:00",
+        "voorkeuren": "IS PARKED IN FRONT OF COOL",
+        "voertuigFoto": "",
+        "locatie": "50.875690893824704, 4.37050526124101"
+      },
+      {
         "id": "jacques-remy",
         "name": "JACQUES REMY & FILS SA",
         "customerNumber": "400342",
@@ -259,8 +268,8 @@
         "customerNumber": "400819",
         "timeSlot": "",
         "voorkeuren": "HALL D",
-        "voertuigFoto": "",
-        "locatie": ""
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/hbw4jj52pz656g1oeprwd/VPTN.jpg?rlkey=4zmwx55nfx8x284u7mhij7rp9&st=ki2ckkrg&dl",
+        "locatie": "50.87395079777418, 4.368262318993959"
       },
       {
         "id": "vlaemynck",
