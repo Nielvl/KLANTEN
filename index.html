@@ -260,6 +260,112 @@
             document.getElementById('sort-button').classList.remove('hidden');
             document.getElementById('sort-time-button').classList.remove('hidden');
         };
+
+        // OCR functionality
+        const captureButton = document.getElementById('capture-button');
+        const fileInput = document.getElementById('file-input');
+
+        captureButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const compressedImage = compressImage(img);
+                        processImage(compressedImage);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function compressImage(img) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = img.width;
+            let height = img.height;
+            const maxWidth = 1000;
+            const maxHeight = 1000;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.drawImage(img, 0, 0, width, height);
+
+            return canvas.toDataURL('image/jpeg', 0.7);
+        }
+
+        function processImage(imageData) {
+            Tesseract.recognize(imageData, 'eng+nld', {
+                logger: m => console.log(m)
+            }).then(({ data: { text } }) => {
+                console.log("Extracted text:", text);
+                const customerInfo = extractCustomerInfo(text);
+                if (customerInfo && customerInfo.isValid) {
+                        console.log("Valid customer information found:", customerInfo);
+                        document.getElementById('klant-zoek').value = customerInfo.searchTerm;
+                        toonKlanten(customerInfo.searchTerm);
+                } else {
+                    console.log("No valid customer information found");
+                    alert('Er is iets niet juist. Geen geldige klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
+                }
+            });
+        }
+
+        function extractCustomerInfo(text) {
+            const lines = text.split('\n');
+            let customerNumber = null;
+            let customerName = null;
+
+            for (let line of lines) {
+                line = line.trim();
+
+                const numberMatch = line.match(/\b(?!433|434|435|436|437)\d{6,7}\b/);
+                if (numberMatch) {
+                    customerNumber = numberMatch[0];
+                    console.log("Found customer number:", customerNumber);
+                    return { searchTerm: customerNumber, isValid: true };
+                }
+            }
+
+            // If no customer number is found, search for a customer name
+            for (let line of lines) {
+                line = line.trim();
+                if (line.length > 3 && !/^\d+$/.test(line)) {  // Ignore lines that are just numbers
+                    const matchedCustomer = klantData.find(klant => 
+                        klant.name.toLowerCase().includes(line.toLowerCase())
+                    );
+                    if (matchedCustomer) {
+                        customerName = matchedCustomer.name;
+                        console.log("Found matching customer name:", customerName);
+                        return { searchTerm: customerName, isValid: true };
+                    }
+                }
+            }
+
+            return { isValid: false };
+        }
+
+        
     </script>
 </body>
 </html>
