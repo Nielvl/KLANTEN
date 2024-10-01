@@ -89,7 +89,7 @@
         document.addEventListener('DOMContentLoaded', laadKlantData);
 
         function laadKlantData() {
-            const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-BnVkOnm7SAxhNgKeHIzJU3O98daM5m.json';
+            const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-vNrf7k3yxNYNA5EqfBf8xdTAbLvyvN.json';
 
             fetch(url)
                 .then(response => {
@@ -321,9 +321,11 @@
                 console.log("Extracted text:", text);
                 const customerInfo = extractCustomerInfo(text);
                 if (customerInfo && customerInfo.isValid) {
-                        console.log("Valid customer information found:", customerInfo);
-                        document.getElementById('klant-zoek').value = customerInfo.searchTerm;
-                        toonKlanten(customerInfo.searchTerm);
+                    console.log("Valid customer information found:", customerInfo);
+                    document.getElementById('klant-zoek').value = customerInfo.search
+
+Term;
+                    toonKlanten(customerInfo.searchTerm);
                 } else {
                     console.log("No valid customer information found");
                     alert('Er is iets niet juist. Geen geldige klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
@@ -334,12 +336,11 @@
         function extractCustomerInfo(text) {
             const lines = text.split('\n');
             let customerNumber = null;
-            let customerName = null;
 
             for (let line of lines) {
                 line = line.trim();
 
-                const numberMatch = line.match(/\b(?!433|434|435|436|437)\d{6,7}\b/);
+                const numberMatch = line.match(/\b400\d{3,4}\b/);
                 if (numberMatch) {
                     customerNumber = numberMatch[0];
                     console.log("Found customer number:", customerNumber);
@@ -355,17 +356,14 @@
                         klant.name.toLowerCase().includes(line.toLowerCase())
                     );
                     if (matchedCustomer) {
-                        customerName = matchedCustomer.name;
-                        console.log("Found matching customer name:", customerName);
-                        return { searchTerm: customerName, isValid: true };
+                        console.log("Found matching customer name:", matchedCustomer.name);
+                        return { searchTerm: matchedCustomer.name, isValid: true };
                     }
                 }
             }
 
             return { isValid: false };
         }
-
-        
     </script>
 </body>
 </html>
