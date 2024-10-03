@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -222,50 +223,30 @@
 
         // OCR functie
         function performOCR(imageData) {
-            const apiKey = 'K87899322788957';
-            const apiUrl = 'https://api.ocr.space/parse/image';
-
-            const formData = new FormData();
-            formData.append('apikey', apiKey);
-            formData.append('base64Image', imageData);
-            formData.append('language', 'eng');
-            formData.append('isOverlayRequired', 'false');
-
-            fetch(apiUrl, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.ParsedResults && result.ParsedResults.length > 0) {
-                    const extractedText = result.ParsedResults[0].ParsedText;
-                    console.log('Extracted text:', extractedText);
-                    processExtractedText(extractedText);
-                } else {
-                    console.error('No text found in the image');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+            Tesseract.recognize(imageData, 'eng', { logger: m => console.log(m) })
+                .then(({ data: { text } }) => {
+                    console.log('OCR Result:', text);
+                    processOCRResult(text);
+                })
+                .catch(error => {
+                    console.error('OCR Error:', error);
+                    alert('Error processing the image. Please try again.');
+                });
         }
 
-        function processExtractedText(text) {
-            // Zoek naar klantnummer (veronderstelt dat het klantnummer 8 cijfers heeft)
-            const customerNumberMatch = text.match(/\b\d{8}\b/);
+        function processOCRResult(text) {
+            // Zoek naar klantnummer dat begint met "40" en 6 of 7 cijfers heeft
+            const customerNumberMatch = text.match(/\b40\d{4,5}\b/);
             if (customerNumberMatch) {
                 const customerNumber = customerNumberMatch[0];
                 console.log('Gevonden klantnummer:', customerNumber);
-                // Zoek de klant op basis van het klantnummer
-                const customer = klantData.find(k => k.customerNumber === customerNumber);
-                if (customer) {
-                    console.log('Klant gevonden:', customer);
-                    toonKlantInfo(customer.id);
-                } else {
-                    console.log('Geen klant gevonden met dit nummer');
-                }
+                // Vul het zoekveld automatisch in met het gevonden klantnummer
+                document.getElementById('klant-zoek').value = customerNumber;
+                // Trigger de zoekopdracht
+                toonKlanten(customerNumber, isAlphabeticalSort);
             } else {
-                console.log('Geen klantnummer gevonden in de tekst');
+                console.log('Geen geldig klantnummer gevonden in de tekst');
+                alert('Geen geldig klantnummer gevonden in de afbeelding. Probeer opnieuw.');
             }
         }
 
@@ -285,8 +266,8 @@
                             canvas.width = img.width;
                             canvas.height = img.height;
                             ctx.drawImage(img, 0, 0, img.width, img.height);
-                            const imageData = canvas.toDataURL('image/jpeg').split(',')[1];
-                            performOCR(imageData);
+                            const imageDataUrl = canvas.toDataURL('image/jpeg');
+                            performOCR(imageDataUrl);
                         };
                         img.src = e.target.result;
                     };
