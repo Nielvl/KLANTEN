@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -221,26 +220,79 @@
             toonKlanten('', false, e.target.value);
         });
 
-        // Add event listener for the capture button
-        document.getElementById('capture-button').addEventListener('click', function() {
-            document.getElementById('file-input').click();
-        });
+        // OCR functie
+        function performOCR(imageData) {
+            const apiKey = 'K87899322788957';
+            const apiUrl = 'https://api.ocr.space/parse/image';
 
-        // Add event listener for the file input
-        document.getElementById('file-input').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    Tesseract.recognize(event.target.result)
-                        .then(function(result) {
-                            console.log('OCR Result:', result.data.text);
-                            // Here you can implement the logic to process the OCR result
-                            // For example, searching for a customer number in the text
-                        });
-                };
-                reader.readAsDataURL(file);
+            const formData = new FormData();
+            formData.append('apikey', apiKey);
+            formData.append('base64Image', imageData);
+            formData.append('language', 'eng');
+            formData.append('isOverlayRequired', 'false');
+
+            fetch(apiUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.ParsedResults && result.ParsedResults.length > 0) {
+                    const extractedText = result.ParsedResults[0].ParsedText;
+                    console.log('Extracted text:', extractedText);
+                    processExtractedText(extractedText);
+                } else {
+                    console.error('No text found in the image');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function processExtractedText(text) {
+            // Zoek naar klantnummer (veronderstelt dat het klantnummer 8 cijfers heeft)
+            const customerNumberMatch = text.match(/\b\d{8}\b/);
+            if (customerNumberMatch) {
+                const customerNumber = customerNumberMatch[0];
+                console.log('Gevonden klantnummer:', customerNumber);
+                // Zoek de klant op basis van het klantnummer
+                const customer = klantData.find(k => k.customerNumber === customerNumber);
+                if (customer) {
+                    console.log('Klant gevonden:', customer);
+                    toonKlantInfo(customer.id);
+                } else {
+                    console.log('Geen klant gevonden met dit nummer');
+                }
+            } else {
+                console.log('Geen klantnummer gevonden in de tekst');
             }
+        }
+
+        // Update de capture-button event listener
+        document.getElementById('capture-button').addEventListener('click', function() {
+            const fileInput = document.getElementById('file-input');
+            fileInput.click();
+            fileInput.onchange = function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = function() {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            ctx.drawImage(img, 0, 0, img.width, img.height);
+                            const imageData = canvas.toDataURL('image/jpeg').split(',')[1];
+                            performOCR(imageData);
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
         });
     </script>
 </body>
