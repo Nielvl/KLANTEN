@@ -1,5 +1,14 @@
 const customerData = {
   "customers": [
+        {
+          "id": "jadesco",
+          "name": "JADESCO",
+          "customerNumber": "4000648",
+          "timeSlot": "07:00",
+          "voorkeuren": "OLD TRUCK OF RUTOMA. IN FORNT OF VAN DIJCK FOODS",
+          "voertuigFoto": "",
+          "locatie": "50.87725467228242, 4.371232285407062"
+      },    
       {
           "id": "thiry-gent",
           "name": "THIRY GENT",
