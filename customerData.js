@@ -1,13 +1,13 @@
-{
-    "customers": [
+const customerData = {
+  "customers": [
       {
-        "id": "thiry-gent",
-        "name": "THIRY GENT",
-        "customerNumber": "400616",
-        "timeSlot": "06:00",
-        "voorkeuren": "warehouse nr 1, it's a transporting company so the truck will change from time to time.",
-        "voertuigFoto": "",
-        "locatie": "50.87836494079864, 4.369754586022119"
+          "id": "thiry-gent",
+          "name": "THIRY GENT",
+          "customerNumber": "400616",
+          "timeSlot": "06:00",
+          "voorkeuren": "warehouse nr 1, it's a transporting company so the truck will change from time to time.",
+          "voertuigFoto": "",
+          "locatie": "50.87836494079864, 4.369754586022119"
       },
       {
         "id": "servais-alex",

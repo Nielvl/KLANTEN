@@ -72,50 +72,45 @@
         
         <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
         <div class="flex flex-wrap justify-between mb-8">
-            <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
-            <button id="sort-time-button" class="details-button mb-2">Sort by time</button>
-            <button id="original-button" class="details-button hidden mb-2">Original order</button>
+            <button id="sort-button" class="details-button mb-2">Original order</button>
+            <select id="sort-time-select" class="p-2 border rounded mb-2">
+                <option value="">Sort by time</option>
+                <option value="00:00-01:00">00:00 - 01:00</option>
+                <option value="01:00-02:00">01:00 - 02:00</option>
+                <option value="02:00-03:00">02:00 - 03:00</option>
+                <option value="03:00-04:00">03:00 - 04:00</option>
+                <option value="04:00-05:00">04:00 - 05:00</option>
+                <option value="05:00-06:00">05:00 - 06:00</option>
+                <option value="06:00-07:00">06:00 - 07:00</option>
+                <option value="07:00-08:00">07:00 - 08:00</option>
+                <option value="08:00-09:00">08:00 - 09:00</option>
+                <option value="09:00-10:00">09:00 - 10:00</option>
+                <option value="10:00-11:00">10:00 - 11:00</option>
+                <option value="11:00-12:00">11:00 - 12:00</option>
+                <option value="will be picked up">Will be picked up</option>
+            </select>
             <button id="capture-button" class="capture-button mb-2">Scan delivery note</button>
         </div>
         <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <div id="klant-lijst" class="mb-8"></div>
     </div>
 
+    <script src="customerData.js"></script>
     <script>
         let klantData = [];
         let origineleVolgorde = [];
+        let isAlphabeticalSort = true;
 
-        // Load customer data when the page loads
-        document.addEventListener('DOMContentLoaded', laadKlantData);
+        document.addEventListener('DOMContentLoaded', initializeData);
 
-        function laadKlantData() {
-            const url = 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/klantData-vNrf7k3yxNYNA5EqfBf8xdTAbLvyvN.json';
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Received data:', data);
-                    if (data && data.customers && Array.isArray(data.customers)) {
-                        klantData = data.customers;
-                        origineleVolgorde = klantData.map(klant => klant.id);
-                        console.log('Processed customer data:', klantData);
-                        toonKlanten();
-                    } else {
-                        throw new Error('Invalid data structure received from the server.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading customer data:', error);
-                    alert('Error loading customer data. Please check the console for more details.');
-                });
+        function initializeData() {
+            klantData = customerData.customers;
+            origineleVolgorde = klantData.map(klant => klant.id);
+            console.log('Processed customer data:', klantData);
+            toonKlanten('', true);
         }
 
-        function toonKlanten(filter = '', sorteer = false, sorteerOpTijd = false) {
+        function toonKlanten(filter = '', sorteer = true, sorteerOpTijd = '') {
             console.log('Displaying customers. Filter:', filter, 'Sort:', sorteer, 'Sort by time:', sorteerOpTijd);
             const klantLijst = document.getElementById('klant-lijst');
             klantLijst.innerHTML = '';
@@ -129,10 +124,14 @@
             if (sorteer) {
                 klanten.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sorteerOpTijd) {
-                klanten.sort((a, b) => {
-                    const timeA = a.timeSlot || '';
-                    const timeB = b.timeSlot || '';
-                    return timeA.localeCompare(timeB);
+                klanten = klanten.filter(klant => {
+                    if (sorteerOpTijd === 'will be picked up') {
+                        return !klant.timeSlot;
+                    }
+                    if (!klant.timeSlot) return false;
+                    const [startTime, endTime] = sorteerOpTijd.split('-');
+                    const klantTime = klant.timeSlot.split(' - ')[0]; // Use the start time if a range is given
+                    return klantTime >= startTime && klantTime < endTime;
                 });
             } else {
                 klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
@@ -179,39 +178,18 @@
                     <p class="mb-2">Time slot: ${klant.timeSlot || 'No time slot'}</p>
                     <p class="mb-2">Preferences: ${klant.voorkeuren || 'No preferences specified'}</p>
                 </div>
-                <div id="map-${klantId}" class="w-full mb-4" style="height: 300px;"></div>
-                <div id="photo-buttons-${klantId}" class="w-full mb-4"></div>
-                <div id="photo-container-${klantId}" class="hidden w-full">
-                    <img id="klant-voertuig-${klantId}" src="" alt="Customer's vehicle" class="mb-4 max-w-full h-auto">
-                </div>
+                <div id="map-${klantId}" class="w-full h-64 mt-4"></div>
             `;
-
             klantDiv.appendChild(detailsDiv);
 
             if (klant.locatie) {
                 const [lat, lng] = klant.locatie.split(', ').map(parseFloat);
                 const map = L.map(`map-${klantId}`).setView([lat, lng], 17);
                 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
                 }).addTo(map);
                 L.marker([lat, lng]).addTo(map);
             }
-
-            const photoButtonsContainer = document.getElementById(`photo-buttons-${klantId}`);
-            const photos = [
-                { key: 'voertuigFoto', label: 'Photo 1' },
-                { key: 'voertuigFoto1', label: 'Photo 2' },
-                { key: 'voertuigFoto2', label: 'Photo 3' }
-            ];
-
-            photos.forEach(photo => {
-                if (klant[photo.key]) {
-                    const button = document.createElement('button');
-                    button.textContent = photo.label;
-                    button.className = 'photo-button mr-2 mb-2';
-                    button.onclick = () => toonFoto(klant[photo.key], klantId);
-                    photoButtonsContainer.appendChild(button);
-                }
-            });
         }
 
         function verbergKlantInfo(klantId) {
@@ -222,147 +200,48 @@
             }
         }
 
-        function toonFoto(url, klantId) {
-            console.log('Displaying photo for customer ID:', klantId);
-            const img = document.getElementById(`klant-voertuig-${klantId}`);
-            img.src = url;
-            document.getElementById(`photo-container-${klantId}`).classList.remove('hidden');
-        }
-
         function sendMail(klantId) {
-            console.log('Sending email for customer ID:', klantId);
             const klant = klantData.find(k => k.id === klantId);
             const subject = encodeURIComponent(`Customer ${klant.name} (Customer number: ${klant.customerNumber}) has been delivered`);
             const body = encodeURIComponent(`The customer ${klant.name} (Customer number: ${klant.customerNumber}) has been delivered.`);
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
-        document.getElementById('klant-zoek').addEventListener('input', (e) => toonKlanten(e.target.value));
-
-        document.getElementById('sort-button').onclick = () => {
-            toonKlanten(document.getElementById('klant-zoek').value, true);
-            document.getElementById('sort-button').classList.add('hidden');
-            document.getElementById('sort-time-button').classList.add('hidden');
-            document.getElementById('original-button').classList.remove('hidden');
-        };
-
-        document.getElementById('sort-time-button').onclick = () => {
-            toonKlanten(document.getElementById('klant-zoek').value, false, true);
-            document.getElementById('sort-button').classList.add('hidden');
-            document.getElementById('sort-time-button').classList.add('hidden');
-            document.getElementById('original-button').classList.remove('hidden');
-        };
-
-        document.getElementById('original-button').onclick = () => {
-            toonKlanten(document.getElementById('klant-zoek').value);
-            document.getElementById('original-button').classList.add('hidden');
-            document.getElementById('sort-button').classList.remove('hidden');
-            document.getElementById('sort-time-button').classList.remove('hidden');
-        };
-
-        // OCR functionality
-        const captureButton = document.getElementById('capture-button');
-        const fileInput = document.getElementById('file-input');
-
-        captureButton.addEventListener('click', () => {
-            fileInput.click();
+        document.getElementById('klant-zoek').addEventListener('input', function(e) {
+            toonKlanten(e.target.value, isAlphabeticalSort);
         });
 
-        fileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
+        document.getElementById('sort-button').addEventListener('click', function() {
+            isAlphabeticalSort = !isAlphabeticalSort;
+            this.textContent = isAlphabeticalSort ? 'Original order' : 'Sort alphabetically';
+            toonKlanten('', isAlphabeticalSort);
+        });
+
+        document.getElementById('sort-time-select').addEventListener('change', function(e) {
+            toonKlanten('', false, e.target.value);
+        });
+
+        // Add event listener for the capture button
+        document.getElementById('capture-button').addEventListener('click', function() {
+            document.getElementById('file-input').click();
+        });
+
+        // Add event listener for the file input
+        document.getElementById('file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const compressedImage = compressImage(img);
-                        processImage(compressedImage);
-                    };
-                    img.src = e.target.result;
+                reader.onload = function(event) {
+                    Tesseract.recognize(event.target.result)
+                        .then(function(result) {
+                            console.log('OCR Result:', result.data.text);
+                            // Here you can implement the logic to process the OCR result
+                            // For example, searching for a customer number in the text
+                        });
                 };
                 reader.readAsDataURL(file);
             }
         });
-
-        function compressImage(img) {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-
-            let width = img.width;
-            let height = img.height;
-            const maxWidth = 1000;
-            const maxHeight = 1000;
-
-            if (width > height) {
-                if (width > maxWidth) {
-                    height *= maxWidth / width;
-                    width = maxWidth;
-                }
-            } else {
-                if (height > maxHeight) {
-                    width *= maxHeight / height;
-                    height = maxHeight;
-                }
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-
-            ctx.drawImage(img, 0, 0, width, height);
-
-            return canvas.toDataURL('image/jpeg', 0.7);
-        }
-
-        function processImage(imageData) {
-            Tesseract.recognize(imageData, 'eng+nld', {
-                logger: m => console.log(m)
-            }).then(({ data: { text } }) => {
-                console.log("Extracted text:", text);
-                const customerInfo = extractCustomerInfo(text);
-                if (customerInfo && customerInfo.isValid) {
-                    console.log("Valid customer information found:", customerInfo);
-                    document.getElementById('klant-zoek').value = customerInfo.search
-
-Term;
-                    toonKlanten(customerInfo.searchTerm);
-                } else {
-                    console.log("No valid customer information found");
-                    alert('Er is iets niet juist. Geen geldige klantinformatie gevonden in de afbeelding. Probeer opnieuw met een duidelijkere foto.');
-                }
-            });
-        }
-
-        function extractCustomerInfo(text) {
-            const lines = text.split('\n');
-            let customerNumber = null;
-
-            for (let line of lines) {
-                line = line.trim();
-
-                const numberMatch = line.match(/\b400\d{3,4}\b/);
-                if (numberMatch) {
-                    customerNumber = numberMatch[0];
-                    console.log("Found customer number:", customerNumber);
-                    return { searchTerm: customerNumber, isValid: true };
-                }
-            }
-
-            // If no customer number is found, search for a customer name
-            for (let line of lines) {
-                line = line.trim();
-                if (line.length > 3 && !/^\d+$/.test(line)) {  // Ignore lines that are just numbers
-                    const matchedCustomer = klantData.find(klant => 
-                        klant.name.toLowerCase().includes(line.toLowerCase())
-                    );
-                    if (matchedCustomer) {
-                        console.log("Found matching customer name:", matchedCustomer.name);
-                        return { searchTerm: matchedCustomer.name, isValid: true };
-                    }
-                }
-            }
-
-            return { isValid: false };
-        }
     </script>
 </body>
 </html>
