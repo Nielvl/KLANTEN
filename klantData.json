@@ -10,6 +10,15 @@
         "locatie": "50.87836494079864, 4.369754586022119"
       },
       {
+        "id": "servais-alex",
+        "name": "SERVAIS ALEX",
+        "customerNumber": "4000957",
+        "timeSlot": "04:30",
+        "voorkeuren": "THE TRUCK SAYS 'LA PETITE ECHOPPE' ON THE SIDE",
+        "voertuigFoto": "",
+        "locatie": "50.87533413237001, 4.371306783271611"
+      },
+      {
         "id": "wyla",
         "name": "WYLA",
         "customerNumber": "4000842",
