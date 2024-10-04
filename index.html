@@ -64,13 +64,37 @@
                 flex: 1 1 100%;
             }
         }
+        .search-container {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+        .search-input {
+            position: relative;
+        }
+        .clear-search {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold mb-4">Customer Management for Forklift Driver</h1>
         
-        <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
+        <div class="search-container">
+            <div class="search-input">
+                <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
+                <span id="clear-search" class="clear-search hidden">&times;</span>
+            </div>
+        </div>
+        
         <div class="flex flex-wrap justify-between mb-8">
             <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
             <select id="sort-time-select" class="p-2 border rounded mb-2">
@@ -117,12 +141,17 @@
             const volgendUur = (huidigeUur + 1) % 24;
             const tijdSlot = `${huidigeUur.toString().padStart(2, '0')}:00-${volgendUur.toString().padStart(2, '0')}:00`;
 
+            console.log('Zoeken naar tijdslot:', tijdSlot); // Debug log
+
             setTimeout(() => {
                 const eersteKlantVanUur = document.querySelector(`[data-timeslot="${tijdSlot}"]`);
                 if (eersteKlantVanUur) {
+                    console.log('Gevonden element:', eersteKlantVanUur); // Debug log
                     eersteKlantVanUur.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    console.log('Geen element gevonden voor tijdslot:', tijdSlot); // Debug log
                 }
-            }, 100);
+            }, 500); // Verhoogd naar 500ms voor meer zekerheid
         }
 
         function toonKlanten(filter = '', sorteer = true, sorteerOpTijd = '') {
@@ -227,8 +256,18 @@
             window.location.href = `mailto:sales@vanlaethem.eu?subject=${subject}&body=${body}`;
         }
 
-        document.getElementById('klant-zoek').addEventListener('input', function(e) {
+        const zoekInput = document.getElementById('klant-zoek');
+        const clearSearch = document.getElementById('clear-search');
+
+        zoekInput.addEventListener('input', function(e) {
             toonKlanten(e.target.value, isAlphabeticalSort);
+            clearSearch.classList.toggle('hidden', e.target.value === '');
+        });
+
+        clearSearch.addEventListener('click', function() {
+            zoekInput.value = '';
+            toonKlanten('', isAlphabeticalSort);
+            this.classList.add('hidden');
         });
 
         document.getElementById('sort-button').addEventListener('click', function() {
