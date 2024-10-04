@@ -8,7 +8,8 @@ const customerData = {
           "voorkeuren": "INSIDE VAN LIER. ALWAYS ANNOUNCE THE PALLETS AND DROP OFF THE DOCUMENTS INSIDE THE OFFICE",
           "voertuigFoto": "",
           "locatie": "50.87775305405133, 4.370275066134459"
-      },    {
+      },    
+      {
           "id": "jadesco",
           "name": "JADESCO",
           "customerNumber": "4000648",
@@ -21,7 +22,7 @@ const customerData = {
           "id": "thiry-gent",
           "name": "THIRY GENT",
           "customerNumber": "400616",
-          "timeSlot": "06:00",
+          "timeSlot": "05:00",
           "voorkeuren": "warehouse nr 1, it's a transporting company so the truck will change from time to time.",
           "voertuigFoto": "",
           "locatie": "50.87836494079864, 4.369754586022119"
@@ -165,17 +166,17 @@ const customerData = {
         "id": "desaeger",
         "name": "DESAEGER BV",
         "customerNumber": "400876",
-        "timeSlot": "",
-        "voorkeuren": "",
+        "timeSlot": "06:30",
+        "voorkeuren": "YOU CAN ALWAYS PUT IT ON TOP OF THE OTHER GOODS. PLEASE CHECK IF THERE IS SOMETHING FOR ALAIN CLOQUETTE ASWELL.",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.87646591379929, 4.372137335288257"
       },
       {
         "id": "fresh-frozen-food",
         "name": "FRESH FROZEN FOOD",
         "customerNumber": "4000462",
-        "timeSlot": "",
-        "voorkeuren": "",
+        "timeSlot": "07:00",
+        "voorkeuren": "MABRU, NOT REALLY SURE WHERE... PLEASE CONTACT ME TO UPDATE THIS INFORMATION",
         "voertuigFoto": "",
         "locatie": ""
       },
@@ -183,7 +184,7 @@ const customerData = {
         "id": "delidis",
         "name": "DELIDIS",
         "customerNumber": "4000122",
-        "timeSlot": "08:00",
+        "timeSlot": "07:00",
         "voorkeuren": "Either they have their own truck or we deliver it at Andiprim, in general it is written on the delivery note. It can be combined with Delidis",
         "voertuigFoto": "https://www.imageneuf.be/onewebmedia/Camion%20Starfresh.jpg?etag=%225f083-5c5e9592%22&sourceContentType=image%2Fjpeg",
         "locatie": "50.877831976525336, 4.370717231621229"
@@ -192,8 +193,8 @@ const customerData = {
         "id": "vanlommel-fresh-food",
         "name": "VANLOMMEL FRESH FOOD bv",
         "customerNumber": "400059",
-        "timeSlot": "",
-        "voorkeuren": "",
+        "timeSlot": "06:00",
+        "voorkeuren": "ALWAYS WITH OUR OWN TRUCK TO MECHELEN",
         "voertuigFoto": "",
         "locatie": ""
       },
@@ -202,16 +203,7 @@ const customerData = {
         "name": "FA-WAY SA",
         "customerNumber": "4000912",
         "timeSlot": "",
-        "voorkeuren": "",
-        "voertuigFoto": "",
-        "locatie": ""
-      },
-      {
-        "id": "la-provencale-sarl",
-        "name": "LA PROVENCALE SARL",
-        "customerNumber": "400950",
-        "timeSlot": "",
-        "voorkeuren": "",
+        "voorkeuren": "WILL COLLECT HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
       },
@@ -228,16 +220,16 @@ const customerData = {
         "id": "horeca-totaal-brugge",
         "name": "HORECA TOTAAL BRUGGE BV",
         "customerNumber": "4000132",
-        "timeSlot": "",
-        "voorkeuren": "",
+        "timeSlot": "06:00",
+        "voorkeuren": "WILL USE A TRUCK OF JM-TRANS.",
         "voertuigFoto": "",
-        "locatie": ""
+        "locatie": "50.87726641881318, 4.368826572488006"
       },
       {
         "id": "wouters-willy-en-co",
         "name": "WOUTERS Willy en Co",
         "customerNumber": "400699",
-        "timeSlot": "",
+        "timeSlot": "06:00",
         "voorkeuren": "BETWEEN HALL F AND E",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/lzye1cwza8eg2cbzjrba1/Foto-20-09-2024-08-19-06.jpg?rlkey=iqsv2cphaku96uh3duf0qvhl1&st=tico27my&dl",
         "locatie": "50.875344706078735, 4.367802424045308"
@@ -255,7 +247,7 @@ const customerData = {
         "id": "star-fresh-liege",
         "name": "STARFRESH Liege SA",
         "customerNumber": "400686",
-        "timeSlot": "08:00",
+        "timeSlot": "07:00",
         "voorkeuren": "Thursday: own truck, other days it needs to be delivered at Andiprim and can be combined with Star Fresh Liége",
         "voertuigFoto1": "https://andiprim.be/wp-content/uploads/2017/04/Fuhrpark-Andiprim-2014-08-20-001-B-de-kopie-1-w3000.jpg",
         "voertuigFoto2": "https://dl.dropboxusercontent.com/scl/fi/r3tuq36389szwrsatq6tp/Foto-20-09-2024-07-12-42.jpg?rlkey=06dh36aa2qso49c308ott3dhh&st=olwocbe8&dl",
@@ -283,7 +275,7 @@ const customerData = {
         "id": "eurofruits-marcinelle",
         "name": "EUROFRUITS Marcinelle",
         "customerNumber": "400253",
-        "timeSlot": "",
+        "timeSlot": "04:00",
         "voorkeuren": "WHEN ASKED TO BE DELIVERED AT AIDA THEN MAKE SURE IT IS BEFORE 04:00",
         "voertuigFoto": "",
         "locatie": "50.87779783451739, 4.370724335522305"
@@ -293,7 +285,7 @@ const customerData = {
         "name": "RESTOFRAIS",
         "customerNumber": "4000018",
         "timeSlot": "05:30 - 06:00",
-        "voorkeuren": "",
+        "voorkeuren": "WILL BE PARKED ON THE PARKING, IN FRONT OF JONCKHEERE",
         "voertuigFoto": "",
         "locatie": "50.87841375413854, 4.370329582359883"
       },
@@ -301,8 +293,8 @@ const customerData = {
         "id": "vanderpooten-primeurs-nv",
         "name": "VANDERPOOTEN PRIMEURS nv (ex BOLLAERTS)",
         "customerNumber": "400819",
-        "timeSlot": "",
-        "voorkeuren": "HALL D",
+        "timeSlot": "05:00",
+        "voorkeuren": "HALL D, CHECK IF YOU CAN COMBINE IT WITH TERTHOLEN/DE SMET JEAN/WILLY WOUTERS",
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/hbw4jj52pz656g1oeprwd/VPTN.jpg?rlkey=4zmwx55nfx8x284u7mhij7rp9&st=ki2ckkrg&dl",
         "locatie": "50.87395079777418, 4.368262318993959"
       },
@@ -337,10 +329,10 @@ const customerData = {
         "id": "arda-can",
         "name": "ARDA CAN",
         "customerNumber": "4000637",
-        "timeSlot": "",
+        "timeSlot": "06:00",
         "voorkeuren": "",
         "voertuigFoto": "",
-        "locatie": "50.87722842635207, 4.371240658126023"
+        "locatie": "50.87722520583969, 4.3712410564440125"
       },
       {
         "id": "tsas",
@@ -373,7 +365,7 @@ const customerData = {
         "id": "rodiers-nv",
         "name": "RODIERS NV",
         "customerNumber": "400445",
-        "timeSlot": "",
+        "timeSlot": "07:00",
         "voorkeuren": "",
         "voertuigFoto": "",
         "locatie": "50.877077031510964, 4.371443679384686"
@@ -424,13 +416,86 @@ const customerData = {
         "locatie": "50.87560192445967, 4.371706648734485"
       },
       {
-        "id": "carrefour-belgium-nv",
-        "name": "CARREFOUR BELGIUM NV",
-        "customerNumber": "400406",
+        "id": "jupitor",
+        "name": "JUPITOR",
+        "customerNumber": "4000557",
+        "timeSlot": "08:00",
+        "voorkeuren": "HAS A WAREHOUSE ON THE BACKSIDE OF MABRU. C14",
+        "voertuigFoto": "",
+        "locatie": "50.873694700417836, 4.367405969612064"
+      },
+      {
+        "id": "populaire-pascal",
+        "name": "POPULAIRE PASCAL",
+        "customerNumber": "4000165",
+        "timeSlot": "03:30",
+        "voorkeuren": "WILL BE PARKED IN FRONT OF THE WAREHOUSE",
+        "voertuigFoto": "",
+        "locatie": "50.87653700872559, 4.3719485534611335"
+      },
+      {
+        "id": "goossens",
+        "name": "GOOSSENS C BV",
+        "customerNumber": "4000851",
         "timeSlot": "",
-        "voorkeuren": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "marchand-dirk",
+        "name": "MARCHAND DIRK",
+        "customerNumber": "4000814",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "streels-christophe",
+        "name": "STREELS CHRISTOPHE",
+        "customerNumber": "400987",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "t-fruithofke",
+        "name": "TFRUITHOFKE",
+        "customerNumber": "4000600",
+        "timeSlot": "05:30",
+        "voorkeuren": "EITHER WILL BE FOR OUR TRUCK TO MECHELEN OR WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "vandenheuvel-wim",
+        "name": "VANDENHEUVEL WIM",
+        "customerNumber": "4000726",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "mibura",
+        "name": "MIBURA",
+        "customerNumber": "4000790",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "galip",
+        "name": "GALIP",
+        "customerNumber": "4000121",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
       }
+
     ]
   }
