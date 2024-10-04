@@ -125,11 +125,13 @@
         .capture-button {
             display: flex;
             align-items: center;
-            padding: 8px 16px;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
             background-color: #007BFF;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 50%;
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -137,7 +139,7 @@
             background-color: #0056b3;
         }
         .capture-button i {
-            margin-right: 8px;
+            font-size: 18px;
         }
     </style>
 </head>
@@ -157,8 +159,8 @@
                 <button id="sort-time" class="sort-option active">By Time</button>
                 <button id="sort-alpha" class="sort-option">Alphabetically</button>
             </div>
-            <button id="capture-button" class="capture-button">
-                <i class="fas fa-camera"></i> Client number
+            <button id="capture-button" class="capture-button" title="Scan client number">
+                <i class="fas fa-camera"></i>
             </button>
         </div>
         
@@ -185,20 +187,19 @@
         function scrollNaarHuidigeTijd() {
             const nu = new Date();
             const huidigeUur = nu.getHours();
-            const volgendUur = (huidigeUur + 1) % 24;
-            const tijdSlot = `${huidigeUur.toString().padStart(2, '0')}:00-${volgendUur.toString().padStart(2, '0')}:00`;
+            const tijdSlot = `${huidigeUur.toString().padStart(2, '0')}:00`;
 
             console.log('Zoeken naar tijdslot:', tijdSlot); // Debug log
 
             setTimeout(() => {
-                const eersteKlantVanUur = document.querySelector(`[data-timeslot="${tijdSlot}"]`);
-                if (eersteKlantVanUur) {
-                    console.log('Gevonden element:', eersteKlantVanUur); // Debug log
-                    eersteKlantVanUur.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                const klantenVanUur = document.querySelectorAll(`[data-timeslot^="${tijdSlot}"]`);
+                if (klantenVanUur.length > 0) {
+                    console.log('Gevonden element:', klantenVanUur[0]); // Debug log
+                    klantenVanUur[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
                 } else {
                     console.log('Geen element gevonden voor tijdslot:', tijdSlot); // Debug log
                 }
-            }, 500); // Verhoogd naar 500ms voor meer zekerheid
+            }, 500);
         }
 
         function toonKlanten(filter = '', sorteer = true, sorteerOpTijd = '') {
@@ -296,15 +297,23 @@
         const zoekInput = document.getElementById('klant-zoek');
         const clearSearch = document.getElementById('clear-search');
 
+        zoekInput.addEventListener('focus', function() {
+            clearSearch.style.display = 'block';
+        });
+
+        zoekInput.addEventListener('blur', function() {
+            if (this.value === '') {
+                clearSearch.style.display = 'none';
+            }
+        });
+
         zoekInput.addEventListener('input', function(e) {
             toonKlanten(e.target.value, isTimeSort);
-            clearSearch.style.display = e.target.value ? 'block' : 'none';
         });
 
         clearSearch.addEventListener('click', function() {
             zoekInput.value = '';
             toonKlanten('', isTimeSort);
-            this.style.display = 'none';
             zoekInput.focus();
         });
 

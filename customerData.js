@@ -506,15 +506,6 @@ const customerData = {
         "locatie": ""
       },
       {
-        "id": "t-sas",
-        "name": "T-SAS",
-        "customerNumber": "4000534",
-        "timeSlot": "",
-        "voorkeuren": "WILL PICK UP HIMSELF",
-        "voertuigFoto": "",
-        "locatie": ""
-      },
-      {
         "id": "difalux",
         "name": "DIFALUX",
         "customerNumber": "4000259",
