@@ -14,7 +14,7 @@ const customerData = {
           "name": "JADESCO",
           "customerNumber": "4000648",
           "timeSlot": "07:00",
-          "voorkeuren": "OLD TRUCK OF RUTOMA. IN FORNT OF VAN DIJCK FOODS",
+          "voorkeuren": "OLD TRUCK OF RUTOMA. IN FRONT OF VAN DIJCK FOODS",
           "voertuigFoto": "",
           "locatie": "50.87725467228242, 4.371232285407062"
       },    
@@ -149,7 +149,7 @@ const customerData = {
         "name": "JACQUES REMY & FILS SA",
         "customerNumber": "400342",
         "timeSlot": "07:00 - 08:00",
-        "voorkeuren": "",
+        "voorkeuren": "DELIVER AS SOON AS YOU SEE HIM ON THE PARKING.",
         "voertuigFoto": "",
         "locatie": "50.87814991581628, 4.370361855333375"
       },
@@ -495,7 +495,51 @@ const customerData = {
         "voorkeuren": "WILL PICK UP HIMSELF",
         "voertuigFoto": "",
         "locatie": ""
+      },
+      {
+        "id": "t-sas",
+        "name": "T-SAS",
+        "customerNumber": "4000534",
+        "timeSlot": "",
+        "voorkeuren": "WILL PICK UP HIMSELF",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "difalux",
+        "name": "DIFALUX",
+        "customerNumber": "4000259",
+        "timeSlot": "04:30",
+        "voorkeuren": "WILL LOAD AT WAREHOUSE 57 (OUR WAREHOUSE ON THE OTHER SIDE OF THE BUILDING)",
+        "voertuigFoto": "",
+        "locatie": "50.87602678328137, 4.370493917605956"
+      },
+      {
+        "id": "q-fresh",
+        "name": "Q-FRESH",
+        "customerNumber": "4000211",
+        "timeSlot": "04:20",
+        "voorkeuren": "DROP OFF AT GUIDOFRUIT",
+        "voertuigFoto": "",
+        "locatie": "50.87581370385585, 4.370725361955239"
+      },
+      {
+        "id": "keirsmaekers",
+        "name": "KEIRSMÄCKERS",
+        "customerNumber": "400978",
+        "timeSlot": "06:00",
+        "voorkeuren": "EITHER WITH OUR OWN TRUCK TO MECHELEN OR WILL PICK UP HIMSELF BEFORE 06:00",
+        "voertuigFoto": "",
+        "locatie": "50.87646591379929, 4.372137335288257"
+      },
+      {
+        "id": "hanos",
+        "name": "HANOS",
+        "customerNumber": "4000153",
+        "timeSlot": "06:30",
+        "voorkeuren": "ALWAYS CHECK FOR MULTIPLE PALLETS AND IF SOMETHING CAME FROM VLEZENBEEK. HE FIRST LOADS IN FRONT OF RINGOOT AND AFTERWARDS GOES TO STARFRUIT",
+        "voertuigFoto": "",
+        "locatie": "50.877056773494346, 4.371451777780497"
       }
-
     ]
   }
