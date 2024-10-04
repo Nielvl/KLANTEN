@@ -67,20 +67,35 @@
         .search-container {
             position: sticky;
             top: 0;
-            background-color: white;
+            background-color: transparent;
             padding: 10px 0;
             z-index: 1000;
         }
         .search-input {
             position: relative;
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        #klant-zoek {
+            flex-grow: 1;
+            border: none;
+            padding: 10px 15px;
+            outline: none;
         }
         .clear-search {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
+            background: none;
+            border: none;
             color: #888;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0 15px;
+        }
+        .clear-search:hover {
+            color: #333;
         }
     </style>
 </head>
@@ -90,8 +105,8 @@
         
         <div class="search-container">
             <div class="search-input">
-                <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
-                <span id="clear-search" class="clear-search hidden">&times;</span>
+                <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)...">
+                <button id="clear-search" class="clear-search" style="display: none;">&times;</button>
             </div>
         </div>
         
@@ -261,13 +276,14 @@
 
         zoekInput.addEventListener('input', function(e) {
             toonKlanten(e.target.value, isAlphabeticalSort);
-            clearSearch.classList.toggle('hidden', e.target.value === '');
+            clearSearch.style.display = e.target.value ? 'block' : 'none';
         });
 
         clearSearch.addEventListener('click', function() {
             zoekInput.value = '';
             toonKlanten('', isAlphabeticalSort);
-            this.classList.add('hidden');
+            this.style.display = 'none';
+            zoekInput.focus();
         });
 
         document.getElementById('sort-button').addEventListener('click', function() {
