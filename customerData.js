@@ -1,6 +1,14 @@
 const customerData = {
   "customers": [
         {
+          "id": "cora",
+          "name": "CORA",
+          "customerNumber": "4000648",
+          "timeSlot": "03:40",
+          "voorkeuren": "INSIDE VAN LIER. ALWAYS ANNOUNCE THE PALLETS AND DROP OFF THE DOCUMENTS INSIDE THE OFFICE",
+          "voertuigFoto": "",
+          "locatie": "50.87775305405133, 4.370275066134459"
+      },    {
           "id": "jadesco",
           "name": "JADESCO",
           "customerNumber": "4000648",
