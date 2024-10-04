@@ -471,7 +471,7 @@ const customerData = {
       },
       {
         "id": "t-fruithofke",
-        "name": "TFRUITHOFKE",
+        "name": "T FRUITHOFKE",
         "customerNumber": "4000600",
         "timeSlot": "05:30",
         "voorkeuren": "EITHER WILL BE FOR OUR TRUCK TO MECHELEN OR WILL PICK UP HIMSELF",
