@@ -71,8 +71,11 @@
             background-color: transparent;
             padding: 10px 0;
             z-index: 1000;
+            display: flex;
+            align-items: center;
         }
         .search-input {
+            flex-grow: 1;
             position: relative;
             display: flex;
             align-items: center;
@@ -80,6 +83,7 @@
             border: 1px solid #ccc;
             border-radius: 20px;
             overflow: hidden;
+            margin-right: 10px;
         }
         #klant-zoek {
             flex-grow: 1;
@@ -87,7 +91,7 @@
             padding: 10px 15px;
             outline: none;
         }
-        .clear-search {
+        .clear-search, .capture-button {
             background: none;
             border: none;
             color: #888;
@@ -95,8 +99,29 @@
             font-size: 18px;
             padding: 0 15px;
         }
-        .clear-search:hover {
+        .clear-search:hover, .capture-button:hover {
             color: #333;
+        }
+        .scroll-top-button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .scroll-top-button:hover {
+            background-color: #0056b3;
+        }
+        .scroll-top-button span {
+            font-size: 6px;
+            margin-top: -2px;
         }
         .sort-toggle {
             display: inline-flex;
@@ -141,6 +166,15 @@
         .capture-button i {
             font-size: 18px;
         }
+        .search-input .capture-button {
+            background: none;
+            color: #888;
+            width: auto;
+            height: auto;
+        }
+        .search-input .capture-button:hover {
+            color: #333;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -150,8 +184,15 @@
         <div class="search-container">
             <div class="search-input">
                 <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)...">
+                <button id="capture-button-search" class="capture-button" title="Scan client number" style="display: none;">
+                    <i class="fas fa-camera"></i>
+                </button>
                 <button id="clear-search" class="clear-search" style="display: none;">&times;</button>
             </div>
+            <button id="scroll-top" class="scroll-top-button" title="Scroll to top">
+                <i class="fas fa-chevron-up"></i>
+                <span>TOP</span>
+            </button>
         </div>
         
         <div class="button-container">
@@ -159,7 +200,7 @@
                 <button id="sort-time" class="sort-option active">By Time</button>
                 <button id="sort-alpha" class="sort-option">Alphabetically</button>
             </div>
-            <button id="capture-button" class="capture-button" title="Scan client number">
+            <button id="capture-button-main" class="capture-button" title="Scan client number">
                 <i class="fas fa-camera"></i>
             </button>
         </div>
@@ -296,19 +337,24 @@
 
         const zoekInput = document.getElementById('klant-zoek');
         const clearSearch = document.getElementById('clear-search');
+        const captureButtonMain = document.getElementById('capture-button-main');
+        const captureButtonSearch = document.getElementById('capture-button-search');
 
         zoekInput.addEventListener('focus', function() {
             clearSearch.style.display = 'block';
         });
 
         zoekInput.addEventListener('blur', function() {
-            if (this.value === '') {
-                clearSearch.style.display = 'none';
-            }
+            setTimeout(() => {
+                if (this.value === '' && document.activeElement !== captureButtonMain && document.activeElement !== captureButtonSearch) {
+                    clearSearch.style.display = 'none';
+                }
+            }, 100);
         });
 
         zoekInput.addEventListener('input', function(e) {
             toonKlanten(e.target.value, isTimeSort);
+            clearSearch.style.display = this.value ? 'block' : 'none';
         });
 
         clearSearch.addEventListener('click', function() {
@@ -367,8 +413,7 @@
             }
         }
 
-        // Update de capture-button event listener
-        document.getElementById('capture-button').addEventListener('click', function() {
+        function handleCapture() {
             const fileInput = document.getElementById('file-input');
             fileInput.click();
             fileInput.onchange = function(event) {
@@ -391,6 +436,31 @@
                     reader.readAsDataURL(file);
                 }
             };
+        }
+
+        captureButtonMain.addEventListener('click', handleCapture);
+        captureButtonSearch.addEventListener('click', handleCapture);
+
+        const scrollTopButton = document.getElementById('scroll-top');
+
+        scrollTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Optioneel: Toon/verberg de scroll-top knop afhankelijk van de scroll positie
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 100) {
+                captureButtonMain.style.display = 'none';
+                captureButtonSearch.style.display = 'flex';
+                scrollTopButton.style.display = 'flex';
+            } else {
+                captureButtonMain.style.display = 'flex';
+                captureButtonSearch.style.display = 'none';
+                scrollTopButton.style.display = 'none';
+            }
         });
     </script>
 </body>
