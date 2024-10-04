@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .hidden { display: none; }
         .klant-kader {
@@ -97,6 +98,47 @@
         .clear-search:hover {
             color: #333;
         }
+        .sort-toggle {
+            display: inline-flex;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .sort-option {
+            padding: 8px 16px;
+            background-color: white;
+            color: #007BFF;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sort-option.active {
+            background-color: #007BFF;
+            color: white;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .capture-button {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .capture-button:hover {
+            background-color: #0056b3;
+        }
+        .capture-button i {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -110,26 +152,16 @@
             </div>
         </div>
         
-        <div class="flex flex-wrap justify-between mb-8">
-            <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
-            <select id="sort-time-select" class="p-2 border rounded mb-2">
-                <option value="">Sort by time</option>
-                <option value="00:00-01:00">00:00 - 01:00</option>
-                <option value="01:00-02:00">01:00 - 02:00</option>
-                <option value="02:00-03:00">02:00 - 03:00</option>
-                <option value="03:00-04:00">03:00 - 04:00</option>
-                <option value="04:00-05:00">04:00 - 05:00</option>
-                <option value="05:00-06:00">05:00 - 06:00</option>
-                <option value="06:00-07:00">06:00 - 07:00</option>
-                <option value="07:00-08:00">07:00 - 08:00</option>
-                <option value="08:00-09:00">08:00 - 09:00</option>
-                <option value="09:00-10:00">09:00 - 10:00</option>
-                <option value="10:00-11:00">10:00 - 11:00</option>
-                <option value="11:00-12:00">11:00 - 12:00</option>
-                <option value="will be picked up">Will be picked up</option>
-            </select>
-            <button id="capture-button" class="capture-button mb-2">Scan delivery note</button>
+        <div class="button-container">
+            <div class="sort-toggle">
+                <button id="sort-time" class="sort-option active">By Time</button>
+                <button id="sort-alpha" class="sort-option">Alphabetically</button>
+            </div>
+            <button id="capture-button" class="capture-button">
+                <i class="fas fa-camera"></i> Client number
+            </button>
         </div>
+        
         <input type="file" id="file-input" accept="image/*" capture="environment" class="hidden">
         <div id="klant-lijst" class="mb-8"></div>
     </div>
@@ -138,7 +170,7 @@
     <script>
         let klantData = [];
         let origineleVolgorde = [];
-        let isAlphabeticalSort = true;
+        let isTimeSort = true;
 
         document.addEventListener('DOMContentLoaded', initializeData);
 
@@ -187,18 +219,8 @@
                     if (!b.timeSlot) return -1;
                     return a.timeSlot.localeCompare(b.timeSlot);
                 });
-            } else if (sorteerOpTijd) {
-                klanten = klanten.filter(klant => {
-                    if (sorteerOpTijd === 'will be picked up') {
-                        return !klant.timeSlot;
-                    }
-                    if (!klant.timeSlot) return false;
-                    const [startTime, endTime] = sorteerOpTijd.split('-');
-                    const klantTime = klant.timeSlot.split(' - ')[0]; // Use the start time if a range is given
-                    return klantTime >= startTime && klantTime < endTime;
-                });
             } else {
-                klanten.sort((a, b) => origineleVolgorde.indexOf(a.id) - origineleVolgorde.indexOf(b.id));
+                klanten.sort((a, b) => a.name.localeCompare(b.name));
             }
 
             klanten.forEach(klant => {
@@ -275,26 +297,37 @@
         const clearSearch = document.getElementById('clear-search');
 
         zoekInput.addEventListener('input', function(e) {
-            toonKlanten(e.target.value, isAlphabeticalSort);
+            toonKlanten(e.target.value, isTimeSort);
             clearSearch.style.display = e.target.value ? 'block' : 'none';
         });
 
         clearSearch.addEventListener('click', function() {
             zoekInput.value = '';
-            toonKlanten('', isAlphabeticalSort);
+            toonKlanten('', isTimeSort);
             this.style.display = 'none';
             zoekInput.focus();
         });
 
-        document.getElementById('sort-button').addEventListener('click', function() {
-            isAlphabeticalSort = !isAlphabeticalSort;
-            this.textContent = isAlphabeticalSort ? 'Sort alphabetically' : 'Sort by delivery time';
-            toonKlanten('', isAlphabeticalSort);
+        document.getElementById('sort-time').addEventListener('click', function() {
+            if (!isTimeSort) {
+                isTimeSort = true;
+                updateSortButtons();
+                toonKlanten('', true);
+            }
         });
 
-        document.getElementById('sort-time-select').addEventListener('change', function(e) {
-            toonKlanten('', false, e.target.value);
+        document.getElementById('sort-alpha').addEventListener('click', function() {
+            if (isTimeSort) {
+                isTimeSort = false;
+                updateSortButtons();
+                toonKlanten('', false);
+            }
         });
+
+        function updateSortButtons() {
+            document.getElementById('sort-time').classList.toggle('active', isTimeSort);
+            document.getElementById('sort-alpha').classList.toggle('active', !isTimeSort);
+        }
 
         // OCR functie
         function performOCR(imageData) {
@@ -318,7 +351,7 @@
                 // Vul het zoekveld automatisch in met het gevonden klantnummer
                 document.getElementById('klant-zoek').value = customerNumber;
                 // Trigger de zoekopdracht
-                toonKlanten(customerNumber, isAlphabeticalSort);
+                toonKlanten(customerNumber, isTimeSort);
             } else {
                 console.log('Geen geldig klantnummer gevonden in de tekst');
                 alert('Geen geldig klantnummer gevonden in de afbeelding. Probeer opnieuw.');
