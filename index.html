@@ -68,7 +68,7 @@
         .search-container {
             position: sticky;
             top: 0;
-            background-color: transparent;
+            background-color: white;
             padding: 10px 0;
             z-index: 1000;
             display: flex;
@@ -236,7 +236,18 @@
                 const klantenVanUur = document.querySelectorAll(`[data-timeslot^="${tijdSlot}"]`);
                 if (klantenVanUur.length > 0) {
                     console.log('Gevonden element:', klantenVanUur[0]); // Debug log
-                    klantenVanUur[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    const searchContainer = document.querySelector('.search-container');
+                    const searchContainerHeight = searchContainer.offsetHeight;
+                    
+                    const elementRect = klantenVanUur[0].getBoundingClientRect();
+                    const absoluteElementTop = elementRect.top + window.pageYOffset;
+                    const middleOfViewport = window.innerHeight / 2;
+                    
+                    window.scrollTo({
+                        top: absoluteElementTop - searchContainerHeight - 20, // 20px extra ruimte
+                        behavior: 'smooth'
+                    });
                 } else {
                     console.log('Geen element gevonden voor tijdslot:', tijdSlot); // Debug log
                 }
