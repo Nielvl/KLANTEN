@@ -91,6 +91,15 @@ const customerData = {
         "locatie": "50.87422376311202, 4.366673280546562"
       },
       {
+        "id": "tertholen",
+        "name": "TERTHOLEN",
+        "customerNumber": "400866",
+        "timeSlot": "04:30",
+        "voorkeuren": "LEFT WAREHOUSE IN THE PICTURE= C30",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/7o90xux1dmbriqosfmk23/Foto-20-09-2024-08-17-21.jpg?rlkey=99uir53w4313xknqe29m0fbvh&st=jiapdh7x&dl",
+        "locatie": "50.87422376311202, 4.366673280546562"
+      },
+      {
         "id": "gfresh-italian-food",
         "name": "GFRESH ITALIAN FOOD",
         "customerNumber": "4000375",
@@ -525,7 +534,7 @@ const customerData = {
       },
       {
         "id": "keirsmaekers",
-        "name": "KEIRSMÄCKERS",
+        "name": "KEIRSMAEKERS",
         "customerNumber": "400978",
         "timeSlot": "06:00",
         "voorkeuren": "EITHER WITH OUR OWN TRUCK TO MECHELEN OR WILL PICK UP HIMSELF BEFORE 06:00",
@@ -558,6 +567,24 @@ const customerData = {
         "voorkeuren": "TOGETHER WITH ALAIN CLOQUETTE",
         "voertuigFoto": "",
         "locatie": "50.87846411828728, 4.370264200254214"
+      },
+      {
+        "id": "rhino",
+        "name": "RHINO",
+        "customerNumber": "4000159",
+        "timeSlot": "03:30",
+        "voorkeuren": "DELIVERY AT MICHEL, MABRU HALL E",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/wy5evvpv3x4vcwzgcb5z4/Foto-20-09-2024-08-19-46.jpg?rlkey=t47ponuugflxprlnzofvilxc0&st=v5u2kpgz&dl",
+        "locatie": "50.875292615593935, 4.367867247192974"
+      },
+      {
+        "id": "rutoma",
+        "name": "RUTOMA",
+        "customerNumber": "4000159",
+        "timeSlot": "04:30",
+        "voorkeuren": "EITHER AT OR IN FRONT OF THE SUPERFRUIT WAREHOUSE (TRUCK). HIS VAN WILL BE IN FRONT OF VAN DIJCK OR VAN LIER.",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/uigje1zkuxoo06mwhga0i/Foto-24-09-2024-06-34-37.jpg?rlkey=2437u7w9mj1nec8wm7c7ghhfo&st=r5g7trsb&dl",
+        "locatie": "50.87777749475872, 4.368494783804061"
       },
     ]
   }
