@@ -108,6 +108,21 @@
             origineleVolgorde = klantData.map(klant => klant.id);
             console.log('Processed customer data:', klantData);
             toonKlanten('', true);
+            scrollNaarHuidigeTijd();
+        }
+
+        function scrollNaarHuidigeTijd() {
+            const nu = new Date();
+            const huidigeUur = nu.getHours();
+            const volgendUur = (huidigeUur + 1) % 24;
+            const tijdSlot = `${huidigeUur.toString().padStart(2, '0')}:00-${volgendUur.toString().padStart(2, '0')}:00`;
+
+            setTimeout(() => {
+                const eersteKlantVanUur = document.querySelector(`[data-timeslot="${tijdSlot}"]`);
+                if (eersteKlantVanUur) {
+                    eersteKlantVanUur.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
         }
 
         function toonKlanten(filter = '', sorteer = true, sorteerOpTijd = '') {
@@ -146,6 +161,7 @@
                 const div = document.createElement('div');
                 div.className = 'klant-kader';
                 div.id = `klant-${klant.id}`;
+                div.dataset.timeslot = klant.timeSlot ? klant.timeSlot.split(' - ')[0] + '-' + klant.timeSlot.split(' - ')[1] : 'no-timeslot';
                 div.innerHTML = `
                     <div class="mb-4">
                         <span class="font-semibold text-lg">${klant.name}</span><br>
