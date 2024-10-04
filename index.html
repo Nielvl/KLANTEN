@@ -72,7 +72,7 @@
         
         <input type="text" id="klant-zoek" placeholder="Search for a customer (name, number or time slot)..." class="w-full p-2 mb-8 border rounded">
         <div class="flex flex-wrap justify-between mb-8">
-            <button id="sort-button" class="details-button mb-2">Original order</button>
+            <button id="sort-button" class="details-button mb-2">Sort alphabetically</button>
             <select id="sort-time-select" class="p-2 border rounded mb-2">
                 <option value="">Sort by time</option>
                 <option value="00:00-01:00">00:00 - 01:00</option>
@@ -122,7 +122,12 @@
             );
 
             if (sorteer) {
-                klanten.sort((a, b) => a.name.localeCompare(b.name));
+                klanten.sort((a, b) => {
+                    if (!a.timeSlot && !b.timeSlot) return 0;
+                    if (!a.timeSlot) return 1;
+                    if (!b.timeSlot) return -1;
+                    return a.timeSlot.localeCompare(b.timeSlot);
+                });
             } else if (sorteerOpTijd) {
                 klanten = klanten.filter(klant => {
                     if (sorteerOpTijd === 'will be picked up') {
@@ -213,7 +218,7 @@
 
         document.getElementById('sort-button').addEventListener('click', function() {
             isAlphabeticalSort = !isAlphabeticalSort;
-            this.textContent = isAlphabeticalSort ? 'Original order' : 'Sort alphabetically';
+            this.textContent = isAlphabeticalSort ? 'Sort alphabetically' : 'Sort by delivery time';
             toonKlanten('', isAlphabeticalSort);
         });
 

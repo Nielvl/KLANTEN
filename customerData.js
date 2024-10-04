@@ -540,6 +540,24 @@ const customerData = {
         "voorkeuren": "ALWAYS CHECK FOR MULTIPLE PALLETS AND IF SOMETHING CAME FROM VLEZENBEEK. HE FIRST LOADS IN FRONT OF RINGOOT AND AFTERWARDS GOES TO STARFRUIT",
         "voertuigFoto": "",
         "locatie": "50.877056773494346, 4.371451777780497"
-      }
+      },
+      {
+        "id": "alain-cloquette",
+        "name": "ALAIN CLOQUETTE",
+        "customerNumber": "400651",
+        "timeSlot": "07:00",
+        "voorkeuren": "WILL HAVE 3 WAREHOUSES AND NEEDS 3 DIFFERENT PALLETS. 1 WAREHOUSE = 1 PALLET + DISTRICAM",
+        "voertuigFoto": "",
+        "locatie": "50.87846411828728, 4.370264200254214"
+      },
+      {
+        "id": "districam",
+        "name": "DISTRICAM",
+        "customerNumber": "400874",
+        "timeSlot": "07:00",
+        "voorkeuren": "TOGETHER WITH ALAIN CLOQUETTE",
+        "voertuigFoto": "",
+        "locatie": "50.87846411828728, 4.370264200254214"
+      },
     ]
   }
