@@ -437,7 +437,7 @@ const customerData = {
         "id": "populaire-pascal",
         "name": "POPULAIRE PASCAL",
         "customerNumber": "4000165",
-        "timeSlot": "03:30",
+        "timeSlot": "03:45",
         "voorkeuren": "WILL BE PARKED IN FRONT OF THE WAREHOUSE",
         "voertuigFoto": "",
         "locatie": "50.87653700872559, 4.3719485534611335"
