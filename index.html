@@ -318,7 +318,7 @@
                     <p class="mb-2">Time slot: ${klant.timeSlot || 'No time slot'}</p>
                     <p class="mb-2">Preferences: ${klant.voorkeuren || 'No preferences specified'}</p>
                 </div>
-                <div id="map-${klantId}" class="w-full h-64 mt-4"></div>
+                <div id="map-${klantId}" class="w-full h-64 mt-4 cursor-pointer"></div>
             `;
             klantDiv.appendChild(detailsDiv);
 
@@ -328,6 +328,16 @@
                 L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
                 }).addTo(map);
                 L.marker([lat, lng]).addTo(map);
+
+                // Voeg een klikgebeurtenis toe aan de kaart
+                map.on('click', function() {
+                    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+                    window.open(googleMapsUrl, '_blank');
+                });
+
+                // Voeg een tooltip toe om de gebruiker te informeren
+                const mapElement = document.getElementById(`map-${klantId}`);
+                mapElement.title = "Klik om te openen in Google Maps";
             }
         }
 
