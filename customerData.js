@@ -185,9 +185,9 @@ const customerData = {
         "name": "FRESH FROZEN FOOD",
         "customerNumber": "4000462",
         "timeSlot": "07:00",
-        "voorkeuren": "MABRU, NOT REALLY SURE WHERE... PLEASE CONTACT ME TO UPDATE THIS INFORMATION",
-        "voertuigFoto": "",
-        "locatie": ""
+        "voorkeuren": "MABRU,HALL E",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/ks0nesm4r09y3wh146zqn/Foto-7-10-2024-07-16-33.jpg?rlkey=kny5fpwd97i3gqnjfycauqd3c&st=o2s616af&dl",
+        "locatie": "50.87468028192008, 4.3688304423645725"
       },
       {
         "id": "delidis",
