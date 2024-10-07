@@ -209,11 +209,11 @@ const customerData = {
       },
       {
         "id": "fa-way-sa",
-        "name": "FA-WAY SA",
+        "name": "FA-WAY SA (l'ETAL)",
         "customerNumber": "4000912",
         "timeSlot": "",
         "voorkeuren": "WILL COLLECT HIMSELF",
-        "voertuigFoto": "",
+        "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/nhhl6gqemna9oir9cazll/Foto-7-10-2024-09-58-21.jpg?rlkey=l1vzmv4ai848o5p37a0j0jaxu&st=knlsstcd&dl",
         "locatie": ""
       },
       {
