@@ -577,5 +577,23 @@ const customerData = {
         "voertuigFoto": "https://dl.dropboxusercontent.com/scl/fi/uigje1zkuxoo06mwhga0i/Foto-24-09-2024-06-34-37.jpg?rlkey=2437u7w9mj1nec8wm7c7ghhfo&st=r5g7trsb&dl",
         "locatie": "50.87777749475872, 4.368494783804061"
       },
+      {
+        "id": "noradin",
+        "name": "NORADIN",
+        "customerNumber": "400915",
+        "timeSlot": "06:30",
+        "voorkeuren": "MABRU",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
+      {
+        "id": "pepinster",
+        "name": "PEPINSTER",
+        "customerNumber": "400677",
+        "timeSlot": "06:30",
+        "voorkeuren": "SAME TRUCK AS LA PROVENCALE",
+        "voertuigFoto": "",
+        "locatie": ""
+      },
     ]
   }
