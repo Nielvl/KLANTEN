@@ -410,7 +410,7 @@ const customerData = {
         "id": "fast-and-fresh",
         "name": "FAST and FRESH",
         "customerNumber": "4000276",
-        "timeSlot": "06:00",
+        "timeSlot": "05:50",
         "voorkeuren": "WAREHOUSE VAN LIER BUT ON THE OTHER SIDE OF THE BUILDING. Deliver it together with Bouvry between 05:30 and 06:00.",
         "voertuigFoto": "",
         "locatie": "50.87744851368797, 4.368868283511946"
@@ -518,7 +518,7 @@ const customerData = {
         "id": "q-fresh",
         "name": "Q-FRESH",
         "customerNumber": "4000211",
-        "timeSlot": "04:20",
+        "timeSlot": "04:00",
         "voorkeuren": "DROP OFF AT GUIDOFRUIT",
         "voertuigFoto": "",
         "locatie": "50.87581370385585, 4.370725361955239"
