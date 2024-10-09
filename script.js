@@ -71,6 +71,7 @@ function toonKlanten(filter = '', sorteer = true) {
         div.className = 'klant-kader';
         div.id = `klant-${klant.id}`;
         div.dataset.timeslot = klant.timeSlot ? klant.timeSlot.split(' - ')[0] + '-' + klant.timeSlot.split(' - ')[1] : 'no-timeslot';
+
         div.innerHTML = `
             <div class="mb-4">
                 <span class="font-semibold text-lg">${klant.name}</span><br>
@@ -84,6 +85,7 @@ function toonKlanten(filter = '', sorteer = true) {
         `;
         klantLijst.appendChild(div);
     });
+    return div;
 }
 
 function toonKlantInfo(klantId) {
@@ -94,6 +96,7 @@ function toonKlantInfo(klantId) {
     const bestaandeDetails = klantDiv.querySelector('.klant-details');
     if (bestaandeDetails) {
         bestaandeDetails.remove();
+        return;
     }
 
     const detailsDiv = document.createElement('div');
